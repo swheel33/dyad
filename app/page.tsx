@@ -78,7 +78,7 @@ export default function Home() {
             <p className="text-sm leading-loose text-muted-foreground py-2 px-4">
               DYAD unlocks unprecedented DeFi opportunities.
             </p>
-        <Separator />
+        <Separator className="my-4" />
 <div class="flex justify-center">
     <Button className="mb-3 mx-4 items-center justify-center" onClick={openModal}>
               Claim dNFT
