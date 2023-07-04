@@ -78,7 +78,11 @@ export default function Home() {
             <p className="text-sm text-muted-foreground py-2 px-4">
               DYAD unlocks unprecedented DeFi opportunities.
             </p>
-            <Separator />
+        <Separator />
+    <Button className="mb-3 mx-4 items-center justify-center" onClick={openModal}>
+              Claim dNFT
+            </Button>
+          
             <p className="text-sm leading-none my-4 px-4 leading-5">
               dNFTs are DYAD’s base layer. 
               </p>
@@ -88,9 +92,7 @@ export default function Home() {
             <p className="text-sm leading-none my-4 px-4 leading-5">
             Ecosystem builders can design protocols using dNFT metadata instead of fungible tokens as incentives.
             </p>
-            <Button className="mb-3 mx-4" onClick={openModal}>
-              Claim dNFT
-            </Button>
+        
          
 
          
