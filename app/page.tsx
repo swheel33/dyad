@@ -71,7 +71,7 @@ export default function Home() {
         </NavigationMenu>
 
         <div className="flex-1 max-w-screen-lg p-4">
-          <Card className="py-2 mb-4">
+        
             <h3 className="text-md font-medium leading-none pt-3 px-4">
               Immutable Base. Infinite Possibility.
             </h3>
@@ -91,9 +91,9 @@ export default function Home() {
             <Button className="mb-3 mx-4" onClick={openModal}>
               Claim dNFT
             </Button>
-          </Card>
+         
 
-          <Card className="mb-4">
+         
             <Table className="p-2">
               <TableHeader>
                 <TableRow>
@@ -125,7 +125,7 @@ export default function Home() {
                 </TableRow>
               </TableBody>
             </Table>
-          </Card>
+   
         </div>
 
         <NavigationMenu className="px-4 max-h-12 w-full max-w-none border-t">
