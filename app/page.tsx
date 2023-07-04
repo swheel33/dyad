@@ -51,7 +51,7 @@ export default function Home() {
           <NavigationMenuList className="gap-2">
             <NavigationMenuItem>
               <Link href="/" legacyBehavior passHref>
-                <NavigationMenuLink className="text-lg tracking-wide font-bold">
+                <NavigationMenuLink className="font-bold">
                   DYAD
                 </NavigationMenuLink>
               </Link>
@@ -65,7 +65,7 @@ export default function Home() {
             </NavigationMenuItem>
           </NavigationMenuList>
           <div className="flex flex-row items-center justify-center gap-2 px-3 py-1">
-            <b>TVL:</b> 1 ETH
+            TVL: 1.00 ETH
           </div>
           <WalletButton />
         </NavigationMenu>
@@ -80,10 +80,13 @@ export default function Home() {
             </p>
             <Separator />
             <p className="text-sm leading-none my-4 px-4 leading-5">
-              dNFTs are DYAD’s base layer. They are ERC 721 NFTs with a unique
-              and maximally composable metadata structure. Ecosystem builders
-              can design protocols using dNFT metadata instead of fungible
-              tokens as incentives.
+              dNFTs are DYAD’s base layer. 
+              </p>
+            <p className="text-sm leading-none my-4 px-4 leading-5">
+              They are ERC 721 NFTs with a unique and maximally composable metadata structure. 
+            </p>
+            <p className="text-sm leading-none my-4 px-4 leading-5">
+            Ecosystem builders can design protocols using dNFT metadata instead of fungible tokens as incentives.
             </p>
             <Button className="mb-3 mx-4" onClick={openModal}>
               Claim dNFT
