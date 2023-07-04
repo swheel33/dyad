@@ -72,25 +72,25 @@ export default function Home() {
 
         <div className="flex-1 max-w-screen-lg p-4">
         
-            <h3 className="text-md font-medium leading-none pt-3 px-4">
+            <h3 className="text-md font-medium leading-loose pt-3 px-4">
               Immutable Base. Infinite Possibility.
             </h3>
-            <p className="text-sm text-muted-foreground py-2 px-4">
+            <p className="text-sm leading-loose text-muted-foreground py-2 px-4">
               DYAD unlocks unprecedented DeFi opportunities.
             </p>
         <Separator />
-
+<div class="flex justify-center">
     <Button className="mb-3 mx-4 items-center justify-center" onClick={openModal}>
               Claim dNFT
             </Button>
-          
-            <p className="text-sm leading-none my-4 px-4 leading-5">
+          </div>
+            <p className="text-sm leading-loose my-4 px-4 leading-5">
               dNFTs are DYAD’s base layer. 
               </p>
-            <p className="text-sm leading-none my-4 px-4 leading-5">
+            <p className="text-sm leading-loose my-4 px-4 leading-5">
               They are ERC 721 NFTs with a unique and maximally composable metadata structure. 
             </p>
-            <p className="text-sm leading-none my-4 px-4 leading-5">
+            <p className="text-sm leading-loose my-4 px-4 leading-5">
             Ecosystem builders can design protocols using dNFT metadata instead of fungible tokens as incentives.
             </p>
         
