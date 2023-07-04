@@ -80,7 +80,7 @@ export default function Home() {
             </p>
         <Separator className="my-4" />
 
-    <Button className="mb-3 mx-4 items-center justify-center" onClick={openModal}>
+    <Button className="mb-3 mx-4" onClick={openModal}>
               Claim dNFT
             </Button>
         
@@ -126,46 +126,35 @@ export default function Home() {
                 </TableRow>
               </TableBody>
             </Table>
-   
-<card>
- <p className="text-sm leading-loose my-4 px-4">
-              dNFTs are DYAD’s base layer. 
-              </p>
-            <p className="text-sm leading-loose my-4 px-4">
-              They are ERC 721 NFTs with a unique and maximally composable metadata structure. 
-            </p>
-            <p className="text-sm leading-loose my-4 px-4">
-            Ecosystem builders can design protocols using dNFT metadata instead of fungible tokens as incentives.
-            </p>
-</card>
+  
         </div>
 
         <NavigationMenu className="px-4 max-h-12 w-full max-w-none border-t">
           <NavigationMenuList className="flex justify-center gap-4">
             <NavigationMenuItem>
               <Link href="/docs" legacyBehavior passHref>
-                <NavigationMenuLink className="text-xs text-muted-foreground hover:text-foreground">
+                <NavigationMenuLink className="text-sm text-muted-foreground hover:text-foreground">
                   Discord
                 </NavigationMenuLink>
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <Link href="/docs" legacyBehavior passHref>
-                <NavigationMenuLink className="text-xs text-muted-foreground hover:text-foreground">
+                <NavigationMenuLink className="text-sm text-muted-foreground hover:text-foreground">
                   Twitter
                 </NavigationMenuLink>
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <Link href="/docs" legacyBehavior passHref>
-                <NavigationMenuLink className="text-xs text-muted-foreground hover:text-foreground">
+                <NavigationMenuLink className="text-sm text-muted-foreground hover:text-foreground">
                   Medium
                 </NavigationMenuLink>
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <Link href="/docs" legacyBehavior passHref>
-                <NavigationMenuLink className="text-xs text-muted-foreground hover:text-foreground">
+                <NavigationMenuLink className="text-sm text-muted-foreground hover:text-foreground">
                   Github
                 </NavigationMenuLink>
               </Link>
