@@ -129,6 +129,17 @@ export default function Home() {
               </TableBody>
             </Table>
    
+<card>
+ <p className="text-sm leading-loose my-4 px-4">
+              dNFTs are DYAD’s base layer. 
+              </p>
+            <p className="text-sm leading-loose my-4 px-4">
+              They are ERC 721 NFTs with a unique and maximally composable metadata structure. 
+            </p>
+            <p className="text-sm leading-loose my-4 px-4">
+            Ecosystem builders can design protocols using dNFT metadata instead of fungible tokens as incentives.
+            </p>
+</card>
         </div>
 
         <NavigationMenu className="px-4 max-h-12 w-full max-w-none border-t">
