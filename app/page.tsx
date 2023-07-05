@@ -85,15 +85,9 @@ export default function Home() {
           </Button>
 
           <p className="text-sm leading-loose my-4 px-4">
-            dNFTs are DYAD’s base layer.
+            dNFTs are ERC 721 NFTs with a unique and maximally composable metadata structure. 
           </p>
-
-          <p className="text-sm leading-loose my-4 px-4">
-            They are ERC 721 NFTs with a unique and maximally composable metadata structure. 
-          </p>
-          </div>
-
-        <div className="flex-1 max-w-screen-lg p-4">
+       
           <Table className="p-4">
             <TableHeader>
               <TableRow>
