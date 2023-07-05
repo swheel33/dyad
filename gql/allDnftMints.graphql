@@ -1,0 +1,7 @@
+query allDnftMints {
+  mintedNfts(orderBy: DNft_id, orderDirection: desc) {
+    DNft_id
+    to
+    price
+  }
+}
