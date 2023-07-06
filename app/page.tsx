@@ -64,7 +64,11 @@ export default function Home() {
               </NavigationMenuItem>
 
               <NavigationMenuItem>
-                <Link href="/docs" legacyBehavior passHref>
+                <Link
+                  href="https://dyadstable.notion.site/DYAD-full-52096aed265247e7a50b14f06c228a7e?pvs=4"
+                  legacyBehavior
+                  passHref
+                >
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                     DOCS
                   </NavigationMenuLink>
