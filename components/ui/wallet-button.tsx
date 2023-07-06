@@ -31,7 +31,7 @@ export default function WalletButton({ className }: Props) {
       variant={isConnected ? "outline" : "default"}
       className={className}
     >
-      {isConnected ? "Disconnect" : "Connect Wallet"}
+      {isConnected ? "Disconnect" : "Connect"}
     </Button>
   );
 }
