@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import WalletButton from "@/components/ui/wallet-button";
+import Button from "@/components/ui/wallet-button";
 import ClaimsTable from "@/components/claims-table";
 import { ClaimModal } from "@/components/claim-modal";
 
@@ -72,11 +72,7 @@ export default function Home() {
               </NavigationMenuItem>
             </NavigationMenuList>
 
-            <div className="flex flex-row items-center justify-center gap-2 px-3 py-1">
-              TVL: 1.00 ETH
-            </div>
-
-            <WalletButton />
+            <Button />
           </NavigationMenu>
 
           <div className="flex-1 max-w-screen-lg p-4">
