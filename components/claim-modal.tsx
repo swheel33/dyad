@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { deployments } from "@/lib/deployments";
 import DnftAbi from "@/abis/dnft.json";
 import WalletButton from "./ui/wallet-button";
+import Loader from "./loader";
 
 interface Props {
   showModal: boolean;
@@ -53,6 +54,7 @@ export function ClaimModal({ showModal, closeModal }: Props) {
 
   const {
     data: txData,
+    isLoading,
     isSuccess,
     write,
   } = useContractWrite({
@@ -61,7 +63,9 @@ export function ClaimModal({ showModal, closeModal }: Props) {
     functionName: "mintNft",
   });
 
-  const { isLoading } = useWaitForTransaction({ hash: txData?.hash });
+  const { isLoading: isTxLoading } = useWaitForTransaction({
+    hash: txData?.hash,
+  });
 
   const { startPrice, priceIncrease, publicMints } = useMemo(() => {
     const startPrice = data?.[0]?.result as bigint;
@@ -87,10 +91,10 @@ export function ClaimModal({ showModal, closeModal }: Props) {
   }, [address, mintPrice, write]);
 
   useEffect(() => {
-    if (isSuccess && !isLoading) {
+    if (isSuccess && !isTxLoading) {
       closeModal();
     }
-  }, [isSuccess, isLoading, closeModal]);
+  }, [isSuccess, isTxLoading, closeModal]);
 
   return (
     showModal && (
@@ -110,7 +114,11 @@ export function ClaimModal({ showModal, closeModal }: Props) {
           </CardContent>
           {address ? (
             <Button className="mt-2" onClick={mintNft}>
-              Claim dNFT No. {(publicMints + BigInt(1)).toString()}
+              {isLoading || isTxLoading ? (
+                <Loader />
+              ) : (
+                `Claim dNFT No. ${(publicMints + BigInt(1)).toString()}`
+              )}
             </Button>
           ) : (
             <WalletButton className="mt-2" />
