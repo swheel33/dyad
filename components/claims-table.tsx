@@ -23,7 +23,7 @@ export default function ClaimsTable({ className }: Props) {
     <Table className={className}>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px]">User</TableHead>
+          <TableHead className="w-[200px]">User</TableHead>
           <TableHead>dNFT ID</TableHead>
           <TableHead>Contribution</TableHead>
         </TableRow>
