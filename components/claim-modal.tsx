@@ -25,7 +25,7 @@ export function ClaimModal({ showModal, closeModal }: Props) {
 
   const dnftAddress = useMemo(
     () =>
-      (chain
+      (chain && deployments[chain.id]
         ? deployments[chain.id].dnft
         : Object.values(deployments)[0].dnft) as `0x${string}`,
     [chain]
