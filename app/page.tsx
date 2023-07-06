@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import Button from "@/components/ui/wallet-button";
+import WalletButton from "@/components/ui/wallet-button";
 import ClaimsTable from "@/components/claims-table";
 import { ClaimModal } from "@/components/claim-modal";
 
@@ -62,7 +62,7 @@ export default function Home() {
                   </NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
-              
+
               <NavigationMenuItem>
                 <Link href="/docs" legacyBehavior passHref>
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
@@ -72,7 +72,7 @@ export default function Home() {
               </NavigationMenuItem>
             </NavigationMenuList>
 
-            <Button />
+            <WalletButton />
           </NavigationMenu>
 
           <div className="flex-1 max-w-screen-lg p-4">
