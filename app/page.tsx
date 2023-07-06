@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { WagmiConfig, createConfig, mainnet } from "wagmi";
+import { WagmiConfig, createConfig } from "wagmi";
 import { createPublicClient, http } from "viem";
+import { goerli } from "viem/chains";
 import { useState } from "react";
 import {
   Client,
@@ -19,15 +20,15 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import WalletButton from "@/components/ui/wallet-button";
 import ClaimsTable from "@/components/claims-table";
+import { ClaimModal } from "@/components/claim-modal";
 
 const wagmiConfig = createConfig({
   autoConnect: true,
   publicClient: createPublicClient({
-    chain: mainnet,
+    chain: goerli,
     transport: http(),
   }),
 });
@@ -137,25 +138,7 @@ export default function Home() {
             </NavigationMenuList>
           </NavigationMenu>
 
-          {showModal && (
-            <div
-              className="fixed w-screen h-screen flex items-center justify-center bg-black/[0.6] z-10"
-              onClick={closeModal}
-            >
-              <Card
-                className="p-4 w-80 max-w-screen-sm flex flex-col justify-start items-left min-w-sm"
-                onClick={(e) => {
-                  e.stopPropagation();
-                }}
-              >
-                <CardTitle className="test-md">Claim dNFT</CardTitle>
-                <CardContent className="px-0 py-2 text-sm">
-                  Claim fee ... ETH
-                </CardContent>
-                <Button className="mt-2">Claim dNFT No. 1</Button>
-              </Card>
-            </div>
-          )}
+          <ClaimModal showModal={showModal} closeModal={closeModal} />
         </main>
       </UrqlProvider>
     </WagmiConfig>
