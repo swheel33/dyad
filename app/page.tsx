@@ -103,8 +103,9 @@ export default function Home() {
               Read our <Link
                   href="https://dyadstable.notion.site/DYAD-full-52096aed265247e7a50b14f06c228a7e?pvs=4"
                   legacyBehavior
-                  passHref
-                > DOCS </Link>to learn how dNFTs comprise DYAD's base layer
+                  passHref>
+                DOCS
+              </Link> to learn how dNFTs comprise DYAD's base layer
             </p>
 
 
