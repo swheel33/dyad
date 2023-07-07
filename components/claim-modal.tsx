@@ -6,7 +6,7 @@ import {
   useWaitForTransaction,
 } from "wagmi";
 import { Abi, formatEther, parseEther } from "viem";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -56,14 +56,16 @@ export function ClaimModal({ showModal, closeModal }: Props) {
     data: txData,
     isLoading,
     isSuccess,
+    isError,
     write,
+    reset,
   } = useContractWrite({
     address: dnftAddress,
     abi: DnftAbi as Abi,
     functionName: "mintNft",
   });
 
-  const { isLoading: isTxLoading } = useWaitForTransaction({
+  const { isLoading: isTxLoading, isError: isTxError } = useWaitForTransaction({
     hash: txData?.hash,
   });
 
@@ -90,11 +92,10 @@ export function ClaimModal({ showModal, closeModal }: Props) {
     }
   }, [address, mintPrice, write]);
 
-  useEffect(() => {
-    if (isSuccess && !isTxLoading) {
-      closeModal();
-    }
-  }, [isSuccess, isTxLoading, closeModal]);
+  const close = useCallback(() => {
+    reset();
+    closeModal();
+  }, [reset, closeModal]);
 
   return (
     showModal && (
@@ -108,13 +109,38 @@ export function ClaimModal({ showModal, closeModal }: Props) {
             e.stopPropagation();
           }}
         >
-          <CardTitle className="test-md">Claim dNFT</CardTitle>
+          <CardTitle className="test-md">
+            {isError || isTxError
+              ? "Error"
+              : isSuccess && !isTxLoading
+              ? "Success!"
+              : "Claim dNFT"}
+          </CardTitle>
           <CardContent className="px-0 py-2 text-sm">
-            Claim fee {mintPrice} ETH
+            {isTxError
+              ? "Error minting dNFT"
+              : isError
+              ? "Error sending transation, please try again"
+              : isSuccess && !isTxLoading
+              ? "dNFT Minted successfully!"
+              : `Claim fee ${mintPrice} ETH`}
           </CardContent>
           {address ? (
-            <Button className="mt-2" onClick={mintNft}>
-              {isLoading || isTxLoading ? (
+            <Button
+              className="mt-2"
+              onClick={
+                isError || isTxError
+                  ? reset
+                  : isSuccess && !isTxLoading
+                  ? close
+                  : mintNft
+              }
+            >
+              {isError || isTxError ? (
+                "Retry"
+              ) : isSuccess && !isTxLoading ? (
+                "Close"
+              ) : isLoading || isTxLoading ? (
                 <Loader />
               ) : (
                 `Claim dNFT No. ${(publicMints + BigInt(1)).toString()}`
