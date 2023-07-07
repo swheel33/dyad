@@ -100,12 +100,10 @@ export default function Home() {
             </p>
 
             <p className="text-sm leading-loose my-4 px-4">
-              Read our <Link
-                  href="https://dyadstable.notion.site/DYAD-full-52096aed265247e7a50b14f06c228a7e?pvs=4"
-                  legacyBehavior
-                  passHref>
+              Read our <a
+                  href="https://dyadstable.notion.site/DYAD-full-52096aed265247e7a50b14f06c228a7e?pvs=4">
                 DOCS
-              </Link> to learn how dNFTs comprise DYAD's base layer
+              </a> to learn how dNFTs comprise DYAD's base layer
             </p>
 
 
