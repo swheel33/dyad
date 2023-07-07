@@ -56,7 +56,7 @@ export default function Home() {
           <NavigationMenu className="px-4 max-h-16 w-full max-w-none flex justify-between border-b">
             <NavigationMenuList className="gap-2">
               <NavigationMenuItem>
-                <Link href="/" legacyBehavior passHref>
+                <Link href="https://dyadstablecoin.github.io/claim-frontend/" legacyBehavior passHref>
                   <NavigationMenuLink className="font-bold">
                     DYAD
                   </NavigationMenuLink>
