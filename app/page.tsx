@@ -99,13 +99,22 @@ export default function Home() {
               metadata structure.
             </p>
 
+            <p className="text-sm leading-loose my-4 px-4">
+              Read our <Link
+                  href="https://dyadstable.notion.site/DYAD-full-52096aed265247e7a50b14f06c228a7e?pvs=4"
+                  legacyBehavior
+                  passHref
+                > DOCS </Link>to learn how dNFTs comprise DYAD's base layer
+            </p>
+
+
             <ClaimsTable className="p-4" />
           </div>
 
           <NavigationMenu className="px-4 max-h-12 w-full max-w-none border-t">
             <NavigationMenuList className="flex justify-center gap-4">
               <NavigationMenuItem>
-                <Link href="/docs" legacyBehavior passHref>
+                <Link href="https://discord.gg/z3wdvqM3kt" legacyBehavior passHref>
                   <NavigationMenuLink className="text-sm text-muted-foreground hover:text-foreground">
                     Discord
                   </NavigationMenuLink>
@@ -113,7 +122,7 @@ export default function Home() {
               </NavigationMenuItem>
 
               <NavigationMenuItem>
-                <Link href="/docs" legacyBehavior passHref>
+                <Link href="https://twitter.com/0xdyad" legacyBehavior passHref>
                   <NavigationMenuLink className="text-sm text-muted-foreground hover:text-foreground">
                     Twitter
                   </NavigationMenuLink>
@@ -129,7 +138,7 @@ export default function Home() {
               </NavigationMenuItem>
 
               <NavigationMenuItem>
-                <Link href="/docs" legacyBehavior passHref>
+                <Link href="https://github.com/DyadStablecoin" legacyBehavior passHref>
                   <NavigationMenuLink className="text-sm text-muted-foreground hover:text-foreground">
                     Github
                   </NavigationMenuLink>
