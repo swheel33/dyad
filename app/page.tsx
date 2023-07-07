@@ -56,7 +56,11 @@ export default function Home() {
           <NavigationMenu className="px-4 max-h-16 w-full max-w-none flex justify-between border-b">
             <NavigationMenuList className="gap-2">
               <NavigationMenuItem>
-                <Link href="https://dyadstablecoin.github.io/claim-frontend/" legacyBehavior passHref>
+                <Link
+                  href="https://dyadstablecoin.github.io/claim-frontend/"
+                  legacyBehavior
+                  passHref
+                >
                   <NavigationMenuLink className="font-bold">
                     DYAD
                   </NavigationMenuLink>
@@ -100,12 +104,12 @@ export default function Home() {
             </p>
 
             <p className="text-sm leading-loose my-4 px-4">
-              Read our <a
-                  href="https://dyadstable.notion.site/DYAD-full-52096aed265247e7a50b14f06c228a7e?pvs=4">
+              Read our{" "}
+              <a href="https://dyadstable.notion.site/DYAD-full-52096aed265247e7a50b14f06c228a7e?pvs=4">
                 DOCS
-              </a> to learn how dNFTs comprise DYAD's base layer
+              </a>{" "}
+              to learn how dNFTs comprise DYAD&apos;s base layer
             </p>
-
 
             <ClaimsTable className="p-4" />
           </div>
@@ -113,7 +117,11 @@ export default function Home() {
           <NavigationMenu className="px-4 max-h-12 w-full max-w-none border-t">
             <NavigationMenuList className="flex justify-center gap-4">
               <NavigationMenuItem>
-                <Link href="https://discord.gg/z3wdvqM3kt" legacyBehavior passHref>
+                <Link
+                  href="https://discord.gg/z3wdvqM3kt"
+                  legacyBehavior
+                  passHref
+                >
                   <NavigationMenuLink className="text-sm text-muted-foreground hover:text-foreground">
                     Discord
                   </NavigationMenuLink>
@@ -137,7 +145,11 @@ export default function Home() {
               </NavigationMenuItem>
 
               <NavigationMenuItem>
-                <Link href="https://github.com/DyadStablecoin" legacyBehavior passHref>
+                <Link
+                  href="https://github.com/DyadStablecoin"
+                  legacyBehavior
+                  passHref
+                >
                   <NavigationMenuLink className="text-sm text-muted-foreground hover:text-foreground">
                     Github
                   </NavigationMenuLink>
