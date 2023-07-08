@@ -105,7 +105,10 @@ export default function Home() {
 
             <p className="text-sm leading-loose my-4 px-4">
               Read our{" "}
-              <a href="https://dyadstable.notion.site/DYAD-full-52096aed265247e7a50b14f06c228a7e?pvs=4" class="underline">
+              <a
+                href="https://dyadstable.notion.site/DYAD-full-52096aed265247e7a50b14f06c228a7e?pvs=4"
+                className="underline"
+              >
                 DOCS
               </a>{" "}
               to learn how dNFTs comprise DYAD&apos;s base layer
