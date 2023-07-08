@@ -12,13 +12,6 @@ import {
   fetchExchange,
 } from "urql";
 
-import {
-  NavigationMenu,
-  NavigationMenuList,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu";
 
 import { MainNav } from "@/components/ui/main-nav";
 import { Button } from "@/components/ui/button";
@@ -56,7 +49,7 @@ export default function Home() {
       <UrqlProvider value={client}>
         <main className="flex flex-col min-h-screen items-center">
         
-      <div className="flex max-w-lg h-16 items-center px-4">
+      <div className="flex max-w-lg h-16 justify-between px-4">
             <MainNav className="mx-6" />
             <div className="ml-auto flex items-center space-x-4">
               <WalletButton />
@@ -98,50 +91,6 @@ export default function Home() {
 
             <ClaimsTable className="p-4" />
           </div>
-
-          <NavigationMenu className="px-4 max-h-12 w-full max-w-none border-t">
-            <NavigationMenuList className="flex justify-center gap-4">
-              <NavigationMenuItem>
-                <Link
-                  href="https://discord.gg/z3wdvqM3kt"
-                  legacyBehavior
-                  passHref
-                >
-                  <NavigationMenuLink className="text-sm text-muted-foreground hover:text-foreground">
-                    Discord
-                  </NavigationMenuLink>
-                </Link>
-              </NavigationMenuItem>
-
-              <NavigationMenuItem>
-                <Link href="https://twitter.com/0xdyad" legacyBehavior passHref>
-                  <NavigationMenuLink className="text-sm text-muted-foreground hover:text-foreground">
-                    Twitter
-                  </NavigationMenuLink>
-                </Link>
-              </NavigationMenuItem>
-
-              <NavigationMenuItem>
-                <Link href="/docs" legacyBehavior passHref>
-                  <NavigationMenuLink className="text-sm text-muted-foreground hover:text-foreground">
-                    Medium
-                  </NavigationMenuLink>
-                </Link>
-              </NavigationMenuItem>
-
-              <NavigationMenuItem>
-                <Link
-                  href="https://github.com/DyadStablecoin"
-                  legacyBehavior
-                  passHref
-                >
-                  <NavigationMenuLink className="text-sm text-muted-foreground hover:text-foreground">
-                    Github
-                  </NavigationMenuLink>
-                </Link>
-              </NavigationMenuItem>
-            </NavigationMenuList>
-          </NavigationMenu>
 
           <ClaimModal showModal={showModal} closeModal={closeModal} />
         </main>
