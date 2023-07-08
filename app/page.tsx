@@ -12,6 +12,14 @@ import {
   fetchExchange,
 } from "urql";
 
+import {
+  NavigationMenu,
+  NavigationMenuList,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu";
+
 import { MainNav } from "@/components/ui/main-nav";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
