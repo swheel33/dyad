@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "DYAD Stablecoin",
+  title: "DYAD",
   description: "A fundamentally new DeFi primitive for managing volatility.",
 };
 
