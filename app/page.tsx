@@ -55,7 +55,15 @@ export default function Home() {
     <WagmiConfig config={wagmiConfig}>
       <UrqlProvider value={client}>
         <main className="flex flex-col min-h-screen items-center">
-          <MainNav className="mx-6" />
+        
+      <div className="flex h-16 items-center px-4">
+            <MainNav className="mx-6" />
+            <div className="ml-auto flex items-center space-x-4">
+              <WalletButton />
+            
+            </div>
+          </div>
+      
 
           <div className="flex-1 max-w-screen-lg p-4">
             <h3 className="text-md font-medium leading-loose pt-3 px-4">
