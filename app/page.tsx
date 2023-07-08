@@ -54,7 +54,7 @@ export default function Home() {
       <UrqlProvider value={client}>
         <main className="flex flex-col min-h-screen items-center">
           <NavigationMenu className="px-4 max-h-16 w-full max-w-none flex justify-between">
-            <NavigationMenuList className="flex-1 max-w-screen-lg p-4">
+            <NavigationMenuList className="flex-1 max-w-lg p-4">
               <NavigationMenuItem>
                 <Link
                   href="https://dyadstablecoin.github.io/claim-frontend/"
@@ -99,7 +99,7 @@ export default function Home() {
               >
                 DOCS
               </a>{" "}
-              to learn how dNFTs comprise DYAD&apos;s base layer
+              to learn how dNFTs are the first step to participating and building in the DYAD ecosystem.
             </p>
 
             <ClaimsTable className="p-4" />
