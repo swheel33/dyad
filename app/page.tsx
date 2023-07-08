@@ -99,7 +99,7 @@ export default function Home() {
               >
                 DOCS
               </a>{" "}
-              to learn how dNFTs are the first step to participating and building in the DYAD ecosystem.
+              to learn how dNFTs are your key to participate and build in the DYAD ecosystem.
             </p>
 
             <ClaimsTable className="p-4" />
