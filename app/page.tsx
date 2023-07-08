@@ -56,7 +56,7 @@ export default function Home() {
             
             </div>
           </div>
-      
+        <Separator className="my-4" />
 
           <div className="flex-1 max-w-screen-lg p-4">
             <h3 className="text-md font-medium leading-loose pt-3 px-4">
@@ -88,7 +88,7 @@ export default function Home() {
               </a>{" "}
               to learn how dNFTs are your key to participate and build in the DYAD ecosystem.
             </p>
-
+  <Separator className="my-4" />
             <ClaimsTable className="p-4" />
           </div>
 
