@@ -12,13 +12,7 @@ import {
   fetchExchange,
 } from "urql";
 
-import {
-  NavigationMenu,
-  NavigationMenuList,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu";
+import { MainNav } from "@/components/ui/main-nav"
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import WalletButton from "@/components/ui/wallet-button";
@@ -53,23 +47,7 @@ export default function Home() {
     <WagmiConfig config={wagmiConfig}>
       <UrqlProvider value={client}>
         <main className="flex flex-col min-h-screen items-center">
-          <NavigationMenu className="flex-1 max-w-screen-lg justify-between p-4">
-            <NavigationMenuList className="gap-2">
-              <NavigationMenuItem>
-                <Link
-                  href="https://dyadstablecoin.github.io/claim-frontend/"
-                  legacyBehavior
-                  passHref
-                >
-                  <NavigationMenuLink className="font-bold">
-                    DYAD
-                  </NavigationMenuLink>
-                </Link>
-              </NavigationMenuItem>
-            </NavigationMenuList>
-
-            <WalletButton />
-          </NavigationMenu>
+          <MainNav className="mx-6" />
 
           <div className="flex-1 max-w-screen-lg p-4">
             <h3 className="text-md font-medium leading-loose pt-3 px-4">
