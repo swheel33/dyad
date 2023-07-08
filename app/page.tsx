@@ -53,8 +53,8 @@ export default function Home() {
     <WagmiConfig config={wagmiConfig}>
       <UrqlProvider value={client}>
         <main className="flex flex-col min-h-screen items-center">
-          <NavigationMenu className="flex-1 max-h-16 max-w-full justify-between p-4 border-b">
-            <NavigationMenuList className="flex justify-between gap-4">
+          <NavigationMenu className="px-4 max-h-16 w-full max-w-none flex justify-between border-b">
+            <NavigationMenuList className="gap-2">
               <NavigationMenuItem>
                 <Link
                   href="https://dyadstablecoin.github.io/claim-frontend/"
