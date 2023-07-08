@@ -18,7 +18,7 @@ interface Props {
   className?: string;
 }
 
-const perPage = 25;
+const perPage = 15;
 
 export default function ClaimsTable({ className }: Props) {
   const [page, setPage] = useState(0);
