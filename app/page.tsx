@@ -53,7 +53,7 @@ export default function Home() {
     <WagmiConfig config={wagmiConfig}>
       <UrqlProvider value={client}>
         <main className="flex flex-col min-h-screen items-center">
-          <NavigationMenu className="flex-1 max-h-16 max-w-screen-lg p-4 justify-between border-b">
+          <NavigationMenu className="flex-1 max-h-16 max-w-screen-lg justify-between border-b">
             <NavigationMenuList className="gap-2">
               <NavigationMenuItem>
                 <Link
@@ -63,18 +63,6 @@ export default function Home() {
                 >
                   <NavigationMenuLink className="font-bold">
                     DYAD
-                  </NavigationMenuLink>
-                </Link>
-              </NavigationMenuItem>
-
-              <NavigationMenuItem>
-                <Link
-                  href="https://dyadstable.notion.site/DYAD-full-52096aed265247e7a50b14f06c228a7e?pvs=4"
-                  legacyBehavior
-                  passHref
-                >
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    DOCS
                   </NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
