@@ -53,7 +53,7 @@ export default function Home() {
     <WagmiConfig config={wagmiConfig}>
       <UrqlProvider value={client}>
         <main className="flex flex-col min-h-screen items-center">
-          <NavigationMenu className="px-4 max-h-16 w-full max-w-none flex justify-between border-b">
+          <NavigationMenu className="px-4 max-h-16 max-w-screen-lg p-4 justify-between border-b">
             <NavigationMenuList className="gap-2">
               <NavigationMenuItem>
                 <Link
@@ -105,7 +105,7 @@ export default function Home() {
 
             <p className="text-sm leading-loose my-4 px-4">
               Read our{" "}
-              <a href="https://dyadstable.notion.site/DYAD-full-52096aed265247e7a50b14f06c228a7e?pvs=4">
+              <a href="https://dyadstable.notion.site/DYAD-full-52096aed265247e7a50b14f06c228a7e?pvs=4" class="underline hover:overline" >
                 DOCS
               </a>{" "}
               to learn how dNFTs comprise DYAD&apos;s base layer
