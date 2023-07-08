@@ -104,7 +104,7 @@ export function ClaimModal({ showModal, closeModal }: Props) {
         onClick={closeModal}
       >
         <Card
-          className="p-4 w-80 max-w-screen-sm flex flex-col justify-start items-left min-w-sm"
+          className="p-8 w-100 max-w-screen-sm flex flex-col justify-start items-left min-w-sm"
           onClick={(e) => {
             e.stopPropagation();
           }}
