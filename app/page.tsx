@@ -54,7 +54,7 @@ export default function Home() {
       <UrqlProvider value={client}>
         <main className="flex flex-col min-h-screen items-center">
           <NavigationMenu className="px-4 max-h-16 w-full max-w-none flex justify-between">
-            <NavigationMenuList className="flex-1 max-w-lg p-4">
+            <NavigationMenuList className="gap-3">
               <NavigationMenuItem>
                 <Link
                   href="https://dyadstablecoin.github.io/claim-frontend/"
