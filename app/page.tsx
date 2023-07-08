@@ -53,7 +53,7 @@ export default function Home() {
     <WagmiConfig config={wagmiConfig}>
       <UrqlProvider value={client}>
         <main className="flex flex-col min-h-screen items-center">
-          <NavigationMenu className="flex-1 max-w-screen-lg p-4">
+          <NavigationMenu className="flex-1 max-w-screen-lg justify-between p-4">
             <NavigationMenuList className="gap-2">
               <NavigationMenuItem>
                 <Link
