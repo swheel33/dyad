@@ -41,7 +41,7 @@ export default function WalletButton({ className }: Props) {
   return (
     <Button
       onClick={handleClick}
-      variant={isConnected ? "outline" : "default"}
+      variant={isConnected ? "default" : "outline"}
       className={className}
     >
       {isConnected ? "Disconnect" : "Connect"}
