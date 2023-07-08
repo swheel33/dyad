@@ -120,9 +120,9 @@ export function ClaimModal({ showModal, closeModal }: Props) {
             {isTxError
               ? "Error minting dNFT"
               : isError
-              ? "Error sending transation, please try again"
+              ? "Error sending transaction, please try again"
               : isSuccess && !isTxLoading
-              ? "dNFT Minted successfully!"
+              ? "dNFT claimed successfully!"
               : `Claim fee ${mintPrice} ETH`}
           </CardContent>
           {address ? (
