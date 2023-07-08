@@ -12,7 +12,7 @@ import {
   fetchExchange,
 } from "urql";
 
-import { MainNav } from "@/components/ui/main-nav"
+import { MainNav } from "@/components/ui/main-nav";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import WalletButton from "@/components/ui/wallet-button";
