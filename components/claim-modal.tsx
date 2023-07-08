@@ -100,7 +100,7 @@ export function ClaimModal({ showModal, closeModal }: Props) {
   return (
     showModal && (
       <div
-        className="fixed w-screen h-screen flex items-center justify-center bg-black/[0.6] z-10"
+        className="fixed w-screen h-screen flex items-center justify-center backdrop-blur-sm bg-black/[0.6] z-10"
         onClick={closeModal}
       >
         <Card
