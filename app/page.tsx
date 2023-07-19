@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { WagmiConfig, createConfig } from "wagmi";
 import { createPublicClient, http } from "viem";
 import { goerli } from "viem/chains";
@@ -18,7 +17,6 @@ import { Separator } from "@/components/ui/separator";
 import WalletButton from "@/components/ui/wallet-button";
 import ClaimsTable from "@/components/claims-table";
 import { ClaimModal } from "@/components/claim-modal";
-import { ThemeToggle } from "@/components/theme-toggle";
 
 const wagmiConfig = createConfig({
   autoConnect: true,
@@ -52,7 +50,6 @@ export default function Home() {
             <MainNav className="mx-6" />
             <div className="ml-auto flex items-center space-x-4">
               <WalletButton />
-              <ThemeToggle className="p-3" />
             </div>
           </div>
           <Separator className="my-4" />
