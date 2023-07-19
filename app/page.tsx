@@ -12,13 +12,13 @@ import {
   fetchExchange,
 } from "urql";
 
-
 import { MainNav } from "@/components/ui/main-nav";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import WalletButton from "@/components/ui/wallet-button";
 import ClaimsTable from "@/components/claims-table";
 import { ClaimModal } from "@/components/claim-modal";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 const wagmiConfig = createConfig({
   autoConnect: true,
@@ -48,15 +48,14 @@ export default function Home() {
     <WagmiConfig config={wagmiConfig}>
       <UrqlProvider value={client}>
         <main className="flex flex-col min-h-screen items-center">
-        
-      <div className="flex max-w-lg h-16 justify-between px-4">
+          <div className="flex max-w-lg h-16 justify-between px-4">
             <MainNav className="mx-6" />
             <div className="ml-auto flex items-center space-x-4">
               <WalletButton />
-            
+              <ThemeToggle className="p-3" />
             </div>
           </div>
-        <Separator className="my-4" />
+          <Separator className="my-4" />
 
           <div className="flex-1 max-w-screen-lg p-4">
             <h3 className="text-md font-medium leading-loose pt-3 px-4">
@@ -86,9 +85,10 @@ export default function Home() {
               >
                 DOCS
               </a>{" "}
-              to learn how dNFTs are your key to participate and build in the DYAD ecosystem.
+              to learn how dNFTs are your key to participate and build in the
+              DYAD ecosystem.
             </p>
-  <Separator className="my-4" />
+            <Separator className="my-4" />
             <ClaimsTable className="p-4" />
           </div>
 
