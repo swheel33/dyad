@@ -24,7 +24,7 @@ export function MainNav({
         Docs
       </Link>
       <Link
-        href="https://discord.gg/tBtWErKQ"
+        href="https://discord.gg/z3wdvqM3kt"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
         Discord
