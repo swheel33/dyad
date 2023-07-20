@@ -3,7 +3,7 @@ interface Deployment {
 }
 
 export const deployments: { [id: string]: Deployment } = {
-  "5": {
-    dnft: "0x8f49f321cb37a2313b7880a8a6495a8741fdd23a",
+  "1": {
+    dnft: "0xdc400bbe0b8b79c07a962ea99a642f5819e3b712",
   },
 };
