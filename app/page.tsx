@@ -82,7 +82,7 @@ export default function Home() {
               >
                 DOCS
               </a>{" "}
-              to learn how dNFTs are your key to participate and build in the
+              to learn how dNFTs are your key to participate in the
               DYAD ecosystem.
             </p>
             <Separator className="my-4" />
