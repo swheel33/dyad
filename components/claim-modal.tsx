@@ -6,7 +6,7 @@ import {
   useWaitForTransaction,
 } from "wagmi";
 import { Abi, formatEther, parseEther } from "viem";
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -65,7 +65,11 @@ export function ClaimModal({ showModal, closeModal }: Props) {
     functionName: "mintNft",
   });
 
-  const { isLoading: isTxLoading, isError: isTxError } = useWaitForTransaction({
+  const {
+    isLoading: isTxLoading,
+    isError: isTxError,
+    error,
+  } = useWaitForTransaction({
     hash: txData?.hash,
   });
 
@@ -101,6 +105,12 @@ export function ClaimModal({ showModal, closeModal }: Props) {
     reset();
     closeModal();
   }, [reset, closeModal]);
+
+  useEffect(() => {
+    if (isTxError) {
+      console.error(error);
+    }
+  }, [isTxError, error]);
 
   return (
     showModal && (
