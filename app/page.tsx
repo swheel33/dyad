@@ -2,7 +2,7 @@
 
 import { WagmiConfig, createConfig } from "wagmi";
 import { createPublicClient, http } from "viem";
-import { goerli } from "viem/chains";
+import { mainnet } from "viem/chains";
 import { useState } from "react";
 import {
   Client,
@@ -21,7 +21,7 @@ import { ClaimModal } from "@/components/claim-modal";
 const wagmiConfig = createConfig({
   autoConnect: true,
   publicClient: createPublicClient({
-    chain: goerli,
+    chain: mainnet,
     transport: http(),
   }),
 });

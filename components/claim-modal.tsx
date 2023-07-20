@@ -70,6 +70,7 @@ export function ClaimModal({ showModal, closeModal }: Props) {
   });
 
   const { startPrice, priceIncrease, publicMints } = useMemo(() => {
+    console.log(data);
     const startPrice = data?.[0]?.result as bigint;
     const priceIncrease = data?.[1]?.result as bigint;
     const publicMints = data?.[2]?.result as bigint;
@@ -77,7 +78,12 @@ export function ClaimModal({ showModal, closeModal }: Props) {
   }, [data]);
 
   const mintPrice = useMemo(() => {
-    if (!startPrice || !priceIncrease || !publicMints) return 0;
+    if (
+      startPrice === undefined ||
+      priceIncrease === undefined ||
+      publicMints === undefined
+    )
+      return 0;
     return formatEther(startPrice + priceIncrease * publicMints);
   }, [startPrice, priceIncrease, publicMints]);
 
