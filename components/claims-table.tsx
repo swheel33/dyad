@@ -46,7 +46,7 @@ export default function ClaimsTable({ className }: Props) {
               <TableCell className="font-medium">
                 {shortAddr(mint.to)}
               </TableCell>
-              <TableCell>#{+mint.DNft_id + 1}</TableCell>
+              <TableCell>#{mint.DNft_id}</TableCell>
               <TableCell>{formatEther(mint.price)} ETH</TableCell>
             </TableRow>
           ))}

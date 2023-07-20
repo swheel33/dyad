@@ -82,8 +82,8 @@ export default function Home() {
               >
                 DOCS
               </a>{" "}
-              to learn how dNFTs are your key to participate in the
-              DYAD ecosystem.
+              to learn how dNFTs are your key to participate in the DYAD
+              ecosystem.
             </p>
             <Separator className="my-4" />
             <ClaimsTable className="p-4" />

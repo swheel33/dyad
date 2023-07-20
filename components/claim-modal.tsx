@@ -70,10 +70,9 @@ export function ClaimModal({ showModal, closeModal }: Props) {
   });
 
   const { startPrice, priceIncrease, publicMints } = useMemo(() => {
-    console.log(data);
-    const startPrice = data?.[0]?.result as bigint;
-    const priceIncrease = data?.[1]?.result as bigint;
-    const publicMints = data?.[2]?.result as bigint;
+    const startPrice = (data?.[0]?.result ?? 0) as bigint;
+    const priceIncrease = (data?.[1]?.result ?? 0) as bigint;
+    const publicMints = (data?.[2]?.result ?? 0) as bigint;
     return { startPrice, priceIncrease, publicMints };
   }, [data]);
 
@@ -149,7 +148,7 @@ export function ClaimModal({ showModal, closeModal }: Props) {
               ) : isLoading || isTxLoading ? (
                 <Loader />
               ) : (
-                `Claim dNFT No. ${(publicMints + BigInt(1)).toString()}`
+                `Claim dNFT No. ${publicMints.toString()}`
               )}
             </Button>
           ) : (
