@@ -125,16 +125,14 @@ export function ClaimModal({ showModal, closeModal }: Props) {
           }}
         >
           <CardTitle className="test-md">
-            {isError || isTxError
+            {isError
               ? "Error"
               : isSuccess && !isTxLoading
               ? "Success!"
               : "Claim dNFT"}
           </CardTitle>
           <CardContent className="px-0 py-2 text-sm">
-            {isTxError
-              ? "Error minting dNFT"
-              : isError
+            {isError
               ? "Error sending transaction, please try again"
               : isSuccess && !isTxLoading
               ? "dNFT claimed successfully!"
