@@ -74,9 +74,12 @@ export function ClaimModal({ showModal, closeModal }: Props) {
   });
 
   const { startPrice, priceIncrease, publicMints } = useMemo(() => {
-    const startPrice = (data?.[0]?.result ?? 0) as bigint;
-    const priceIncrease = (data?.[1]?.result ?? 0) as bigint;
-    const publicMints = (data?.[2]?.result ?? 0) as bigint;
+    let startPrice = BigInt(0);
+    let priceIncrease = BigInt(0);
+    let publicMints = BigInt(0);
+    if (data?.[0]?.result) startPrice = data[0].result as bigint;
+    if (data?.[1]?.result) priceIncrease = data?.[1]?.result as bigint;
+    if (data?.[2]?.result) publicMints = data?.[2]?.result as bigint;
     return { startPrice, priceIncrease, publicMints };
   }, [data]);
 
@@ -87,7 +90,11 @@ export function ClaimModal({ showModal, closeModal }: Props) {
       publicMints === undefined
     )
       return 0;
-    return formatEther(startPrice + priceIncrease * publicMints);
+    try {
+      return formatEther(startPrice + priceIncrease * publicMints);
+    } catch (err) {
+      return 0;
+    }
   }, [startPrice, priceIncrease, publicMints]);
 
   const mintNft = useCallback(() => {
