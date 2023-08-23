@@ -8,19 +8,16 @@ import {
 import { Abi, formatEther, parseEther } from "viem";
 import { useCallback, useEffect, useMemo } from "react";
 
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { CardContent, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { deployments } from "@/lib/deployments";
 import DnftAbi from "@/abis/dnft.json";
 import WalletButton from "./ui/wallet-button";
 import Loader from "./loader";
+import useModal from "@/contexts/modal";
 
-interface Props {
-  showModal: boolean;
-  closeModal: () => void;
-}
-
-export function ClaimModal({ showModal, closeModal }: Props) {
+export function ClaimModalContent() {
+  const { closeModal } = useModal();
   const { address } = useAccount();
   const { chain } = useNetwork();
 
@@ -120,57 +117,45 @@ export function ClaimModal({ showModal, closeModal }: Props) {
   }, [isTxError, error]);
 
   return (
-    showModal && (
-      <div
-        className="fixed w-screen h-screen flex items-center justify-center backdrop-blur-sm bg-black/[0.6] z-10"
-        onClick={closeModal}
-      >
-        <Card
-          className="p-4 w-80 max-w-screen-sm flex flex-col justify-start items-left min-w-sm"
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
+    <div className="w-80">
+      <CardTitle className="text-md">
+        {isError
+          ? "Error"
+          : isSuccess && !isTxLoading
+          ? "Success!"
+          : "Claim dNFT"}
+      </CardTitle>
+      <CardContent className="px-0 py-2 text-sm">
+        {isError
+          ? "Error sending transaction, please try again"
+          : isSuccess && !isTxLoading
+          ? "dNFT claimed successfully!"
+          : `Claim fee ${mintPrice} ETH`}
+      </CardContent>
+      {address ? (
+        <Button
+          className="mt-2 w-full"
+          onClick={
+            isError || isTxError
+              ? reset
+              : isSuccess && !isTxLoading
+              ? close
+              : mintNft
+          }
         >
-          <CardTitle className="test-md">
-            {isError
-              ? "Error"
-              : isSuccess && !isTxLoading
-              ? "Success!"
-              : "Claim dNFT"}
-          </CardTitle>
-          <CardContent className="px-0 py-2 text-sm">
-            {isError
-              ? "Error sending transaction, please try again"
-              : isSuccess && !isTxLoading
-              ? "dNFT claimed successfully!"
-              : `Claim fee ${mintPrice} ETH`}
-          </CardContent>
-          {address ? (
-            <Button
-              className="mt-2"
-              onClick={
-                isError || isTxError
-                  ? reset
-                  : isSuccess && !isTxLoading
-                  ? close
-                  : mintNft
-              }
-            >
-              {isError || isTxError ? (
-                "Retry"
-              ) : isSuccess && !isTxLoading ? (
-                "Close"
-              ) : isLoading || isTxLoading ? (
-                <Loader />
-              ) : (
-                `Claim dNFT No. ${publicMints.toString()}`
-              )}
-            </Button>
+          {isError || isTxError ? (
+            "Retry"
+          ) : isSuccess && !isTxLoading ? (
+            "Close"
+          ) : isLoading || isTxLoading ? (
+            <Loader />
           ) : (
-            <WalletButton className="mt-2" />
+            `Claim dNFT No. ${publicMints.toString()}`
           )}
-        </Card>
-      </div>
-    )
+        </Button>
+      ) : (
+        <WalletButton className="mt-2 w-full" />
+      )}
+    </div>
   );
 }

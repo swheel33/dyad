@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { formatEther } from "viem";
 
 import { useAllDnftMintsQuery } from "@/gql";
@@ -13,6 +13,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { shortAddr } from "@/lib/utils";
+import useModal from "@/contexts/modal";
+import DnftModalContent from "./dnft-modal-content";
 
 interface Props {
   className?: string;
@@ -23,6 +25,7 @@ const perPage = 15;
 export default function ClaimsTable({ className }: Props) {
   const [page, setPage] = useState(0);
 
+  const { setModal } = useModal();
   const [{ data }] = useAllDnftMintsQuery({
     variables: {
       numResults: perPage,
@@ -30,24 +33,59 @@ export default function ClaimsTable({ className }: Props) {
     },
   });
 
+  const openModal = useCallback(() => {
+    setModal(<DnftModalContent />);
+  }, [setModal]);
+
+  const crColor = (cr: number): string => {
+    switch (true) {
+      case cr < 20:
+        return "text-red-500";
+      case cr < 30:
+        return "text-yellow-500";
+      case cr < 40:
+        return "text-green-500";
+      default:
+        return "text-green-500";
+    }
+  };
+
   return (
     <div className={className}>
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px]">User</TableHead>
-            <TableHead>dNFT ID</TableHead>
-            <TableHead>Contribution</TableHead>
+            <TableHead className="w-[80px]">dNFT ID</TableHead>
+            <TableHead>Owner</TableHead>
+            <TableHead>Collateralization Ratio (CR)</TableHead>
+            <TableHead>DYAD Minted</TableHead>
+            <TableHead>Vault Shares</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {data?.mintedNfts.map((mint) => (
-            <TableRow key={mint.DNft_id}>
+            <TableRow
+              key={mint.DNft_id}
+              onClick={openModal}
+              className="cursor-pointer"
+            >
+              <TableCell>#{mint.DNft_id}</TableCell>
               <TableCell className="font-medium">
                 {shortAddr(mint.to)}
               </TableCell>
-              <TableCell>#{mint.DNft_id}</TableCell>
-              <TableCell>{formatEther(mint.price)} ETH</TableCell>
+              <TableCell
+                className={`text-right ${crColor(
+                  +formatEther(mint.price) * 100
+                )}`}
+              >
+                {(+formatEther(mint.price) * 100).toFixed(2)}%
+              </TableCell>
+              <TableCell className="font-medium text-right">
+                {+formatEther(mint.price) * 1000}
+              </TableCell>
+              <TableCell className="font-medium text-right">
+                ${(+formatEther(mint.price) * 100).toFixed(2)}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
