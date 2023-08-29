@@ -34,7 +34,15 @@ export default function ClaimsTable({ className }: Props) {
   });
 
   const openModal = useCallback(() => {
-    setModal(<DnftModalContent />);
+    setModal(
+      <DnftModalContent
+        dnft={{
+          id: "0",
+          minter: `0x${"0".repeat(40)}`,
+          price: "0",
+        }}
+      />
+    );
   }, [setModal]);
 
   const crColor = (cr: number): string => {
