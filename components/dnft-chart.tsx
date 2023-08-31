@@ -12,7 +12,7 @@ export default function DnftChart({ data }: Props) {
   return (
     <AreaChart
       width={600}
-      height={250}
+      height={150}
       data={data}
       margin={{ top: 30, right: 30, left: 30, bottom: 0 }}
     >

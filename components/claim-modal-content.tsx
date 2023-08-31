@@ -17,7 +17,7 @@ import Loader from "./loader";
 import useModal from "@/contexts/modal";
 
 export function ClaimModalContent() {
-  const { closeModal } = useModal();
+  const { shiftModal } = useModal();
   const { address } = useAccount();
   const { chain } = useNetwork();
 
@@ -107,8 +107,8 @@ export function ClaimModalContent() {
 
   const close = useCallback(() => {
     reset();
-    closeModal();
-  }, [reset, closeModal]);
+    shiftModal();
+  }, [reset, shiftModal]);
 
   useEffect(() => {
     if (isTxError) {

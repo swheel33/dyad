@@ -1,7 +1,12 @@
-query allDnftMints($numResults: Int, $skip: Int) {
+query allDnftMints(
+  $numResults: Int
+  $skip: Int
+  $orderBy: MintedNft_orderBy
+  $orderDirection: OrderDirection
+) {
   mintedNfts(
-    orderBy: DNft_id
-    orderDirection: desc
+    orderBy: $orderBy
+    orderDirection: $orderDirection
     first: $numResults
     skip: $skip
   ) {

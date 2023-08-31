@@ -1,9 +1,10 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { formatEther } from "viem";
+import { formatEther, parseEther } from "viem";
+import { ArrowDownIcon, ArrowUpIcon } from "@radix-ui/react-icons";
 
-import { useAllDnftMintsQuery } from "@/gql";
+import { MintedNft_OrderBy, OrderDirection, useAllDnftMintsQuery } from "@/gql";
 import {
   Table,
   TableBody,
@@ -12,7 +13,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Separator } from "@/components/ui/separator";
 import { shortAddr } from "@/lib/utils";
+import { crColor } from "@/lib/utils";
 import useModal from "@/contexts/modal";
 import DnftModalContent from "./dnft-modal-content";
 
@@ -24,50 +27,104 @@ const perPage = 15;
 
 export default function ClaimsTable({ className }: Props) {
   const [page, setPage] = useState(0);
+  const [sortBy, setSortBy] = useState<MintedNft_OrderBy>(
+    MintedNft_OrderBy.DNftId
+  );
+  const [sortDir, setSortDir] = useState<OrderDirection>(OrderDirection.Asc);
+  const [filterOwned, setFilterOwned] = useState<boolean>(false);
 
-  const { setModal } = useModal();
+  const { pushModal } = useModal();
   const [{ data }] = useAllDnftMintsQuery({
     variables: {
       numResults: perPage,
       skip: page * perPage,
+      orderBy: sortBy,
+      orderDirection: sortDir,
     },
   });
 
   const openModal = useCallback(() => {
-    setModal(
+    pushModal(
       <DnftModalContent
         dnft={{
           id: "0",
           minter: `0x${"0".repeat(40)}`,
-          price: "0",
+          price: parseEther("0.97").toString(),
         }}
       />
     );
-  }, [setModal]);
+  }, [pushModal]);
 
-  const crColor = (cr: number): string => {
-    switch (true) {
-      case cr < 20:
-        return "text-red-500";
-      case cr < 30:
-        return "text-yellow-500";
-      case cr < 40:
-        return "text-green-500";
-      default:
-        return "text-green-500";
+  const handleHeaderClick = (id: MintedNft_OrderBy) => {
+    if (id === sortBy) {
+      setSortDir(
+        sortDir === OrderDirection.Asc
+          ? OrderDirection.Desc
+          : OrderDirection.Asc
+      );
+    } else {
+      setSortBy(id);
+      setSortDir(OrderDirection.Asc);
     }
   };
 
   return (
     <div className={className}>
+      <div className="flex flex-row gap-3 px-2 pb-3">
+        <p
+          onClick={() => setFilterOwned(false)}
+          className={`text-sm ${
+            !filterOwned ? "text-foreground" : "text-muted-foreground"
+          } cursor-pointer`}
+        >
+          All
+        </p>
+        <p
+          onClick={() => setFilterOwned(true)}
+          className={`text-sm ${
+            filterOwned ? "text-foreground" : "text-muted-foreground"
+          } cursor-pointer`}
+        >
+          Mine
+        </p>
+      </div>
+      <Separator />
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[80px]">dNFT ID</TableHead>
+            <TableHead
+              className="w-[80px] whitespace-nowrap cursor-pointer"
+              onClick={() => {
+                handleHeaderClick(MintedNft_OrderBy.DNftId);
+              }}
+            >
+              dNFT ID
+              {sortBy === MintedNft_OrderBy.DNftId &&
+                (sortDir === OrderDirection.Asc ? (
+                  <ArrowUpIcon className="w-3 h-3 ml-1 inline" />
+                ) : (
+                  <ArrowDownIcon className="w-3 h-3 ml-1 inline" />
+                ))}
+            </TableHead>
             <TableHead>Owner</TableHead>
-            <TableHead>Collateralization Ratio (CR)</TableHead>
-            <TableHead>DYAD Minted</TableHead>
-            <TableHead>Vault Shares</TableHead>
+            <TableHead
+              onClick={() => handleHeaderClick(MintedNft_OrderBy.DNftId)}
+              className="cursor-pointer"
+            >
+              CR
+            </TableHead>
+            <TableHead
+              className="text-right cursor-pointer"
+              onClick={() => handleHeaderClick(MintedNft_OrderBy.DNftId)}
+            >
+              DYAD Minted
+            </TableHead>
+            <TableHead
+              className="text-right cursor-pointer"
+              onClick={() => handleHeaderClick(MintedNft_OrderBy.DNftId)}
+            >
+              Vault Shares
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -75,16 +132,14 @@ export default function ClaimsTable({ className }: Props) {
             <TableRow
               key={mint.DNft_id}
               onClick={openModal}
-              className="cursor-pointer"
+              className="cursor-pointer h-12"
             >
               <TableCell>#{mint.DNft_id}</TableCell>
               <TableCell className="font-medium">
                 {shortAddr(mint.to)}
               </TableCell>
               <TableCell
-                className={`text-right ${crColor(
-                  +formatEther(mint.price) * 100
-                )}`}
+                className={`${crColor(+formatEther(mint.price) * 100)}`}
               >
                 {(+formatEther(mint.price) * 100).toFixed(2)}%
               </TableCell>

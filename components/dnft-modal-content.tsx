@@ -1,3 +1,5 @@
+import { formatEther } from "viem";
+
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -18,6 +20,11 @@ import { CardTitle } from "./ui/card";
 import { Separator } from "@/components/ui/separator";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import { crColor } from "@/lib/utils";
+import { useState } from "react";
+import { PopoverAnchor } from "@radix-ui/react-popover";
+import AdjustVaultModalContent from "./adjust-vault-modal-content";
+import useModal from "@/contexts/modal";
 
 const testData = [
   {
@@ -87,27 +94,43 @@ interface Props {
 }
 
 export default function DnftModalContent({ dnft }: Props) {
+  const { pushModal } = useModal();
+
   return (
     <>
-      <div className="dyad-section flex flex-col space-y-1 m-4">
+      <div className="dyad-section flex flex-col space-y-1 mb-4">
         <CardTitle className="text-lg">Stats</CardTitle>
-        <p className="text-sm font-medium text-muted-foreground leading-loose">
-          DYAD Minted: <span className="text-foreground">3490</span>
-        </p>
-        <p className="text-sm font-medium text-muted-foreground leading-loose">
-          Shares: <span className="text-foreground">4300</span>
-        </p>
+        <div className="grid grid-rows-2 grid-cols-2">
+          <p className="text-md font-medium text-muted-foreground leading-loose">
+            Minted: <span className="text-foreground">3490</span>
+          </p>
+          <p className="text-md font-medium text-muted-foreground leading-loose text-right">
+            ID: <span className="text-foreground">#1</span>
+          </p>
+          <p className="text-md font-medium text-muted-foreground leading-loose">
+            Shares: <span className="text-foreground">4300</span>
+          </p>
+          <p className="text-md font-medium text-muted-foreground leading-loose text-right">
+            CR:{" "}
+            <span className={crColor(+formatEther(BigInt(dnft.price)))}>
+              {(+formatEther(BigInt(dnft.price)) * 100).toFixed(2)}%
+            </span>
+          </p>
+        </div>
         <DnftChart data={testData} />
         <Separator />
 
-        <div className="mint-section flex space-x-2 pt-4">
-          <Input type="number" placeholder="Mint DYAD" />
-          <Button variant="secondary">MAX</Button>
-        </div>
-
-        <div className="redeem-section flex space-x-2">
-          <Input type="number" placeholder="Redeem DYAD" />
-          <Button variant="secondary">MAX</Button>
+        <div className="flex space-x-8 pt-4 justify-between">
+          <div className="flex gap-2 items-center">
+            <Input type="number" placeholder="Mint DYAD" />
+            <p className="text-xs cursor-pointer">MAX</p>
+            <Button variant="secondary">Mint</Button>
+          </div>
+          <div className="flex gap-2 items-center">
+            <Input type="number" placeholder="Redeem DYAD" />
+            <p className="text-xs cursor-pointer hover:underline">MAX</p>
+            <Button variant="secondary">Burn</Button>
+          </div>
         </div>
       </div>
 
@@ -119,62 +142,31 @@ export default function DnftModalContent({ dnft }: Props) {
               <TableHead>Value</TableHead>
               <TableHead>Yield</TableHead>
               <TableHead>Earnings</TableHead>
-              <TableHead className="w-20">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {vaults.map(({ id, value, apy, earnings }) => (
-              <TableRow key={id}>
+              <TableRow
+                className="h-12 w-full cursor-pointer"
+                onClick={() =>
+                  pushModal(<AdjustVaultModalContent vault={{ id }} />)
+                }
+                key={id}
+              >
                 <TableCell>{id}</TableCell>
                 <TableCell>${value}</TableCell>
                 <TableCell>{apy}%</TableCell>
                 <TableCell>${earnings}</TableCell>
-                <TableCell>
-                  <Popover>
-                    <PopoverTrigger>
-                      <Button variant="outline">±</Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-80">
-                      <RadioGroup defaultValue="deposit" className="space-y-2">
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="deposit" id="deposit" />
-                          <Label htmlFor="deposit" className="cursor-pointer">
-                            Deposit
-                          </Label>
-                        </div>
-                        <div className="flex space-x-2">
-                          <Input type="number" placeholder="Deposit" />
-                          <Button variant="secondary">MAX</Button>
-                        </div>
-                        <div className="flex items-center space-x-2 cursor-pointer">
-                          <RadioGroupItem value="withdraw" id="withdraw" />
-                          <Label htmlFor="withdraw" className="cursor-pointer">
-                            Withdraw
-                          </Label>
-                        </div>
-                        <div className="flex space-x-2">
-                          <Input type="number" placeholder="Withdraw" />
-                          <Button variant="secondary">MAX</Button>
-                        </div>
-                        <div className="pt-2 w-full">
-                          <Button className="w-full">CONFIRM</Button>
-                        </div>
-                      </RadioGroup>
-                    </PopoverContent>
-                  </Popover>
-                </TableCell>
               </TableRow>
             ))}
             {new Array(5 - vaults.length).fill(null).map((_, idx) => (
               <TableRow key={`option-${idx}`}>
-                <TableCell />
-                <TableCell />
-                <TableCell />
-                <TableCell />
-                <TableCell>
+                <TableCell colSpan={4}>
                   <Popover>
-                    <PopoverTrigger>
-                      <Button variant="outline">+</Button>
+                    <PopoverTrigger className="w-full">
+                      <Button variant="outline" className="w-full">
+                        +
+                      </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-80">
                       {/* ... (Your provided design for the Deposit/Withdraw popover) ... */}

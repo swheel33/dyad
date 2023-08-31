@@ -3,14 +3,14 @@ import useModal from "@/contexts/modal";
 import { ClaimModalContent } from "./claim-modal-content";
 
 export default function ClaimSection() {
-  const { setModal } = useModal();
+  const { pushModal } = useModal();
 
   return (
     <>
       <Button
         className="mb-3 mx-4"
         onClick={() => {
-          setModal(<ClaimModalContent />);
+          pushModal(<ClaimModalContent />);
         }}
       >
         Claim dNFT
