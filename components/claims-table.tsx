@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/table";
 import { Separator } from "@/components/ui/separator";
 import { shortAddr } from "@/lib/utils";
-import { crColor } from "@/lib/utils";
 import useModal from "@/contexts/modal";
 import DnftModalContent from "./dnft-modal-content";
 
@@ -65,6 +64,19 @@ export default function ClaimsTable({ className }: Props) {
     } else {
       setSortBy(id);
       setSortDir(OrderDirection.Asc);
+    }
+  };
+
+  const crColor = (cr: number): string => {
+    switch (true) {
+      case cr < 20:
+        return "text-red-500";
+      case cr < 30:
+        return "text-yellow-500";
+      case cr < 40:
+        return "text-green-500";
+      default:
+        return "text-green-500";
     }
   };
 
