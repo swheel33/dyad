@@ -15,54 +15,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import DnftChart from "./dnft-chart";
 import { CardTitle } from "./ui/card";
 import { Separator } from "@/components/ui/separator";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
 import { crColor } from "@/lib/utils";
-import { useState } from "react";
-import { PopoverAnchor } from "@radix-ui/react-popover";
 import AdjustVaultModalContent from "./adjust-vault-modal-content";
 import useModal from "@/contexts/modal";
-
-const testData = [
-  {
-    minted: 4000,
-    shares: 2400,
-    timestamp: 2400,
-  },
-  {
-    minted: 3000,
-    shares: 1398,
-    timestamp: 2210,
-  },
-  {
-    minted: 2000,
-    shares: 9800,
-    timestamp: 2290,
-  },
-  {
-    minted: 2780,
-    shares: 3908,
-    timestamp: 2000,
-  },
-  {
-    minted: 1890,
-    shares: 4800,
-    timestamp: 2181,
-  },
-  {
-    minted: 2390,
-    shares: 3800,
-    timestamp: 2500,
-  },
-  {
-    minted: 3490,
-    shares: 4300,
-    timestamp: 2100,
-  },
-];
 
 const vaults = [
   {
@@ -98,9 +55,9 @@ export default function DnftModalContent({ dnft }: Props) {
 
   return (
     <>
-      <div className="dyad-section flex flex-col space-y-1 mb-4">
+      <div className="dyad-section flex flex-col space-y-1">
         <CardTitle className="text-lg">Stats</CardTitle>
-        <div className="grid grid-rows-2 grid-cols-2">
+        <div className="grid grid-rows-2 grid-cols-2 pb-3">
           <p className="text-md font-medium text-muted-foreground leading-loose">
             Minted: <span className="text-foreground">3490</span>
           </p>
@@ -117,10 +74,8 @@ export default function DnftModalContent({ dnft }: Props) {
             </span>
           </p>
         </div>
-        <DnftChart data={testData} />
         <Separator />
-
-        <div className="flex space-x-8 pt-4 justify-between">
+        <div className="flex space-x-8 py-4 justify-between">
           <div className="flex gap-2 items-center">
             <Input type="number" placeholder="Mint DYAD" />
             <p className="text-xs cursor-pointer">MAX</p>
@@ -132,6 +87,7 @@ export default function DnftModalContent({ dnft }: Props) {
             <Button variant="secondary">Burn</Button>
           </div>
         </div>
+        <Separator />
       </div>
 
       <div className="vault-section flex flex-col space-y-4">
