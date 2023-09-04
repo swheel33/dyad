@@ -14,8 +14,8 @@ import { MainNav } from "@/components/ui/main-nav";
 import { Separator } from "@/components/ui/separator";
 import WalletButton from "@/components/ui/wallet-button";
 import ClaimSection from "@/components/claim-section";
-import ClaimsTable from "@/components/claims-table";
 import { ModalProvider } from "@/contexts/modal";
+import DnftBox from "@/components/dnft-box";
 
 const wagmiConfig = createConfig({
   autoConnect: true,
@@ -53,7 +53,7 @@ export default function Home() {
               <Separator className="my-4" />
               <ClaimSection />
               <Separator className="my-4" />
-              <ClaimsTable className="p-4" />
+              <DnftBox />
             </div>
           </ModalProvider>
         </main>
