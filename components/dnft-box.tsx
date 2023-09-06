@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Label } from "@radix-ui/react-label";
 
 import {
   Select,
@@ -8,6 +7,7 @@ import {
   SelectValue,
   SelectContent,
 } from "@/components/ui/select";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -27,48 +27,33 @@ export default function DnftBox() {
   return (
     <div className="container mx-auto p-4">
       {/* Select dNFT */}
-      <Label className="text-sm">
-        Select dNFT
-        <Select>
-          <SelectTrigger id="select-dnft" className="mt-1">
-            <SelectValue placeholder="Select dNFT" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="dnft1">dNFT 1</SelectItem>
-            <SelectItem value="dnft2">dNFT 2</SelectItem>
-          </SelectContent>
-        </Select>
-      </Label>
+      <Select>
+        <SelectTrigger id="select-dnft" className="mt-1">
+          <SelectValue placeholder="Select dNFT" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="dnft1">dNFT 1</SelectItem>
+          <SelectItem value="dnft2">dNFT 2</SelectItem>
+        </SelectContent>
+      </Select>
 
       {/* Tabs */}
-      <div className="my-4 flex space-x-4 ">
-        <Button
-          variant={selectedTab === "mint" ? "default" : "outline"}
-          onClick={() => {
-            setSelectedTab("mint");
-          }}
-        >
-          Mint & Deposit
-        </Button>
-        <Button
-          variant={selectedTab === "burn" ? "default" : "outline"}
-          onClick={() => {
-            setSelectedTab("burn");
-          }}
-        >
-          Burn & Withdraw
-        </Button>
-      </div>
 
-      {selectedTab === "mint" ? (
-        <MintAndDepositTab setSelectedVault={(test: string) => test} />
-      ) : (
-        <BurnAndWithdrawTab setSelectedVault={(test: string) => test} />
-      )}
+      <Tabs defaultValue="mint" className="mt-2">
+        <TabsList className="my-2">
+          <TabsTrigger value="mint">Mint & Deposit</TabsTrigger>
+          <TabsTrigger value="burn">Burn & Withdraw</TabsTrigger>
+        </TabsList>
+        <TabsContent value="mint">
+          <MintAndDepositTab setSelectedVault={(test: string) => test} />
+        </TabsContent>
+        <TabsContent value="burn">
+          <BurnAndWithdrawTab setSelectedVault={(test: string) => test} />
+        </TabsContent>
+      </Tabs>
 
       {/* Persistent dNFT Data Block */}
       <div className="mt-4 border p-4">
-        <h2 className="text-xl mb-2">dNFT Data</h2>
         <p className="text-sm text-muted-foreground">
           DYAD minted: <span className="text-foreground">10</span>
         </p>
@@ -79,8 +64,7 @@ export default function DnftBox() {
           Collateral Ratio: <span className={crColor(90)}>90%</span>
         </p>
 
-        <h2 className="text-xl mt-4 mb-2">Vault Shares Data Table</h2>
-        <Table className="w-full border">
+        <Table className="w-full border mt-4">
           <TableHeader>
             <TableRow>
               <TableHead>Vault</TableHead>

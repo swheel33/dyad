@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Label } from "@radix-ui/react-label";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,7 +22,6 @@ export default function BurnAndWithdrawTab({ setSelectedVault }: Props) {
     <div>
       {/* Burn Component */}
       <div className="mb-4 p-4 border">
-        <h2 className="text-xl mb-2">Burn</h2>
         <div className="flex space-x-4">
           <Input
             type="text"
@@ -46,10 +44,8 @@ export default function BurnAndWithdrawTab({ setSelectedVault }: Props) {
         </Button>
       </div>
 
-      {/* Vault ComboBox */}
-
-      <Label className="text-sm">
-        Select Vault
+      {/* Withdraw Component */}
+      <div className="mb-4 p-4 border">
         <Select>
           <SelectTrigger className="mt-1 mb-4">
             <SelectValue placeholder="Select Vault" />
@@ -59,11 +55,6 @@ export default function BurnAndWithdrawTab({ setSelectedVault }: Props) {
             <SelectItem value="dnft2">Vault 2</SelectItem>
           </SelectContent>
         </Select>
-      </Label>
-
-      {/* Withdraw Component */}
-      <div className="mb-4 p-4 border">
-        <h2 className="text-xl mb-2">Withdraw</h2>
         <div className="flex space-x-4">
           <Input
             type="text"
