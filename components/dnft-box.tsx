@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import {
   Select,
   SelectItem,
@@ -8,7 +6,6 @@ import {
   SelectContent,
 } from "@/components/ui/select";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -22,8 +19,6 @@ import BurnAndWithdrawTab from "./burn-and-withdraw-tab";
 import { crColor } from "@/lib/utils";
 
 export default function DnftBox() {
-  const [selectedTab, setSelectedTab] = useState<"mint" | "burn">("mint");
-
   return (
     <div className="container mx-auto p-4">
       {/* Select dNFT */}
