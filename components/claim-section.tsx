@@ -16,19 +16,11 @@ export default function ClaimSection() {
         Claim dNFT
       </Button>
       <p className="text-sm leading-loose my-4 px-4">
-        dNFTs are ERC 721 NFTs with a unique and maximally composable metadata
-        structure.
-      </p>
-
-      <p className="text-sm leading-loose my-4 px-4">
-        Read our{" "}
-        <a
-          href="https://dyadstable.notion.site/DYAD-full-52096aed265247e7a50b14f06c228a7e?pvs=4"
-          className="underline"
-        >
-          DOCS
-        </a>{" "}
-        to learn how dNFTs are your key to participate in the DYAD ecosystem.
+        Use your dNFT to deposit collateral, acquire XP, mint DYAD, and earn
+        with our partners.
+        <br />
+        The longer you keep your collateral deposited, the more it will grow
+        with time enabling you to mint dyad at a more efficient rate.
       </p>
     </>
   );

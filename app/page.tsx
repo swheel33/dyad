@@ -2,7 +2,7 @@
 
 import { WagmiConfig, createConfig } from "wagmi";
 import { createPublicClient, http } from "viem";
-import { mainnet } from "viem/chains";
+import { goerli, mainnet } from "viem/chains";
 import {
   Client,
   Provider as UrqlProvider,
@@ -20,7 +20,7 @@ import DnftBox from "@/components/dnft-box";
 const wagmiConfig = createConfig({
   autoConnect: true,
   publicClient: createPublicClient({
-    chain: mainnet,
+    chain: goerli,
     transport: http(),
   }),
 });
