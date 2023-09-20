@@ -47,7 +47,7 @@ export default function MintAndDepositTab({
   vaults,
 }: Props) {
   const { address } = useAccount();
-  const [newCR, setNewCR] = useState(0n);
+  const [newCR, setNewCR] = useState(BigInt(0));
   const [depositInput, setDepositInput] = useState<string>();
 
   const [depositAmount, depositAmountError] = useMemo(() => {
@@ -87,7 +87,7 @@ export default function MintAndDepositTab({
     address: selectedVault?.asset as `0x${string}`,
     abi: ERC20 as Abi,
     functionName: "approve",
-    args: [selectedVault?.address ?? "0", depositAmount ?? 0n],
+    args: [selectedVault?.address ?? "0", depositAmount ?? BigInt(0)],
   });
 
   const { isLoading: isApprovalTxLoading, isError: isApprovalTxError } =
@@ -106,7 +106,7 @@ export default function MintAndDepositTab({
     address: selectedVault?.address as `0x${string}`,
     abi: ERC20 as Abi,
     functionName: "approve",
-    args: [selectedVault?.address ?? "0", depositAmount ?? 0n],
+    args: [selectedVault?.address ?? "0", depositAmount ?? BigInt(0)],
   });
 
   const { isLoading: isDepositTxLoading, isError: isDepositTxError } =
@@ -176,10 +176,12 @@ export default function MintAndDepositTab({
             : ""}
         </p>
         <p className="text-green-500 text-xs">
-          {collatRatio && (
+          {collatRatio ? (
             <>
               Old CR: <span>{+formatEther(collatRatio) * 100}%</span> -&gt;
             </>
+          ) : (
+            ""
           )}{" "}
           New CR: {+formatEther(newCR) * 100}%
         </p>
@@ -215,21 +217,23 @@ export default function MintAndDepositTab({
             placeholder="Amount to Mint"
             className="w-full p-2 border mb-2"
             onChange={(e) =>
-              setNewCR((collatRatio ?? 0n) + parseEther(e.target.value))
+              setNewCR((collatRatio ?? BigInt(0)) + parseEther(e.target.value))
             }
           />
           <Button
             className="p-2 border bg-gray-200"
-            onClick={() => setNewCR((collatRatio ?? 0n) + 100n)}
+            onClick={() => setNewCR((collatRatio ?? BigInt(0)) + BigInt(100))}
           >
             MAX
           </Button>
         </div>
         <p className="text-green-500 text-xs">
-          {collatRatio && (
+          {collatRatio ? (
             <>
               Old CR: <span>{+formatEther(collatRatio) * 100}%</span> -&gt;
             </>
+          ) : (
+            ""
           )}{" "}
           New CR: {+formatEther(newCR) * 100}%
         </p>

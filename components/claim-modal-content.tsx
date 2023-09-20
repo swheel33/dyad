@@ -11,7 +11,7 @@ import { useCallback, useEffect, useMemo } from "react";
 import { CardContent, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { deployments } from "@/lib/deployments";
-import DnftAbi from "@/abis/dnft.json";
+import DnftAbi from "@/abis/DNft.json";
 import WalletButton from "@/components/ui/wallet-button";
 import Loader from "@/components/loader";
 import useModal from "@/contexts/modal";

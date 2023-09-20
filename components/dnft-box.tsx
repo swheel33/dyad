@@ -85,9 +85,9 @@ export default function DnftBox() {
     watch: true,
     select: (data) => ({
       dnftBalance: +(data?.[0]?.result?.toString() ?? "0"),
-      collateralRatio: (data?.[1]?.result ?? 0n) as bigint,
-      totalValueLocked: (data?.[2]?.result ?? 0n) as bigint,
-      dyadMinted: (data?.[3]?.result ?? 0n) as bigint,
+      collateralRatio: (data?.[1]?.result ?? BigInt(0)) as bigint,
+      totalValueLocked: (data?.[2]?.result ?? BigInt(0)) as bigint,
+      dyadMinted: (data?.[3]?.result ?? BigInt(0)) as bigint,
     }),
   });
   const { dnftBalance, collateralRatio, totalValueLocked, dyadMinted } =
@@ -225,27 +225,27 @@ export default function DnftBox() {
             <p className="text-sm text-muted-foreground">
               DYAD minted:{" "}
               <span className="text-foreground">
-                {formatEther(dyadMinted ?? 0n)}
+                {formatEther(dyadMinted ?? BigInt(0))}
               </span>
             </p>
             <p className="text-sm text-muted-foreground">
               Collateral value:{" "}
               <span className="text-foreground">
-                ${formatEther(totalValueLocked ?? 0n)}
+                ${formatEther(totalValueLocked ?? BigInt(0))}
               </span>
             </p>
             <p className="text-sm text-muted-foreground">
               Collateral Ratio:{" "}
               <span
                 className={crColor(
-                  dyadMinted === 0n
+                  dyadMinted === BigInt(0)
                     ? 100
-                    : +formatEther(collateralRatio ?? 0n) * 100
+                    : +formatEther(collateralRatio ?? BigInt(0)) * 100
                 )}
               >
-                {dyadMinted === 0n
+                {dyadMinted === BigInt(0)
                   ? "N/A"
-                  : `${+formatEther(collateralRatio ?? 0n) * 100}%`}
+                  : `${+formatEther(collateralRatio ?? BigInt(0)) * 100}%`}
               </span>
             </p>
 
