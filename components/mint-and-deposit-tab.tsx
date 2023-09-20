@@ -1,4 +1,12 @@
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
+import {
+  useAccount,
+  useBalance,
+  useContractRead,
+  useContractWrite,
+  useWaitForTransaction,
+} from "wagmi";
+import { Abi, formatEther, parseEther } from "viem";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,10 +17,24 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { formatEther, parseEther } from "viem";
+import VaultAbi from "@/abis/Vault.json";
+import ERC20 from "@/abis/ERC20.json";
+import Loader from "./loader";
 
 interface Props {
-  setSelectedVault: (value: string) => void;
+  setSelectedVaultId: (value: string) => void;
+  vaults: {
+    address: string;
+    asset: string;
+    symbol: string;
+    collatPrice: string;
+  }[];
+  selectedVault?: {
+    address: string;
+    asset: string;
+    symbol: string;
+    collatPrice: string;
+  };
   collatRatio?: bigint;
   vaultUsdValue?: bigint;
   dyadMinted?: bigint;
@@ -20,21 +42,115 @@ interface Props {
 
 export default function MintAndDepositTab({
   collatRatio,
-  setSelectedVault,
+  setSelectedVaultId,
+  selectedVault,
+  vaults,
 }: Props) {
+  const { address } = useAccount();
   const [newCR, setNewCR] = useState(0n);
+  const [depositInput, setDepositInput] = useState<string>();
+
+  const [depositAmount, depositAmountError] = useMemo(() => {
+    if (depositInput === undefined || depositInput === "") {
+      return [undefined, undefined];
+    }
+    try {
+      return [parseEther(depositInput as string), undefined];
+    } catch {
+      return [undefined, "Invalid input"];
+    }
+  }, [depositInput]);
+
+  const { data: balanceData } = useBalance({
+    enabled: !!selectedVault?.asset,
+    address,
+    token: (selectedVault?.asset ?? "") as `0x${string}`,
+  });
+
+  const { data: allowance } = useContractRead({
+    enabled: !!selectedVault?.asset,
+    address: (selectedVault?.asset ?? "") as `0x${string}`,
+    abi: ERC20 as Abi,
+    args: [address ?? "0", selectedVault?.address ?? "0"],
+    functionName: "allowance",
+    watch: true,
+    select: (data) => data as bigint,
+  });
+
+  const {
+    data: approvalTxData,
+    isLoading: isApprovalLoading,
+    isError: isApprovalError,
+    write: approve,
+    reset: approvalReset,
+  } = useContractWrite({
+    address: selectedVault?.asset as `0x${string}`,
+    abi: ERC20 as Abi,
+    functionName: "approve",
+    args: [selectedVault?.address ?? "0", depositAmount ?? 0n],
+  });
+
+  const { isLoading: isApprovalTxLoading, isError: isApprovalTxError } =
+    useWaitForTransaction({
+      hash: approvalTxData?.hash,
+      onError: console.error,
+    });
+
+  const {
+    data: depositTxData,
+    isLoading: isDepositLoading,
+    isError: isDepositError,
+    write: deposit,
+    reset: depositReset,
+  } = useContractWrite({
+    address: selectedVault?.address as `0x${string}`,
+    abi: ERC20 as Abi,
+    functionName: "approve",
+    args: [selectedVault?.address ?? "0", depositAmount ?? 0n],
+  });
+
+  const { isLoading: isDepositTxLoading, isError: isDepositTxError } =
+    useWaitForTransaction({
+      hash: depositTxData?.hash,
+      onError: console.error,
+    });
+
+  const setApproval = useCallback(() => {
+    if (
+      allowance !== undefined &&
+      depositAmount !== undefined &&
+      allowance < depositAmount
+    ) {
+      approve();
+    }
+  }, [allowance, depositAmount, approve]);
+
+  const requiresApproval = useMemo(
+    () =>
+      allowance !== undefined &&
+      depositAmount !== undefined &&
+      allowance < depositAmount,
+    [allowance, depositAmount]
+  );
 
   return (
     <div>
       {/* Deposit Component */}
       <div className="mb-4 p-4 border">
-        <Select>
+        <Select
+          onValueChange={(value) => {
+            setSelectedVaultId(value);
+          }}
+        >
           <SelectTrigger className="mt-1 mb-4">
             <SelectValue placeholder="Select Vault" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="dnft1">Vault 1</SelectItem>
-            <SelectItem value="dnft2">Vault 2</SelectItem>
+            {vaults.map((vault) => (
+              <SelectItem key={vault.address} value={vault.address}>
+                {vault.symbol}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
         <div className="flex space-x-4">
@@ -42,17 +158,23 @@ export default function MintAndDepositTab({
             type="text"
             placeholder="Amount to Deposit"
             className="w-full p-2 border mb-2"
-            onChange={(e) =>
-              setNewCR((collatRatio ?? 0n) + parseEther(e.target.value))
-            }
+            value={depositInput}
+            onChange={(e) => setDepositInput(e.target.value)}
           />
           <Button
             className="p-2 border bg-gray-200"
-            onClick={() => setNewCR((collatRatio ?? 0n) + 100)}
+            onClick={() => setDepositInput(balanceData?.formatted ?? "")}
           >
             MAX
           </Button>
         </div>
+        <p className="text-red-500 text-xs pb-2">
+          {depositAmountError
+            ? depositAmountError
+            : depositAmount && balanceData && depositAmount > balanceData?.value
+            ? "Not enough balance"
+            : ""}
+        </p>
         <p className="text-green-500 text-xs">
           {collatRatio && (
             <>
@@ -61,9 +183,28 @@ export default function MintAndDepositTab({
           )}{" "}
           New CR: {+formatEther(newCR) * 100}%
         </p>
-        <Button className="mt-4 p-2" variant="default">
-          Deposit [collateral]
+        <Button
+          className="mt-4 p-2"
+          variant="default"
+          disabled={!selectedVault || !depositAmount || depositAmountError}
+          onClick={() => {
+            approvalReset();
+            requiresApproval ? setApproval() : console.log();
+          }}
+        >
+          {isApprovalLoading || isApprovalTxLoading ? (
+            <Loader />
+          ) : requiresApproval ? (
+            "Approve"
+          ) : (
+            `Deposit ${selectedVault?.symbol ?? ""}`
+          )}
         </Button>
+        <p className="text-red-500 text-xs pb-2">
+          {isApprovalError || isApprovalTxError
+            ? "Error approving token for deposit"
+            : ""}
+        </p>
       </div>
 
       {/* Mint Component */}

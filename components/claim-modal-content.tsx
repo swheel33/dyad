@@ -12,8 +12,8 @@ import { CardContent, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { deployments } from "@/lib/deployments";
 import DnftAbi from "@/abis/dnft.json";
-import WalletButton from "./ui/wallet-button";
-import Loader from "./loader";
+import WalletButton from "@/components/ui/wallet-button";
+import Loader from "@/components/loader";
 import useModal from "@/contexts/modal";
 
 export function ClaimModalContent() {
@@ -62,12 +62,9 @@ export function ClaimModalContent() {
     functionName: "mintNft",
   });
 
-  const {
-    isLoading: isTxLoading,
-    isError: isTxError,
-    error,
-  } = useWaitForTransaction({
+  const { isLoading: isTxLoading, isError: isTxError } = useWaitForTransaction({
     hash: txData?.hash,
+    onError: console.error,
   });
 
   const { startPrice, priceIncrease, publicMints } = useMemo(() => {
@@ -109,12 +106,6 @@ export function ClaimModalContent() {
     reset();
     shiftModal();
   }, [reset, shiftModal]);
-
-  useEffect(() => {
-    if (isTxError) {
-      console.error(error);
-    }
-  }, [isTxError, error]);
 
   return (
     <div className="w-80">

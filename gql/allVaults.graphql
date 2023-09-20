@@ -1,0 +1,15 @@
+query allVaults($isLicensed: Boolean = false) {
+  vaults(where: { isLicensed: $isLicensed }) {
+    id
+    isLicensed
+    vaultManager {
+      id
+    }
+    asset {
+      id
+      name
+      symbol
+      decimals
+    }
+  }
+}
