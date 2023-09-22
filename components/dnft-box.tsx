@@ -43,7 +43,10 @@ export default function DnftBox() {
   const { pushModal } = useModal();
 
   const { vaultManager, dyad, dnft, vault } = useMemo(
-    () => (chain ? deployments[chain.id] : Object.values(deployments)[0]),
+    () =>
+      chain && deployments[chain.id]
+        ? deployments[chain.id]
+        : Object.values(deployments)[0],
     [chain]
   );
 
