@@ -17,6 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import VaultManagerAbi from "@/abis/VaultManager.json";
 import VaultAbi from "@/abis/Vault.json";
 import ERC20 from "@/abis/ERC20.json";
 import Loader from "./loader";
@@ -29,6 +30,8 @@ interface Props {
     symbol: string;
     collatPrice: string;
   }[];
+  vaultManager: string;
+  selectedDnft?: string;
   selectedVault?: {
     address: string;
     asset: string;
@@ -36,8 +39,9 @@ interface Props {
     collatPrice: string;
   };
   collatRatio?: bigint;
-  vaultUsdValue?: bigint;
+  totalValueLocked?: bigint;
   dyadMinted?: bigint;
+  minCollateralizationRatio?: bigint;
 }
 
 export default function MintAndDepositTab({
@@ -45,10 +49,15 @@ export default function MintAndDepositTab({
   setSelectedVaultId,
   selectedVault,
   vaults,
+  selectedDnft,
+  totalValueLocked,
+  dyadMinted,
+  minCollateralizationRatio,
+  vaultManager,
 }: Props) {
   const { address } = useAccount();
-  const [newCR, setNewCR] = useState(BigInt(0));
   const [depositInput, setDepositInput] = useState<string>();
+  const [mintInput, setMintInput] = useState<string>();
 
   const [depositAmount, depositAmountError] = useMemo(() => {
     if (depositInput === undefined || depositInput === "") {
@@ -61,11 +70,36 @@ export default function MintAndDepositTab({
     }
   }, [depositInput]);
 
+  const [mintAmount, mintAmountError] = useMemo(() => {
+    if (mintInput === undefined || mintInput === "") {
+      return [undefined, undefined];
+    }
+    try {
+      return [parseEther(mintInput as string), undefined];
+    } catch {
+      return [undefined, "Invalid input"];
+    }
+  }, [mintInput]);
+
   const { data: balanceData } = useBalance({
     enabled: !!selectedVault?.asset,
     address,
     token: (selectedVault?.asset ?? "") as `0x${string}`,
   });
+
+  const maxMint = useMemo(() => {
+    if (
+      totalValueLocked === undefined ||
+      minCollateralizationRatio === undefined ||
+      minCollateralizationRatio === BigInt(0) ||
+      dyadMinted === undefined
+    )
+      return BigInt(0);
+    return (
+      (totalValueLocked * BigInt(10 ** 18)) / minCollateralizationRatio -
+      dyadMinted
+    );
+  }, [minCollateralizationRatio, totalValueLocked, dyadMinted]);
 
   const { data: allowance } = useContractRead({
     enabled: !!selectedVault?.asset,
@@ -93,7 +127,13 @@ export default function MintAndDepositTab({
   const { isLoading: isApprovalTxLoading, isError: isApprovalTxError } =
     useWaitForTransaction({
       hash: approvalTxData?.hash,
-      onError: console.error,
+      onError: (err) => {
+        console.error(err);
+        approvalReset();
+      },
+      onSuccess: () => {
+        approvalReset();
+      },
     });
 
   const {
@@ -104,15 +144,22 @@ export default function MintAndDepositTab({
     reset: depositReset,
   } = useContractWrite({
     address: selectedVault?.address as `0x${string}`,
-    abi: ERC20 as Abi,
-    functionName: "approve",
-    args: [selectedVault?.address ?? "0", depositAmount ?? BigInt(0)],
+    abi: VaultAbi as Abi,
+    functionName: "deposit",
+    args: [selectedDnft ?? "0", depositAmount ?? BigInt(0)],
   });
 
   const { isLoading: isDepositTxLoading, isError: isDepositTxError } =
     useWaitForTransaction({
       hash: depositTxData?.hash,
-      onError: console.error,
+      onError: (err) => {
+        console.error(err);
+        depositReset();
+      },
+      onSuccess: () => {
+        depositReset();
+        setDepositInput("");
+      },
     });
 
   const setApproval = useCallback(() => {
@@ -132,6 +179,51 @@ export default function MintAndDepositTab({
       allowance < depositAmount,
     [allowance, depositAmount]
   );
+
+  const {
+    data: mintTxData,
+    isLoading: isMintLoading,
+    isError: isMintError,
+    write: mint,
+    reset: mintReset,
+  } = useContractWrite({
+    address: vaultManager as `0x${string}`,
+    abi: VaultManagerAbi as Abi,
+    functionName: "mintDyad",
+    args: [selectedDnft ?? "0", address, mintAmount ?? BigInt(0)],
+  });
+
+  const { isLoading: isMintTxLoading, isError: isMintTxError } =
+    useWaitForTransaction({
+      hash: mintTxData?.hash,
+      onError: (err) => {
+        console.error(err);
+        mintReset();
+      },
+      onSuccess: () => {
+        mintReset();
+        setMintInput("");
+      },
+    });
+
+  const newCR = useMemo(() => {
+    if (
+      (dyadMinted ?? BigInt(0)) +
+        (mintAmount ?? BigInt(0)) +
+        (depositAmount ?? BigInt(0)) <=
+      BigInt(0)
+    ) {
+      return undefined;
+    }
+    return (
+      (((totalValueLocked ?? BigInt(0)) +
+        ((depositAmount ?? BigInt(0)) *
+          BigInt(selectedVault?.collatPrice ?? parseEther("1"))) /
+          parseEther("1")) *
+        BigInt(10 ** 18)) /
+      ((dyadMinted ?? BigInt(0)) + (mintAmount ?? BigInt(0)))
+    );
+  }, [dyadMinted, totalValueLocked, mintAmount, depositAmount, selectedVault]);
 
   return (
     <div>
@@ -183,18 +275,33 @@ export default function MintAndDepositTab({
           ) : (
             ""
           )}{" "}
-          New CR: {+formatEther(newCR) * 100}%
+          {!depositAmountError && depositAmount && newCR ? (
+            <>New CR: {+formatEther(newCR) * 100}%</>
+          ) : (
+            ""
+          )}
         </p>
         <Button
           className="mt-4 p-2"
           variant="default"
-          disabled={!selectedVault || !depositAmount || depositAmountError}
+          disabled={
+            !selectedVault ||
+            !depositAmount ||
+            depositAmountError ||
+            isApprovalLoading ||
+            isApprovalTxLoading ||
+            isDepositLoading ||
+            isDepositTxLoading
+          }
           onClick={() => {
             approvalReset();
-            requiresApproval ? setApproval() : console.log();
+            requiresApproval ? setApproval() : deposit();
           }}
         >
-          {isApprovalLoading || isApprovalTxLoading ? (
+          {isApprovalLoading ||
+          isApprovalTxLoading ||
+          isDepositLoading ||
+          isDepositTxLoading ? (
             <Loader />
           ) : requiresApproval ? (
             "Approve"
@@ -205,6 +312,8 @@ export default function MintAndDepositTab({
         <p className="text-red-500 text-xs pb-2">
           {isApprovalError || isApprovalTxError
             ? "Error approving token for deposit"
+            : isDepositError || isDepositTxError
+            ? "Error depositing token"
             : ""}
         </p>
       </div>
@@ -216,17 +325,23 @@ export default function MintAndDepositTab({
             type="text"
             placeholder="Amount to Mint"
             className="w-full p-2 border mb-2"
-            onChange={(e) =>
-              setNewCR((collatRatio ?? BigInt(0)) + parseEther(e.target.value))
-            }
+            value={mintInput}
+            onChange={(e) => setMintInput(e.target.value)}
           />
           <Button
             className="p-2 border bg-gray-200"
-            onClick={() => setNewCR((collatRatio ?? BigInt(0)) + BigInt(100))}
+            onClick={() => setMintInput(maxMint ? formatEther(maxMint) : "")}
           >
             MAX
           </Button>
         </div>
+        <p className="text-red-500 text-xs pb-2">
+          {mintAmountError
+            ? mintAmountError
+            : mintAmount && balanceData && mintAmount > maxMint
+            ? "Not enough collateral"
+            : ""}
+        </p>
         <p className="text-green-500 text-xs">
           {collatRatio ? (
             <>
@@ -235,11 +350,29 @@ export default function MintAndDepositTab({
           ) : (
             ""
           )}{" "}
-          New CR: {+formatEther(newCR) * 100}%
+          {mintAmount && newCR ? <>New CR: {+formatEther(newCR) * 100}%</> : ""}
         </p>
-        <Button className="mt-4 p-2" variant="default">
-          Mint DYAD
+        <Button
+          className="mt-4 p-2"
+          variant="default"
+          disabled={
+            mintAmount === undefined ||
+            mintAmountError !== undefined ||
+            mintAmount > maxMint ||
+            isMintLoading ||
+            isMintTxLoading
+          }
+          onClick={() => {
+            if (address !== undefined) {
+              mint();
+            }
+          }}
+        >
+          {isMintLoading || isMintTxLoading ? <Loader /> : "Mint DYAD"}
         </Button>
+        <p className="text-red-500 text-xs pb-2">
+          {isMintError || isMintTxError ? "Error minting DYAD" : ""}
+        </p>
       </div>
     </div>
   );

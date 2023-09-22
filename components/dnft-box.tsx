@@ -1,11 +1,10 @@
 import {
   useAccount,
-  useContractInfiniteReads,
   useContractRead,
   useContractReads,
   useNetwork,
 } from "wagmi";
-import { Abi, formatEther } from "viem";
+import { Abi, formatEther, getAddress, numberToHex } from "viem";
 
 import {
   Select,
@@ -27,7 +26,6 @@ import MintAndDepositTab from "@/components/mint-and-deposit-tab";
 import BurnAndWithdrawTab from "@/components/burn-and-withdraw-tab";
 import { crColor } from "@/lib/utils";
 import WalletButton from "./ui/wallet-button";
-import { useAllVaultsQuery } from "@/gql";
 import { useMemo, useState } from "react";
 import { deployments } from "@/lib/deployments";
 import VaultManagerAbi from "@/abis/VaultManager.json";
@@ -44,16 +42,12 @@ export default function DnftBox() {
   const [selectedVaultId, setSelectedVaultId] = useState<string>();
   const { pushModal } = useModal();
 
-  const [allVaultsQuery] = useAllVaultsQuery({
-    variables: {
-      isLicensed: true,
-    },
-  });
-
-  const { vaultManager, dyad, dnft } = useMemo(
+  const { vaultManager, dyad, dnft, vault } = useMemo(
     () => (chain ? deployments[chain.id] : Object.values(deployments)[0]),
     [chain]
   );
+
+  const vaults = vault ? [vault] : [];
 
   const { data: initialContractReads } = useContractReads({
     contracts: [
@@ -81,6 +75,11 @@ export default function DnftBox() {
         functionName: "mintedDyad",
         args: [vaultManager, selectedDnft ?? "0"],
       },
+      {
+        address: vaultManager as `0x${string}`,
+        abi: VaultManagerAbi as Abi,
+        functionName: "MIN_COLLATERIZATION_RATIO",
+      },
     ],
     watch: true,
     select: (data) => ({
@@ -88,10 +87,16 @@ export default function DnftBox() {
       collateralRatio: (data?.[1]?.result ?? BigInt(0)) as bigint,
       totalValueLocked: (data?.[2]?.result ?? BigInt(0)) as bigint,
       dyadMinted: (data?.[3]?.result ?? BigInt(0)) as bigint,
+      minCollateralizationRatio: (data?.[4]?.result ?? BigInt(0)) as bigint,
     }),
   });
-  const { dnftBalance, collateralRatio, totalValueLocked, dyadMinted } =
-    initialContractReads ?? {};
+  const {
+    dnftBalance,
+    collateralRatio,
+    totalValueLocked,
+    dyadMinted,
+    minCollateralizationRatio,
+  } = initialContractReads ?? {};
 
   // Get addresses of all dnfts owned by user
   const { data: dnfts } = useContractReads({
@@ -134,50 +139,91 @@ export default function DnftBox() {
   });
 
   const { data: vaultsData } = useContractReads({
-    enabled: allVaultsQuery?.data?.vaults !== undefined,
-    contracts: Array.apply(
-      null,
-      Array(allVaultsQuery?.data?.vaults?.length ?? 0)
-    )
+    watch: true,
+    contracts: Array.apply(null, Array(vaults.length))
       .map((_, index) => [
         {
-          address: (allVaultsQuery?.data?.vaults?.[index].id ??
-            `0x${"0".repeat(40)}`) as `0x${string}`,
+          address: (vaults[index] ?? `0x${"0".repeat(40)}`) as `0x${string}`,
           abi: VaultAbi as Abi,
           functionName: "asset",
         },
         {
-          address: (allVaultsQuery?.data?.vaults?.[index].id ??
-            `0x${"0".repeat(40)}`) as `0x${string}`,
+          address: (vaults[index] ?? `0x${"0".repeat(40)}`) as `0x${string}`,
           abi: VaultAbi as Abi,
           functionName: "symbol",
         },
         {
-          address: (allVaultsQuery?.data?.vaults?.[index].id ??
-            `0x${"0".repeat(40)}`) as `0x${string}`,
+          address: (vaults[index] ?? `0x${"0".repeat(40)}`) as `0x${string}`,
           abi: VaultAbi as Abi,
           functionName: "collatPrice",
+        },
+        {
+          address: (vaults[index] ?? `0x${"0".repeat(40)}`) as `0x${string}`,
+          abi: VaultAbi as Abi,
+          functionName: "decimals",
+        },
+        {
+          address: vaultManager as `0x${string}`,
+          abi: VaultManagerAbi as Abi,
+          functionName: "getVaultsUsdValue",
+          args: [selectedDnft ?? "0"],
+        },
+        {
+          address: (vaults[index] ?? `0x${"0".repeat(40)}`) as `0x${string}`,
+          abi: VaultAbi as Abi,
+          functionName: "balanceOf",
+          args: [
+            getAddress(
+              numberToHex(BigInt(selectedDnft ?? "0"), { size: 20 })
+            ) as `0x${string}`,
+          ],
+        },
+        {
+          address: (vaults[index] ?? `0x${"0".repeat(40)}`) as `0x${string}`,
+          abi: VaultAbi as Abi,
+          functionName: "totalSupply",
         },
       ])
       .flat(),
     select: (data) => {
-      const vaults: {
+      const v: {
         address: string;
         asset: string;
         symbol: string;
         collatPrice: string;
+        decimals: string;
+        tvl: string;
+        share: string;
+        value: string;
       }[] = [];
       data.forEach((result, index) => {
-        if (index % 3 === 0) {
-          vaults.push({
-            address: allVaultsQuery?.data?.vaults?.[index / 3].id ?? "",
+        if (index % 7 === 0) {
+          const share =
+            data[index + 5]?.result && data[index + 6]?.result
+              ? (
+                  (BigInt(data[index + 5]?.result?.toString() ?? "0") *
+                    BigInt(10 ** 18)) /
+                  BigInt(data[index + 6]?.result?.toString() ?? "1")
+                ).toString()
+              : "0";
+          const tvl = data[index + 4]?.result?.toString() ?? "";
+          const value =
+            share !== "0"
+              ? ((BigInt(tvl) * BigInt(share)) / BigInt(10 ** 18)).toString()
+              : "0";
+          v.push({
+            address: vaults[index / 7] ?? "",
             asset: result?.result?.toString() ?? "",
             symbol: data[index + 1]?.result?.toString() ?? "",
             collatPrice: data[index + 2]?.result?.toString() ?? "",
+            decimals: data[index + 3]?.result?.toString() ?? "",
+            tvl,
+            share,
+            value,
           });
         }
       });
-      return vaults;
+      return v;
     },
   });
 
@@ -201,77 +247,101 @@ export default function DnftBox() {
 
           {/* Tabs */}
 
-          <Tabs defaultValue="mint" className="mt-2">
-            <TabsList className="my-2">
-              <TabsTrigger value="mint">Mint & Deposit</TabsTrigger>
-              <TabsTrigger value="burn">Burn & Withdraw</TabsTrigger>
-            </TabsList>
-            <TabsContent value="mint">
-              <MintAndDepositTab
-                setSelectedVaultId={setSelectedVaultId}
-                vaults={vaultsData ?? []}
-                selectedVault={vaultsData?.find(
-                  (vault) => vault.address === selectedVaultId
-                )}
-              />
-            </TabsContent>
-            <TabsContent value="burn">
-              <BurnAndWithdrawTab setSelectedVault={(test: string) => test} />
-            </TabsContent>
-          </Tabs>
+          {selectedDnft && (
+            <>
+              <Tabs defaultValue="mint" className="mt-2">
+                <TabsList className="my-2">
+                  <TabsTrigger value="mint">Mint & Deposit</TabsTrigger>
+                  <TabsTrigger value="burn">Burn & Withdraw</TabsTrigger>
+                </TabsList>
+                <TabsContent value="mint">
+                  <MintAndDepositTab
+                    setSelectedVaultId={setSelectedVaultId}
+                    vaults={vaultsData ?? []}
+                    vaultManager={vaultManager}
+                    selectedVault={vaultsData?.find(
+                      (vault) => vault.address === selectedVaultId
+                    )}
+                    selectedDnft={selectedDnft}
+                    dyadMinted={dyadMinted}
+                    totalValueLocked={totalValueLocked}
+                    minCollateralizationRatio={minCollateralizationRatio}
+                  />
+                </TabsContent>
+                <TabsContent value="burn">
+                  <BurnAndWithdrawTab
+                    setSelectedVaultId={setSelectedVaultId}
+                    vaults={vaultsData ?? []}
+                    vaultManager={vaultManager}
+                    selectedVault={vaultsData?.find(
+                      (vault) => vault.address === selectedVaultId
+                    )}
+                    selectedDnft={selectedDnft}
+                    dyadMinted={dyadMinted}
+                    totalValueLocked={totalValueLocked}
+                    minCollateralizationRatio={minCollateralizationRatio}
+                    dyad={dyad}
+                    collatRatio={collateralRatio}
+                  />
+                </TabsContent>
+              </Tabs>
 
-          {/* Persistent dNFT Data Block */}
-          <div className="mt-4 border p-4">
-            <p className="text-sm text-muted-foreground">
-              DYAD minted:{" "}
-              <span className="text-foreground">
-                {formatEther(dyadMinted ?? BigInt(0))}
-              </span>
-            </p>
-            <p className="text-sm text-muted-foreground">
-              Collateral value:{" "}
-              <span className="text-foreground">
-                ${formatEther(totalValueLocked ?? BigInt(0))}
-              </span>
-            </p>
-            <p className="text-sm text-muted-foreground">
-              Collateral Ratio:{" "}
-              <span
-                className={crColor(
-                  dyadMinted === BigInt(0)
-                    ? 100
-                    : +formatEther(collateralRatio ?? BigInt(0)) * 100
-                )}
-              >
-                {dyadMinted === BigInt(0)
-                  ? "N/A"
-                  : `${+formatEther(collateralRatio ?? BigInt(0)) * 100}%`}
-              </span>
-            </p>
+              {/* Persistent dNFT Data Block */}
+              <div className="mt-4 border p-4">
+                <p className="text-sm text-muted-foreground">
+                  DYAD minted:{" "}
+                  <span className="text-foreground">
+                    {formatEther(dyadMinted ?? BigInt(0))}
+                  </span>
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  Collateral value:{" "}
+                  <span className="text-foreground">
+                    ${formatEther(totalValueLocked ?? BigInt(0))}
+                  </span>
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  Collateral Ratio:{" "}
+                  <span
+                    className={crColor(
+                      dyadMinted === BigInt(0)
+                        ? 100
+                        : +formatEther(collateralRatio ?? BigInt(0)) * 100
+                    )}
+                  >
+                    {dyadMinted === BigInt(0)
+                      ? "N/A"
+                      : `${+formatEther(collateralRatio ?? BigInt(0)) * 100}%`}
+                  </span>
+                </p>
 
-            <Table className="w-full border mt-4">
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Vault</TableHead>
-                  <TableHead>TVL</TableHead>
-                  <TableHead>Share</TableHead>
-                  <TableHead>Value</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {[
-                  { vault: "ETH", totalValue: 1000, share: "10%", value: 100 },
-                ].map((data, index) => (
-                  <TableRow key={index}>
-                    <TableCell>{data.vault}</TableCell>
-                    <TableCell>${data.totalValue}</TableCell>
-                    <TableCell>{data.share}</TableCell>
-                    <TableCell>${data.value}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
+                <Table className="w-full border mt-4">
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Vault</TableHead>
+                      <TableHead>TVL</TableHead>
+                      <TableHead>Share</TableHead>
+                      <TableHead>Value</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {vaultsData?.map((data, index) => (
+                      <TableRow key={index}>
+                        <TableCell>{data.symbol}</TableCell>
+                        <TableCell>${formatEther(BigInt(data.tvl))}</TableCell>
+                        <TableCell>
+                          {formatEther(BigInt(data.share) * BigInt(100))}%
+                        </TableCell>
+                        <TableCell>
+                          ${formatEther(BigInt(data.value))}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            </>
+          )}
         </>
       ) : (
         <div className="flex w-full justify-center items-center">

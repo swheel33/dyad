@@ -1,4 +1,12 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import {
+  useAccount,
+  useBalance,
+  useContractRead,
+  useContractReads,
+  useContractWrite,
+  useWaitForTransaction,
+} from "wagmi";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,14 +17,184 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import VaultManagerAbi from "@/abis/VaultManager.json";
+import VaultAbi from "@/abis/Vault.json";
+import { Abi, formatEther, getAddress, numberToHex, parseEther } from "viem";
+import Loader from "./loader";
 
 interface Props {
-  setSelectedVault: (value: string) => void;
+  setSelectedVaultId: (value: string) => void;
+  vaults: {
+    address: string;
+    asset: string;
+    symbol: string;
+    collatPrice: string;
+  }[];
+  vaultManager: string;
+  dyad: string;
+  selectedDnft?: string;
+  selectedVault?: {
+    address: string;
+    asset: string;
+    symbol: string;
+    collatPrice: string;
+  };
+  collatRatio?: bigint;
+  totalValueLocked?: bigint;
+  dyadMinted?: bigint;
+  minCollateralizationRatio?: bigint;
 }
 
-export default function BurnAndWithdrawTab({ setSelectedVault }: Props) {
+export default function BurnAndWithdrawTab({
+  setSelectedVaultId,
+  selectedVault,
+  vaults,
+  selectedDnft,
+  totalValueLocked,
+  dyadMinted,
+  minCollateralizationRatio,
+  vaultManager,
+  dyad,
+  collatRatio,
+}: Props) {
   const [oldCR, setOldCR] = useState(0);
-  const [newCR, setNewCR] = useState(0);
+  const [withdrawInput, setWithdrawInput] = useState<string>();
+  const [burnInput, setBurnInput] = useState<string>();
+  const { address } = useAccount();
+
+  const [withdrawAmount, withdrawAmountError] = useMemo(() => {
+    if (withdrawInput === undefined || withdrawInput === "") {
+      return [undefined, undefined];
+    }
+    try {
+      return [parseEther(withdrawInput as string), undefined];
+    } catch {
+      return [undefined, "Invalid input"];
+    }
+  }, [withdrawInput]);
+
+  const [burnAmount, burnAmountError] = useMemo(() => {
+    if (burnInput === undefined || burnInput === "") {
+      return [undefined, undefined];
+    }
+    try {
+      return [parseEther(burnInput as string), undefined];
+    } catch {
+      return [undefined, "Invalid input"];
+    }
+  }, [burnInput]);
+
+  const { data: dyadBalance } = useBalance({
+    address,
+    token: dyad as `0x${string}`,
+  });
+
+  const { data: withdrawableBalance } = useContractReads({
+    contracts: [
+      {
+        address: selectedVault?.address as `0x${string}`,
+        abi: VaultAbi as Abi,
+        functionName: "balanceOf",
+        args: [
+          getAddress(numberToHex(BigInt(selectedDnft ?? "0"), { size: 20 })),
+        ],
+      },
+      {
+        address: selectedVault?.address as `0x${string}`,
+        abi: VaultAbi as Abi,
+        functionName: "convertToAssets",
+        args: [parseEther("1")],
+      },
+    ],
+    select: (data) => {
+      const balance = data?.[0]?.result as bigint;
+      const price = data?.[1]?.result as bigint;
+      if (balance === undefined || price === undefined) return undefined;
+      return (balance * price) / BigInt(10 ** 18);
+    },
+  });
+
+  const {
+    data: withdrawTxData,
+    isLoading: isWithdrawLoading,
+    isError: isWithdrawError,
+    write: withdraw,
+    reset: withdrawReset,
+  } = useContractWrite({
+    address: selectedVault?.address as `0x${string}`,
+    abi: VaultAbi as Abi,
+    functionName: "withdraw",
+    args: [selectedDnft ?? "0", withdrawAmount ?? BigInt(0), address],
+  });
+
+  const { isLoading: isWithdrawTxLoading, isError: isWithdrawTxError } =
+    useWaitForTransaction({
+      hash: withdrawTxData?.hash,
+      onError: (err) => {
+        console.error(err);
+        withdrawReset();
+      },
+      onSuccess: () => {
+        withdrawReset();
+        setWithdrawInput("");
+      },
+    });
+
+  const {
+    data: burnTxData,
+    isLoading: isBurnLoading,
+    isError: isBurnError,
+    write: burn,
+    reset: burnReset,
+  } = useContractWrite({
+    address: vaultManager as `0x${string}`,
+    abi: VaultManagerAbi as Abi,
+    functionName: "redeemDyad",
+    args: [
+      vaults[0].address, // TODO: Add vault selector to burn section
+      selectedDnft ?? "0",
+      address,
+      burnAmount ?? BigInt(0),
+    ],
+  });
+
+  const { isLoading: isBurnTxLoading, isError: isBurnTxError } =
+    useWaitForTransaction({
+      hash: burnTxData?.hash,
+      onError: (err) => {
+        console.error(err);
+        burnReset();
+      },
+      onSuccess: () => {
+        burnReset();
+        setBurnInput("");
+      },
+    });
+
+  const newCR = useMemo(() => {
+    if (
+      (dyadMinted ?? BigInt(0)) - (burnAmount ?? BigInt(0)) <= BigInt(0) ||
+      !collatRatio
+    ) {
+      return undefined;
+    }
+    return (
+      collatRatio -
+      ((totalValueLocked ?? BigInt(0)) -
+        (((withdrawAmount ?? BigInt(0)) *
+          BigInt(selectedVault?.collatPrice ?? parseEther("1"))) /
+          parseEther("1")) *
+          BigInt(10 ** 18)) /
+        ((dyadMinted ?? BigInt(0)) - (burnAmount ?? BigInt(0)))
+    );
+  }, [
+    dyadMinted,
+    totalValueLocked,
+    burnAmount,
+    withdrawAmount,
+    selectedVault,
+    collatRatio,
+  ]);
 
   return (
     <div>
@@ -27,32 +205,62 @@ export default function BurnAndWithdrawTab({ setSelectedVault }: Props) {
             type="text"
             placeholder="Amount to Burn"
             className="w-full p-2 border mb-2"
-            onChange={(e) => setNewCR(oldCR + parseInt(e.target.value))}
+            value={burnInput}
+            onChange={(e) => setBurnInput(e.target.value)}
           />
           <Button
             className="p-2 border bg-gray-200"
-            onClick={() => setNewCR(oldCR + 100)}
+            onClick={() => setBurnInput(dyadBalance?.formatted ?? "")}
           >
             MAX
           </Button>
         </div>
         <p className="text-red-500 text-xs">
-          Old CR: {oldCR}% -&gt; New CR: {newCR}%
+          {burnAmount && !burnAmountError && newCR !== undefined ? (
+            <>New CR: {+formatEther(newCR) * 100}%</>
+          ) : (
+            ""
+          )}
         </p>
-        <Button className="mt-4 p-2" variant="default">
-          Burn DYAD
+        <Button
+          className="mt-4 p-2"
+          variant="default"
+          disabled={
+            dyadBalance?.value === undefined ||
+            !burnAmount ||
+            burnAmountError ||
+            isBurnLoading ||
+            isBurnTxLoading ||
+            burnAmount > dyadBalance?.value
+          }
+          onClick={() => {
+            if (address !== undefined) {
+              burn();
+            }
+          }}
+        >
+          {isBurnLoading || isBurnTxLoading ? <Loader /> : "Burn DYAD"}
         </Button>
+        <p className="text-red-500 text-xs pb-2">
+          {isBurnError || isBurnTxError ? "Error burning DYAD" : ""}
+        </p>
       </div>
-
       {/* Withdraw Component */}
       <div className="mb-4 p-4 border">
-        <Select>
+        <Select
+          onValueChange={(value) => {
+            setSelectedVaultId(value);
+          }}
+        >
           <SelectTrigger className="mt-1 mb-4">
             <SelectValue placeholder="Select Vault" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="dnft1">Vault 1</SelectItem>
-            <SelectItem value="dnft2">Vault 2</SelectItem>
+            {vaults?.map((vault) => (
+              <SelectItem key={vault.address} value={vault.address}>
+                {vault.symbol}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
         <div className="flex space-x-4">
@@ -60,21 +268,54 @@ export default function BurnAndWithdrawTab({ setSelectedVault }: Props) {
             type="text"
             placeholder="Amount to Withdraw"
             className="w-full p-2 border mb-2"
-            onChange={(e) => setNewCR(oldCR + parseInt(e.target.value))}
+            value={withdrawInput}
+            onChange={(e) => setWithdrawInput(e.target.value)}
           />
           <Button
             className="p-2 border bg-gray-200"
-            onClick={() => setNewCR(oldCR + 100)}
+            onClick={() =>
+              setWithdrawInput(
+                withdrawableBalance ? formatEther(withdrawableBalance) : ""
+              )
+            }
           >
             MAX
           </Button>
         </div>
         <p className="text-red-500 text-xs">
-          Old CR: {oldCR}% -&gt; New CR: {newCR}%
+          {!withdrawAmountError && withdrawAmount && newCR ? (
+            <>New CR: {+formatEther(newCR) * 100}%</>
+          ) : (
+            ""
+          )}
         </p>
-        <Button className="mt-4 p-2" variant="default">
-          Withdraw [collateral]
+        <Button
+          className="mt-4 p-2"
+          variant="default"
+          disabled={
+            !selectedVault ||
+            !withdrawAmount ||
+            withdrawAmountError ||
+            isWithdrawLoading ||
+            isWithdrawTxLoading
+          }
+          onClick={() => {
+            if (address !== undefined) {
+              withdraw();
+            }
+          }}
+        >
+          {isWithdrawLoading || isWithdrawTxLoading ? (
+            <Loader />
+          ) : (
+            `Withdraw ${selectedVault?.symbol}`
+          )}
         </Button>
+        <p className="text-red-500 text-xs pb-2">
+          {isWithdrawError || isWithdrawTxError
+            ? "Error withdrawing token"
+            : ""}
+        </p>
       </div>
     </div>
   );
