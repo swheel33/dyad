@@ -234,15 +234,15 @@ export default function DnftBox() {
     <div className="container mx-auto p-4">
       {isConnected ? (
         <>
-          {/* Select dNFT */}
+          {/* Select Note */}
           <Select onValueChange={setSelectedDnft}>
             <SelectTrigger id="select-dnft" className="mt-1">
-              <SelectValue placeholder="Select dNFT" />
+              <SelectValue placeholder="Select Note" />
             </SelectTrigger>
             <SelectContent>
               {dnfts?.map((dnft) => (
                 <SelectItem value={dnft} key={`dnft-${dnft}`}>
-                  dNFT {dnft}
+                  Note {dnft}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -289,7 +289,7 @@ export default function DnftBox() {
                 </TabsContent>
               </Tabs>
 
-              {/* Persistent dNFT Data Block */}
+              {/* Persistent Note Data Block */}
               <div className="mt-4 border p-4">
                 <p className="text-sm text-muted-foreground">
                   DYAD minted:{" "}
@@ -309,7 +309,8 @@ export default function DnftBox() {
                     className={crColor(
                       dyadMinted === BigInt(0)
                         ? 100
-                        : +formatEther(collateralRatio ?? BigInt(0)) * 100
+                        : +formatEther(collateralRatio ?? BigInt(0)) * 100,
+                      +formatEther(minCollateralizationRatio ?? BigInt(1)) * 3
                     )}
                   >
                     {dyadMinted === BigInt(0)

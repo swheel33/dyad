@@ -3,7 +3,6 @@ import { Input } from "@/components/ui/input";
 import { CardTitle } from "./ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { crColor } from "@/lib/utils";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 
 interface Props {
@@ -38,9 +37,8 @@ export default function AdjustVaultModalContent({ vault }: Props) {
           <Button variant="secondary">MAX</Button>
         </div>
         <p className="text-sm whitespace-nowrap">
-          CR: <span className={crColor(10)}>10.00%</span>{" "}
-          <ArrowRightIcon className="inline w-3 h-3" />{" "}
-          <span className={crColor(90)}>90.00%</span>
+          CR: <span>10.00%</span> <ArrowRightIcon className="inline w-3 h-3" />{" "}
+          <span>90.00%</span>
         </p>
         <div className="pt-2 w-full">
           <Button className="w-full">CONFIRM</Button>

@@ -110,7 +110,7 @@ export default function ClaimsTable({ className }: Props) {
                 handleHeaderClick(MintedNft_OrderBy.DNftId);
               }}
             >
-              dNFT ID
+              Note ID
               {sortBy === MintedNft_OrderBy.DNftId &&
                 (sortDir === OrderDirection.Asc ? (
                   <ArrowUpIcon className="w-3 h-3 ml-1 inline" />

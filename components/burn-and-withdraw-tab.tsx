@@ -21,6 +21,7 @@ import VaultManagerAbi from "@/abis/VaultManager.json";
 import VaultAbi from "@/abis/Vault.json";
 import { Abi, formatEther, getAddress, numberToHex, parseEther } from "viem";
 import Loader from "./loader";
+import { crColor } from "@/lib/utils";
 
 interface Props {
   setSelectedVaultId: (value: string) => void;
@@ -173,19 +174,18 @@ export default function BurnAndWithdrawTab({
 
   const newCR = useMemo(() => {
     if (
-      (dyadMinted ?? BigInt(0)) - (burnAmount ?? BigInt(0)) <= BigInt(0) ||
+      (dyadMinted ?? BigInt(0)) - (burnAmount ?? BigInt(0)) === BigInt(0) ||
       !collatRatio
     ) {
       return undefined;
     }
     return (
-      collatRatio -
-      ((totalValueLocked ?? BigInt(0)) -
-        (((withdrawAmount ?? BigInt(0)) *
+      (((totalValueLocked ?? BigInt(0)) -
+        ((withdrawAmount ?? BigInt(0)) *
           BigInt(selectedVault?.collatPrice ?? parseEther("1"))) /
           parseEther("1")) *
-          BigInt(10 ** 18)) /
-        ((dyadMinted ?? BigInt(0)) - (burnAmount ?? BigInt(0)))
+        BigInt(10 ** 18)) /
+      ((dyadMinted ?? BigInt(0)) - (burnAmount ?? BigInt(0)))
     );
   }, [
     dyadMinted,
@@ -216,8 +216,19 @@ export default function BurnAndWithdrawTab({
           </Button>
         </div>
         <p className="text-red-500 text-xs">
-          {burnAmount && !burnAmountError && newCR !== undefined ? (
-            <>New CR: {+formatEther(newCR) * 100}%</>
+          {burnAmount &&
+          !burnAmountError &&
+          newCR !== undefined &&
+          minCollateralizationRatio ? (
+            <span
+              className={crColor(
+                +formatEther(newCR),
+                +formatEther(minCollateralizationRatio) * 3
+              )}
+            >
+              New CR:{" "}
+              {newCR > BigInt(0) ? `${+formatEther(newCR) * 100}%` : "Invalid"}
+            </span>
           ) : (
             ""
           )}
@@ -269,10 +280,12 @@ export default function BurnAndWithdrawTab({
             placeholder="Amount to Withdraw"
             className="w-full p-2 border mb-2"
             value={withdrawInput}
+            disabled={!selectedVault}
             onChange={(e) => setWithdrawInput(e.target.value)}
           />
           <Button
             className="p-2 border bg-gray-200"
+            disabled={!selectedVault}
             onClick={() =>
               setWithdrawInput(
                 withdrawableBalance ? formatEther(withdrawableBalance) : ""
@@ -283,8 +296,19 @@ export default function BurnAndWithdrawTab({
           </Button>
         </div>
         <p className="text-red-500 text-xs">
-          {!withdrawAmountError && withdrawAmount && newCR ? (
-            <>New CR: {+formatEther(newCR) * 100}%</>
+          {!withdrawAmountError &&
+          withdrawAmount &&
+          newCR &&
+          minCollateralizationRatio ? (
+            <span
+              className={crColor(
+                +formatEther(newCR),
+                +formatEther(minCollateralizationRatio) * 3
+              )}
+            >
+              New CR:{" "}
+              {newCR > BigInt(0) ? `${+formatEther(newCR) * 100}%` : "Invalid"}
+            </span>
           ) : (
             ""
           )}

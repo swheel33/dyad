@@ -21,6 +21,7 @@ import VaultManagerAbi from "@/abis/VaultManager.json";
 import VaultAbi from "@/abis/Vault.json";
 import ERC20 from "@/abis/ERC20.json";
 import Loader from "./loader";
+import { crColor } from "@/lib/utils";
 
 interface Props {
   setSelectedVaultId: (value: string) => void;
@@ -207,12 +208,7 @@ export default function MintAndDepositTab({
     });
 
   const newCR = useMemo(() => {
-    if (
-      (dyadMinted ?? BigInt(0)) +
-        (mintAmount ?? BigInt(0)) +
-        (depositAmount ?? BigInt(0)) <=
-      BigInt(0)
-    ) {
+    if ((dyadMinted ?? BigInt(0)) + (mintAmount ?? BigInt(0)) <= BigInt(0)) {
       return undefined;
     }
     return (
@@ -250,12 +246,14 @@ export default function MintAndDepositTab({
             type="text"
             placeholder="Amount to Deposit"
             className="w-full p-2 border mb-2"
+            disabled={!selectedVault}
             value={depositInput}
             onChange={(e) => setDepositInput(e.target.value)}
           />
           <Button
             className="p-2 border bg-gray-200"
             onClick={() => setDepositInput(balanceData?.formatted ?? "")}
+            disabled={!selectedVault}
           >
             MAX
           </Button>
@@ -275,8 +273,18 @@ export default function MintAndDepositTab({
           ) : (
             ""
           )}{" "}
-          {!depositAmountError && depositAmount && newCR ? (
-            <>New CR: {+formatEther(newCR) * 100}%</>
+          {!depositAmountError &&
+          depositAmount &&
+          newCR &&
+          minCollateralizationRatio ? (
+            <span
+              className={crColor(
+                +formatEther(newCR),
+                +formatEther(minCollateralizationRatio) * 3
+              )}
+            >
+              New CR: {+formatEther(newCR) * 100}%
+            </span>
           ) : (
             ""
           )}
@@ -309,7 +317,7 @@ export default function MintAndDepositTab({
             `Deposit ${selectedVault?.symbol ?? ""}`
           )}
         </Button>
-        <p className="text-red-500 text-xs pb-2">
+        <p className="text-red-500 text-xs pt-2">
           {isApprovalError || isApprovalTxError
             ? "Error approving token for deposit"
             : isDepositError || isDepositTxError
@@ -350,7 +358,18 @@ export default function MintAndDepositTab({
           ) : (
             ""
           )}{" "}
-          {mintAmount && newCR ? <>New CR: {+formatEther(newCR) * 100}%</> : ""}
+          {mintAmount && newCR && minCollateralizationRatio ? (
+            <span
+              className={crColor(
+                +formatEther(newCR),
+                +formatEther(minCollateralizationRatio) * 3
+              )}
+            >
+              New CR: {+formatEther(newCR) * 100}%
+            </span>
+          ) : (
+            ""
+          )}
         </p>
         <Button
           className="mt-4 p-2"
@@ -370,7 +389,7 @@ export default function MintAndDepositTab({
         >
           {isMintLoading || isMintTxLoading ? <Loader /> : "Mint DYAD"}
         </Button>
-        <p className="text-red-500 text-xs pb-2">
+        <p className="text-red-500 text-xs pt-2">
           {isMintError || isMintTxError ? "Error minting DYAD" : ""}
         </p>
       </div>

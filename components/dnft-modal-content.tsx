@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/table";
 import { CardTitle } from "./ui/card";
 import { Separator } from "@/components/ui/separator";
-import { crColor } from "@/lib/utils";
 import AdjustVaultModalContent from "./adjust-vault-modal-content";
 import useModal from "@/contexts/modal";
 
@@ -69,9 +68,7 @@ export default function DnftModalContent({ dnft }: Props) {
           </p>
           <p className="text-md font-medium text-muted-foreground leading-loose text-right">
             CR:{" "}
-            <span className={crColor(+formatEther(BigInt(dnft.price)))}>
-              {(+formatEther(BigInt(dnft.price)) * 100).toFixed(2)}%
-            </span>
+            <span>{(+formatEther(BigInt(dnft.price)) * 100).toFixed(2)}%</span>
           </p>
         </div>
         <Separator />

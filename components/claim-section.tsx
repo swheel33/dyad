@@ -13,10 +13,10 @@ export default function ClaimSection() {
           pushModal(<ClaimModalContent />);
         }}
       >
-        Claim dNFT
+        Claim Note
       </Button>
       <p className="text-sm leading-loose my-4 px-4">
-        Use your dNFT to deposit collateral, acquire XP, mint DYAD, and earn
+        Use your Note to deposit collateral, acquire XP, mint DYAD, and earn
         with our partners.
         <br />
         The longer you keep your collateral deposited, the more it will grow

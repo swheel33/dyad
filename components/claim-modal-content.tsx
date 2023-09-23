@@ -114,13 +114,13 @@ export function ClaimModalContent() {
           ? "Error"
           : isSuccess && !isTxLoading
           ? "Success!"
-          : "Claim dNFT"}
+          : "Claim Note"}
       </CardTitle>
       <CardContent className="px-0 py-2 text-sm">
         {isError
           ? "Error sending transaction, please try again"
           : isSuccess && !isTxLoading
-          ? "dNFT claimed successfully!"
+          ? "Note claimed successfully!"
           : `Claim fee ${mintPrice} ETH`}
       </CardContent>
       {address ? (
@@ -141,7 +141,7 @@ export function ClaimModalContent() {
           ) : isLoading || isTxLoading ? (
             <Loader />
           ) : (
-            `Claim dNFT No. ${publicMints.toString()}`
+            `Claim Note No. ${publicMints.toString()}`
           )}
         </Button>
       ) : (
