@@ -1,63 +1,22 @@
 "use client";
 
-import { WagmiConfig, createConfig } from "wagmi";
-import { createPublicClient, http } from "viem";
-import { goerli, mainnet } from "viem/chains";
-import {
-  Client,
-  Provider as UrqlProvider,
-  cacheExchange,
-  fetchExchange,
-} from "urql";
-
-import { MainNav } from "@/components/ui/main-nav";
 import { Separator } from "@/components/ui/separator";
-import WalletButton from "@/components/ui/wallet-button";
 import ClaimSection from "@/components/claim-section";
-import { ModalProvider } from "@/contexts/modal";
 import DnftBox from "@/components/dnft-box";
-
-const wagmiConfig = createConfig({
-  autoConnect: true,
-  publicClient: createPublicClient({
-    chain: goerli,
-    transport: http(),
-  }),
-});
-
-const client = new Client({
-  url: process.env.NEXT_PUBLIC_SUBGRAPH_URL ?? "",
-  exchanges: [cacheExchange, fetchExchange],
-});
 
 export default function Home() {
   return (
-    <WagmiConfig config={wagmiConfig}>
-      <UrqlProvider value={client}>
-        <main className="flex flex-col min-h-screen items-center">
-          <ModalProvider>
-            <div className="flex max-w-md h-16 justify-between px-4">
-              <MainNav className="mx-6" />
-              <div className="ml-auto flex items-center space-x-4">
-                <WalletButton />
-              </div>
-            </div>
-            <Separator className="my-4" />
-            <div className="flex-1 max-w-screen-md p-4 ">
-              <h3 className="text-md font-medium leading-loose pt-3 px-4">
-                Immutable Base. Infinite Possibility.
-              </h3>
-              <p className="text-sm leading-loose text-muted-foreground py-2 px-4">
-                DYAD unlocks unprecedented DeFi opportunities.
-              </p>
-              <Separator className="my-4" />
-              <ClaimSection />
-              <Separator className="my-4" />
-              <DnftBox />
-            </div>
-          </ModalProvider>
-        </main>
-      </UrqlProvider>
-    </WagmiConfig>
+    <div className="flex-1 max-w-screen-md p-4 ">
+      <h3 className="text-md font-medium leading-loose pt-3 px-4">
+        Immutable Base. Infinite Possibility.
+      </h3>
+      <p className="text-sm leading-loose text-muted-foreground py-2 px-4">
+        DYAD unlocks unprecedented DeFi opportunities.
+      </p>
+      <Separator className="my-4" />
+      <ClaimSection />
+      <Separator className="my-4" />
+      <DnftBox />
+    </div>
   );
 }

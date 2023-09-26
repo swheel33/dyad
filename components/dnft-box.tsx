@@ -5,6 +5,7 @@ import {
   useNetwork,
 } from "wagmi";
 import { Abi, formatEther, getAddress, numberToHex } from "viem";
+import { useMemo, useState } from "react";
 
 import {
   Select,
@@ -26,7 +27,6 @@ import MintAndDepositTab from "@/components/mint-and-deposit-tab";
 import BurnAndWithdrawTab from "@/components/burn-and-withdraw-tab";
 import { crColor } from "@/lib/utils";
 import WalletButton from "./ui/wallet-button";
-import { useMemo, useState } from "react";
 import { deployments } from "@/lib/deployments";
 import VaultManagerAbi from "@/abis/VaultManager.json";
 import DyadAbi from "@/abis/Dyad.json";
