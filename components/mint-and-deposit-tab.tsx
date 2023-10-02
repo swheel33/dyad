@@ -229,6 +229,7 @@ export default function MintAndDepositTab({
           onValueChange={(value) => {
             setSelectedVaultId(value);
           }}
+          disabled={!selectedDnft}
         >
           <SelectTrigger className="mt-1 mb-4">
             <SelectValue placeholder="Select Vault" />
@@ -335,10 +336,12 @@ export default function MintAndDepositTab({
             className="w-full p-2 border mb-2"
             value={mintInput}
             onChange={(e) => setMintInput(e.target.value)}
+            disabled={!selectedDnft}
           />
           <Button
             className="p-2 border bg-gray-200"
             onClick={() => setMintInput(maxMint ? formatEther(maxMint) : "")}
+            disabled={!selectedDnft}
           >
             MAX
           </Button>

@@ -207,10 +207,12 @@ export default function BurnAndWithdrawTab({
             className="w-full p-2 border mb-2"
             value={burnInput}
             onChange={(e) => setBurnInput(e.target.value)}
+            disabled={!selectedDnft}
           />
           <Button
             className="p-2 border bg-gray-200"
             onClick={() => setBurnInput(dyadBalance?.formatted ?? "")}
+            disabled={!selectedDnft}
           >
             MAX
           </Button>
@@ -262,6 +264,7 @@ export default function BurnAndWithdrawTab({
           onValueChange={(value) => {
             setSelectedVaultId(value);
           }}
+          disabled={!selectedDnft}
         >
           <SelectTrigger className="mt-1 mb-4">
             <SelectValue placeholder="Select Vault" />
@@ -332,7 +335,7 @@ export default function BurnAndWithdrawTab({
           {isWithdrawLoading || isWithdrawTxLoading ? (
             <Loader />
           ) : (
-            `Withdraw ${selectedVault?.symbol}`
+            `Withdraw ${selectedVault?.symbol ?? ""}`
           )}
         </Button>
         <p className="text-red-500 text-xs pb-2">

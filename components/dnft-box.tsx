@@ -233,125 +233,122 @@ export default function DnftBox() {
   return (
     <div className="container mx-auto p-4">
       {isConnected ? (
-        <>
-          {/* Select Note */}
-          <Select onValueChange={setSelectedDnft}>
-            <SelectTrigger id="select-dnft" className="mt-1">
-              <SelectValue placeholder="Select Note" />
-            </SelectTrigger>
-            <SelectContent>
-              {dnfts?.map((dnft) => (
-                <SelectItem value={dnft} key={`dnft-${dnft}`}>
-                  Note {dnft}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
-          {/* Tabs */}
-
-          {selectedDnft && (
-            <>
-              <Tabs defaultValue="mint" className="mt-2">
-                <TabsList className="my-2">
-                  <TabsTrigger value="mint">Mint & Deposit</TabsTrigger>
-                  <TabsTrigger value="burn">Burn & Withdraw</TabsTrigger>
-                </TabsList>
-                <TabsContent value="mint">
-                  <MintAndDepositTab
-                    setSelectedVaultId={setSelectedVaultId}
-                    vaults={vaultsData ?? []}
-                    vaultManager={vaultManager}
-                    selectedVault={vaultsData?.find(
-                      (vault) => vault.address === selectedVaultId
-                    )}
-                    selectedDnft={selectedDnft}
-                    dyadMinted={dyadMinted}
-                    totalValueLocked={totalValueLocked}
-                    minCollateralizationRatio={minCollateralizationRatio}
-                  />
-                </TabsContent>
-                <TabsContent value="burn">
-                  <BurnAndWithdrawTab
-                    setSelectedVaultId={setSelectedVaultId}
-                    vaults={vaultsData ?? []}
-                    vaultManager={vaultManager}
-                    selectedVault={vaultsData?.find(
-                      (vault) => vault.address === selectedVaultId
-                    )}
-                    selectedDnft={selectedDnft}
-                    dyadMinted={dyadMinted}
-                    totalValueLocked={totalValueLocked}
-                    minCollateralizationRatio={minCollateralizationRatio}
-                    dyad={dyad}
-                    collatRatio={collateralRatio}
-                  />
-                </TabsContent>
-              </Tabs>
-
-              {/* Persistent Note Data Block */}
-              <div className="mt-4 border p-4">
-                <p className="text-sm text-muted-foreground">
-                  DYAD minted:{" "}
-                  <span className="text-foreground">
-                    {formatEther(dyadMinted ?? BigInt(0))}
-                  </span>
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  Collateral value:{" "}
-                  <span className="text-foreground">
-                    ${formatEther(totalValueLocked ?? BigInt(0))}
-                  </span>
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  Collateral Ratio:{" "}
-                  <span
-                    className={crColor(
-                      dyadMinted === BigInt(0)
-                        ? 100
-                        : +formatEther(collateralRatio ?? BigInt(0)) * 100,
-                      +formatEther(minCollateralizationRatio ?? BigInt(1)) * 3
-                    )}
-                  >
-                    {dyadMinted === BigInt(0)
-                      ? "N/A"
-                      : `${+formatEther(collateralRatio ?? BigInt(0)) * 100}%`}
-                  </span>
-                </p>
-
-                <Table className="w-full border mt-4">
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Vault</TableHead>
-                      <TableHead>TVL</TableHead>
-                      <TableHead>Share</TableHead>
-                      <TableHead>Value</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {vaultsData?.map((data, index) => (
-                      <TableRow key={index}>
-                        <TableCell>{data.symbol}</TableCell>
-                        <TableCell>${formatEther(BigInt(data.tvl))}</TableCell>
-                        <TableCell>
-                          {formatEther(BigInt(data.share) * BigInt(100))}%
-                        </TableCell>
-                        <TableCell>
-                          ${formatEther(BigInt(data.value))}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            </>
-          )}
-        </>
+        <Select onValueChange={setSelectedDnft}>
+          <SelectTrigger id="select-dnft" className="mt-1">
+            <SelectValue placeholder="Select Note" />
+          </SelectTrigger>
+          <SelectContent>
+            {dnfts?.map((dnft) => (
+              <SelectItem value={dnft} key={`dnft-${dnft}`}>
+                Note {dnft}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       ) : (
         <div className="flex w-full justify-center items-center">
           <WalletButton />
         </div>
       )}
+
+      {/* Tabs */}
+
+      {
+        <>
+          <Tabs defaultValue="mint" className="mt-2">
+            <TabsList className="my-2">
+              <TabsTrigger value="mint">Mint & Deposit</TabsTrigger>
+              <TabsTrigger value="burn">Burn & Withdraw</TabsTrigger>
+            </TabsList>
+            <TabsContent value="mint">
+              <MintAndDepositTab
+                setSelectedVaultId={setSelectedVaultId}
+                vaults={vaultsData ?? []}
+                vaultManager={vaultManager}
+                selectedVault={vaultsData?.find(
+                  (vault) => vault.address === selectedVaultId
+                )}
+                selectedDnft={selectedDnft}
+                dyadMinted={dyadMinted}
+                totalValueLocked={totalValueLocked}
+                minCollateralizationRatio={minCollateralizationRatio}
+              />
+            </TabsContent>
+            <TabsContent value="burn">
+              <BurnAndWithdrawTab
+                setSelectedVaultId={setSelectedVaultId}
+                vaults={vaultsData ?? []}
+                vaultManager={vaultManager}
+                selectedVault={vaultsData?.find(
+                  (vault) => vault.address === selectedVaultId
+                )}
+                selectedDnft={selectedDnft}
+                dyadMinted={dyadMinted}
+                totalValueLocked={totalValueLocked}
+                minCollateralizationRatio={minCollateralizationRatio}
+                dyad={dyad}
+                collatRatio={collateralRatio}
+              />
+            </TabsContent>
+          </Tabs>
+
+          {/* Persistent Note Data Block */}
+          <div
+            className={`mt-4 border p-4 ${selectedDnft ? "" : "opacity-50"}`}
+          >
+            <p className="text-sm text-muted-foreground">
+              DYAD minted:{" "}
+              <span className="text-foreground">
+                {formatEther(dyadMinted ?? BigInt(0))}
+              </span>
+            </p>
+            <p className="text-sm text-muted-foreground">
+              Collateral value:{" "}
+              <span className="text-foreground">
+                ${formatEther(totalValueLocked ?? BigInt(0))}
+              </span>
+            </p>
+            <p className="text-sm text-muted-foreground">
+              Collateral Ratio:{" "}
+              <span
+                className={crColor(
+                  dyadMinted === BigInt(0)
+                    ? 100
+                    : +formatEther(collateralRatio ?? BigInt(0)) * 100,
+                  +formatEther(minCollateralizationRatio ?? BigInt(1)) * 3
+                )}
+              >
+                {dyadMinted === BigInt(0)
+                  ? "N/A"
+                  : `${+formatEther(collateralRatio ?? BigInt(0)) * 100}%`}
+              </span>
+            </p>
+
+            <Table className="w-full border mt-4">
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Vault</TableHead>
+                  <TableHead>TVL</TableHead>
+                  <TableHead>Share</TableHead>
+                  <TableHead>Value</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {vaultsData?.map((data, index) => (
+                  <TableRow key={index}>
+                    <TableCell>{data.symbol}</TableCell>
+                    <TableCell>${formatEther(BigInt(data.tvl))}</TableCell>
+                    <TableCell>
+                      {formatEther(BigInt(data.share) * BigInt(100))}%
+                    </TableCell>
+                    <TableCell>${formatEther(BigInt(data.value))}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </>
+      }
     </div>
   );
 }
