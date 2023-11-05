@@ -87,7 +87,7 @@ export function ClaimModal({ showModal, closeModal }: Props) {
       if (data?.[0]?.result) startPrice = data[0].result as bigint;
       if (data?.[1]?.result) priceIncrease = data?.[1]?.result as bigint;
       if (data?.[2]?.result) publicMints = data?.[2]?.result as bigint;
-      if (data?.[2]?.result) insiderMints = data?.[3]?.result as bigint;
+      if (data?.[3]?.result) insiderMints = data?.[3]?.result as bigint;
       console.log(data);
       return { startPrice, priceIncrease, publicMints, insiderMints };
     }, [data]);
