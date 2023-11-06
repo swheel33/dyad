@@ -47,12 +47,7 @@ export function ClaimModal({ showModal, closeModal }: Props) {
       {
         address: dnftAddress,
         abi: DnftAbi as Abi,
-        functionName: "publicMints",
-      },
-      {
-        address: dnftAddress,
-        abi: DnftAbi as Abi,
-        functionName: "insiderMints",
+        functionName: "totalSupply",
       },
     ],
   });
@@ -78,33 +73,30 @@ export function ClaimModal({ showModal, closeModal }: Props) {
     hash: txData?.hash,
   });
 
-  const { startPrice, priceIncrease, publicMints, insiderMints } =
-    useMemo(() => {
-      let startPrice = BigInt(0);
-      let priceIncrease = BigInt(0);
-      let publicMints = BigInt(0);
-      let insiderMints = BigInt(0);
-      if (data?.[0]?.result) startPrice = data[0].result as bigint;
-      if (data?.[1]?.result) priceIncrease = data?.[1]?.result as bigint;
-      if (data?.[2]?.result) publicMints = data?.[2]?.result as bigint;
-      if (data?.[3]?.result) insiderMints = data?.[3]?.result as bigint;
-      console.log(data);
-      return { startPrice, priceIncrease, publicMints, insiderMints };
-    }, [data]);
+  const { startPrice, priceIncrease, totalSupply } = useMemo(() => {
+    let startPrice = BigInt(0);
+    let priceIncrease = BigInt(0);
+    let totalSupply = BigInt(0);
+    if (data?.[0]?.result) startPrice = data[0].result as bigint;
+    if (data?.[1]?.result) priceIncrease = data?.[1]?.result as bigint;
+    if (data?.[2]?.result) totalSupply = data?.[2]?.result as bigint;
+    console.log(data);
+    return { startPrice, priceIncrease, totalSupply };
+  }, [data]);
 
   const mintPrice = useMemo(() => {
     if (
       startPrice === undefined ||
       priceIncrease === undefined ||
-      publicMints === undefined
+      totalSupply === undefined
     )
       return 0;
     try {
-      return formatEther(startPrice + priceIncrease * publicMints);
+      return formatEther(startPrice + priceIncrease * totalSupply);
     } catch (err) {
       return 0;
     }
-  }, [startPrice, priceIncrease, publicMints]);
+  }, [startPrice, priceIncrease, totalSupply]);
 
   const mintNft = useCallback(() => {
     if (!address) {
@@ -172,7 +164,7 @@ export function ClaimModal({ showModal, closeModal }: Props) {
               ) : isLoading || isTxLoading ? (
                 <Loader />
               ) : (
-                `Claim dNFT No. ${(publicMints + insiderMints).toString()}`
+                `Claim dNFT No. ${totalSupply.toString()}`
               )}
             </Button>
           ) : (
