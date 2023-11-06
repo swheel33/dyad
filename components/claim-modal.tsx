@@ -163,7 +163,7 @@ export function ClaimModal({ showModal, closeModal }: Props) {
               ) : isLoading || isTxLoading ? (
                 <Loader />
               ) : (
-                `Claim dNFT No. ${totalSupply.toString()}`
+                `Claim dNFT No. ${totalSupply}`
               )}
             </Button>
           ) : (
