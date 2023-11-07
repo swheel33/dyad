@@ -1,8 +1,10 @@
 "use client";
 
-import { WagmiConfig, createConfig } from "wagmi";
+import { WagmiConfig, createConfig, configureChains } from "wagmi";
+import { infuraProvider } from "wagmi/providers/infura";
+
 import { createPublicClient, http } from "viem";
-import { mainnet } from "viem/chains";
+import { mainnet, goerli } from "viem/chains";
 import { useState } from "react";
 import {
   Client,
@@ -18,12 +20,14 @@ import WalletButton from "@/components/ui/wallet-button";
 import ClaimsTable from "@/components/claims-table";
 import { ClaimModal } from "@/components/claim-modal";
 
+const { chains, publicClient } = configureChains(
+  [mainnet, goerli],
+  [infuraProvider({ apiKey: "" })]
+);
+
 const wagmiConfig = createConfig({
   autoConnect: true,
-  publicClient: createPublicClient({
-    chain: mainnet,
-    transport: http(),
-  }),
+  publicClient: publicClient,
 });
 
 const client = new Client({

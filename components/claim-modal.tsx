@@ -80,6 +80,7 @@ export function ClaimModal({ showModal, closeModal }: Props) {
     if (data?.[0]?.result) startPrice = data[0].result as bigint;
     if (data?.[1]?.result) priceIncrease = data?.[1]?.result as bigint;
     if (data?.[2]?.result) totalSupply = data?.[2]?.result as bigint;
+    console.log("data", data);
     return { startPrice, priceIncrease, totalSupply };
   }, [data]);
 
