@@ -152,7 +152,7 @@ export default function BurnAndWithdrawTab({
     abi: VaultManagerAbi as Abi,
     functionName: "redeemDyad",
     args: [
-      vaults[0].address, // TODO: Add vault selector to burn section
+      vaults[0]?.address, // TODO: Add vault selector to burn section
       selectedDnft ?? "0",
       address,
       burnAmount ?? BigInt(0),
@@ -271,7 +271,7 @@ export default function BurnAndWithdrawTab({
           </SelectTrigger>
           <SelectContent>
             {vaults?.map((vault) => (
-              <SelectItem key={vault.address} value={vault.address}>
+              <SelectItem key={vault?.address} value={vault?.address}>
                 {vault.symbol}
               </SelectItem>
             ))}

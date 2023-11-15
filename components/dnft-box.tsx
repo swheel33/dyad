@@ -14,7 +14,6 @@ import {
   SelectValue,
   SelectContent,
 } from "@/components/ui/select";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
   Table,
   TableBody,
@@ -251,47 +250,34 @@ export default function DnftBox() {
         </div>
       )}
 
-      {/* Tabs */}
-
       {
-        <>
-          <Tabs defaultValue="mint" className="mt-2">
-            <TabsList className="my-2">
-              <TabsTrigger value="mint">Mint & Deposit</TabsTrigger>
-              <TabsTrigger value="burn">Burn & Withdraw</TabsTrigger>
-            </TabsList>
-            <TabsContent value="mint">
-              <MintAndDepositTab
-                setSelectedVaultId={setSelectedVaultId}
-                vaults={vaultsData ?? []}
-                vaultManager={vaultManager}
-                selectedVault={vaultsData?.find(
-                  (vault) => vault.address === selectedVaultId
-                )}
-                selectedDnft={selectedDnft}
-                dyadMinted={dyadMinted}
-                totalValueLocked={totalValueLocked}
-                minCollateralizationRatio={minCollateralizationRatio}
-              />
-            </TabsContent>
-            <TabsContent value="burn">
-              <BurnAndWithdrawTab
-                setSelectedVaultId={setSelectedVaultId}
-                vaults={vaultsData ?? []}
-                vaultManager={vaultManager}
-                selectedVault={vaultsData?.find(
-                  (vault) => vault.address === selectedVaultId
-                )}
-                selectedDnft={selectedDnft}
-                dyadMinted={dyadMinted}
-                totalValueLocked={totalValueLocked}
-                minCollateralizationRatio={minCollateralizationRatio}
-                dyad={dyad}
-                collatRatio={collateralRatio}
-              />
-            </TabsContent>
-          </Tabs>
-
+        <div className="pt-4">
+          <MintAndDepositTab
+            setSelectedVaultId={setSelectedVaultId}
+            vaults={vaultsData ?? []}
+            vaultManager={vaultManager}
+            selectedVault={vaultsData?.find(
+              (vault) => vault?.address === selectedVaultId
+            )}
+            selectedDnft={selectedDnft}
+            dyadMinted={dyadMinted}
+            totalValueLocked={totalValueLocked}
+            minCollateralizationRatio={minCollateralizationRatio}
+          />
+          <BurnAndWithdrawTab
+            setSelectedVaultId={setSelectedVaultId}
+            vaults={vaultsData ?? []}
+            vaultManager={vaultManager}
+            selectedVault={vaultsData?.find(
+              (vault) => vault?.address === selectedVaultId
+            )}
+            selectedDnft={selectedDnft}
+            dyadMinted={dyadMinted}
+            totalValueLocked={totalValueLocked}
+            minCollateralizationRatio={minCollateralizationRatio}
+            dyad={dyad}
+            collatRatio={collateralRatio}
+          />
           {/* Persistent Note Data Block */}
           <div
             className={`mt-4 border p-4 ${selectedDnft ? "" : "opacity-50"}`}
@@ -347,7 +333,7 @@ export default function DnftBox() {
               </TableBody>
             </Table>
           </div>
-        </>
+        </div>
       }
     </div>
   );
