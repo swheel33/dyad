@@ -16,11 +16,9 @@ export default function ClaimSection() {
         Claim Note
       </Button>
       <p className="text-sm leading-loose my-4 px-4">
-        Use your Note to deposit collateral, acquire XP, mint DYAD, and earn
-        with our partners.
-        <br />
-        The longer you keep your collateral deposited, the more it will grow
-        with time enabling you to mint dyad at a more efficient rate.
+        Use your Note to deposit collateral and mint DYAD <br />
+        The longer you keep your collateral deposited the more it will grow,
+        enabling you to mint DYAD for less
       </p>
     </>
   );
