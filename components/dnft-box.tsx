@@ -14,6 +14,7 @@ import {
   SelectValue,
   SelectContent,
 } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -33,6 +34,7 @@ import VaultAbi from "@/abis/Vault.json";
 import DNftAbi from "@/abis/DNft.json";
 import useModal from "@/contexts/modal";
 import { AddVaultModalContent } from "./add-vault-modal-content";
+import { ClaimModalContent } from "./claim-modal-content";
 
 export default function DnftBox() {
   const { isConnected, address } = useAccount();
@@ -245,7 +247,14 @@ export default function DnftBox() {
           </SelectContent>
         </Select>
       ) : (
-        <div className="flex w-full justify-center items-center">
+        <div className="flex w-full justify-between items-center mb-2">
+          <Button
+            onClick={() => {
+              pushModal(<ClaimModalContent />);
+            }}
+          >
+            Claim Note
+          </Button>
           <WalletButton />
         </div>
       )}

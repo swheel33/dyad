@@ -8,18 +8,21 @@ export function MainNav({
 }: React.HTMLAttributes<HTMLElement>) {
   return (
     <nav
-      className={cn("flex items-center space-x-4 lg:space-x-6", className)}
+      className={cn(
+        "flex justify-start items-center space-x-4 lg:space-x-6",
+        className
+      )}
       {...props}
     >
       <Link
         href="/"
-        className="text-sm font-medium transition-colors hover:text-primary"
+        className="text-sm font-bold transition-colors hover:text-primary"
       >
         DYAD
       </Link>
       <Link
         href="/vaults"
-        className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+        className="text-sm font-bold text-muted-foreground transition-colors hover:text-primary"
       >
         Vaults
       </Link>

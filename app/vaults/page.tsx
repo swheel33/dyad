@@ -6,7 +6,6 @@ import { Abi, formatEther, getAddress, numberToHex, parseEther } from "viem";
 
 import { deployments } from "@/lib/deployments";
 import { Separator } from "@/components/ui/separator";
-import ClaimSection from "@/components/claim-section";
 import DnftBox from "@/components/dnft-box";
 import {
   Table,
