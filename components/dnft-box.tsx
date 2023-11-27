@@ -232,7 +232,7 @@ export default function DnftBox() {
   });
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="pt-4">
       {isConnected ? (
         <Select onValueChange={setSelectedDnft}>
           <SelectTrigger id="select-dnft" className="mt-1">

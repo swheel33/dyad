@@ -26,6 +26,12 @@ export function MainNav({
       >
         Vaults
       </Link>
+      <Link
+        href="/notes"
+        className="text-sm font-bold text-muted-foreground transition-colors hover:text-primary"
+      >
+        Notes
+      </Link>
     </nav>
   );
 }
