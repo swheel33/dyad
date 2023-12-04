@@ -22,6 +22,7 @@ import VaultAbi from "@/abis/Vault.json";
 import ERC20 from "@/abis/ERC20.json";
 import Loader from "./loader";
 import { crColor } from "@/lib/utils";
+import { deployments } from "@/lib/deployments";
 
 interface Props {
   setSelectedVaultId: (value: string) => void;
@@ -103,14 +104,18 @@ export default function MintAndDepositTab({
   }, [minCollateralizationRatio, totalValueLocked, dyadMinted]);
 
   const { data: allowance } = useContractRead({
-    enabled: !!selectedVault?.asset,
-    address: (selectedVault?.asset ?? "") as `0x${string}`,
+    // enabled: !!selectedVault?.asset,
+    address: deployments["5"].weth,
     abi: ERC20 as Abi,
-    args: [address ?? "0", selectedVault?.address ?? "0"],
+    args: [
+      "0xEd6715D2172BFd50C2DBF608615c2AB497904803",
+      deployments["5"].vaultManager,
+    ],
     functionName: "allowance",
     watch: true,
     select: (data) => data as bigint,
   });
+  console.log("allowance", allowance);
 
   const {
     data: approvalTxData,
@@ -119,10 +124,10 @@ export default function MintAndDepositTab({
     write: approve,
     reset: approvalReset,
   } = useContractWrite({
-    address: selectedVault?.asset as `0x${string}`,
+    address: deployments["5"].weth,
     abi: ERC20 as Abi,
     functionName: "approve",
-    args: [selectedVault?.address ?? "0", depositAmount ?? BigInt(0)],
+    args: [deployments["5"].vaultManager, depositAmount ?? BigInt(0)],
   });
 
   const { isLoading: isApprovalTxLoading, isError: isApprovalTxError } =
@@ -144,10 +149,18 @@ export default function MintAndDepositTab({
     write: deposit,
     reset: depositReset,
   } = useContractWrite({
-    address: selectedVault?.address as `0x${string}`,
-    abi: VaultAbi as Abi,
+    address: deployments["5"].vaultManager,
+    abi: VaultManagerAbi["abi"],
     functionName: "deposit",
-    args: [selectedDnft ?? "0", depositAmount ?? BigInt(0)],
+    args: [
+      selectedDnft ?? "0",
+      deployments["5"].vault,
+      // "0x50228B06DAd02fd6703CC2506830BFec1169C7fa",
+      depositAmount ?? BigInt(0),
+    ],
+    onError: (err) => {
+      console.error("error", err);
+    },
   });
 
   const { isLoading: isDepositTxLoading, isError: isDepositTxError } =
@@ -220,6 +233,7 @@ export default function MintAndDepositTab({
       ((dyadMinted ?? BigInt(0)) + (mintAmount ?? BigInt(0)))
     );
   }, [dyadMinted, totalValueLocked, mintAmount, depositAmount, selectedVault]);
+  console.log("vaults", vaults);
 
   return (
     <div>

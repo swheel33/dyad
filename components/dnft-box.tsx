@@ -201,6 +201,7 @@ export default function DnftBox() {
         value: string;
       }[] = [];
       data.forEach((result, index) => {
+        console.log("data", data);
         if (index % 7 === 0) {
           const share =
             data[index + 5]?.result && data[index + 6]?.result
@@ -218,7 +219,7 @@ export default function DnftBox() {
           v.push({
             address: vaults[index / 7] ?? "",
             asset: result?.result?.toString() ?? "",
-            symbol: data[index + 1]?.result?.toString() ?? "",
+            symbol: "WETH",
             collatPrice: data[index + 2]?.result?.toString() ?? "",
             decimals: data[index + 3]?.result?.toString() ?? "",
             tvl,
