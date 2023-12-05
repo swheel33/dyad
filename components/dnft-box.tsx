@@ -218,7 +218,7 @@ export default function DnftBox() {
               : "0";
           v.push({
             address: vaults[index / 7] ?? "",
-            asset: result?.result?.toString() ?? "",
+            asset: weth,
             symbol: "WETH",
             collatPrice: data[index + 2]?.result?.toString() ?? "",
             decimals: data[index + 3]?.result?.toString() ?? "",
