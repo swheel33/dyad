@@ -53,6 +53,7 @@ export default function MintAndDepositTab({
   const { address } = useAccount();
   const [depositInput, setDepositInput] = useState<string>();
   const [mintInput, setMintInput] = useState<string>();
+  const [redeemInput, setRedeemInput] = useState<string>();
 
   const [depositAmount, depositAmountError] = useMemo(() => {
     if (depositInput === undefined || depositInput === "") {
@@ -75,6 +76,17 @@ export default function MintAndDepositTab({
       return [undefined, "Invalid input"];
     }
   }, [mintInput]);
+
+  const [redeemAmount, redeemAmountError] = useMemo(() => {
+    if (mintInput === undefined || mintInput === "") {
+      return [undefined, undefined];
+    }
+    try {
+      return [parseEther(redeemInput as string), undefined];
+    } catch {
+      return [undefined, "Invalid input"];
+    }
+  }, [redeemInput]);
 
   const { data: balanceData } = useBalance({
     enabled: !!selectedVault?.asset,
@@ -214,6 +226,32 @@ export default function MintAndDepositTab({
       ((dyadMinted ?? BigInt(0)) + (mintAmount ?? BigInt(0)))
     );
   }, [dyadMinted, totalValueLocked, mintAmount, depositAmount, selectedVault]);
+
+  const {
+    data: redeemTxData,
+    isLoading: isRedeemLoading,
+    isError: isRedeemError,
+    write: redeem,
+    reset: redeemReset,
+  } = useContractWrite({
+    address: vaultManager,
+    abi: VaultManagerAbi["abi"],
+    functionName: "redeemDyad",
+    args: [selectedDnft ?? "0", redeemAmount ?? BigInt(0), address],
+  });
+
+  const { isLoading: isRedeemTxLoading, isError: isRedeemTxError } =
+    useWaitForTransaction({
+      hash: redeemTxData?.hash,
+      onError: (err) => {
+        console.error(err);
+        redeemReset();
+      },
+      onSuccess: () => {
+        redeemReset();
+        setRedeemInput("");
+      },
+    });
 
   return (
     <div>
@@ -379,68 +417,68 @@ export default function MintAndDepositTab({
         <div className="flex space-x-4">
           <Input
             type="text"
-            placeholder="Amount to Mint"
+            placeholder="Amount to Redeem"
             className="w-full p-2 border mb-2"
             value={mintInput}
             onChange={(e) => setMintInput(e.target.value)}
             disabled={!selectedDnft}
           />
-          <Button
-            className="p-2 border bg-gray-200"
-            onClick={() => setMintInput(maxMint ? formatEther(maxMint) : "")}
-            disabled={!selectedDnft}
-          >
-            MAX
-          </Button>
+          {/* <Button */}
+          {/*   className="p-2 border bg-gray-200" */}
+          {/*   onClick={() => setMintInput(maxMint ? formatEther(maxMint) : "")} */}
+          {/*   disabled={!selectedDnft} */}
+          {/* > */}
+          {/*   MAX */}
+          {/* </Button> */}
         </div>
-        <p className="text-red-500 text-xs pb-2">
-          {mintAmountError
-            ? mintAmountError
-            : mintAmount && balanceData && mintAmount > maxMint
-            ? "Not enough collateral"
-            : ""}
-        </p>
-        <p className="text-green-500 text-xs">
-          {collatRatio ? (
-            <>
-              Old CR: <span>{+formatEther(collatRatio) * 100}%</span> -&gt;
-            </>
-          ) : (
-            ""
-          )}{" "}
-          {mintAmount && newCR && minCollateralizationRatio ? (
-            <span
-              className={crColor(
-                +formatEther(newCR),
-                +formatEther(minCollateralizationRatio) * 3
-              )}
-            >
-              New CR: {+formatEther(newCR) * 100}%
-            </span>
-          ) : (
-            ""
-          )}
-        </p>
+        {/* <p className="text-red-500 text-xs pb-2"> */}
+        {/*   {mintAmountError */}
+        {/*     ? mintAmountError */}
+        {/*     : mintAmount && balanceData && mintAmount > maxMint */}
+        {/*     ? "Not enough collateral" */}
+        {/*     : ""} */}
+        {/* </p> */}
+        {/* <p className="text-green-500 text-xs"> */}
+        {/*   {collatRatio ? ( */}
+        {/*     <> */}
+        {/*       Old CR: <span>{+formatEther(collatRatio) * 100}%</span> -&gt; */}
+        {/*     </> */}
+        {/*   ) : ( */}
+        {/*     "" */}
+        {/*   )}{" "} */}
+        {/*   {mintAmount && newCR && minCollateralizationRatio ? ( */}
+        {/*     <span */}
+        {/*       className={crColor( */}
+        {/*         +formatEther(newCR), */}
+        {/*         +formatEther(minCollateralizationRatio) * 3 */}
+        {/*       )} */}
+        {/*     > */}
+        {/*       New CR: {+formatEther(newCR) * 100}% */}
+        {/*     </span> */}
+        {/*   ) : ( */}
+        {/*     "" */}
+        {/*   )} */}
+        {/* </p> */}
         <Button
           className="mt-4 p-2"
           variant="default"
           disabled={
-            mintAmount === undefined ||
-            mintAmountError !== undefined ||
-            // mintAmount > maxMint ||
-            isMintLoading ||
-            isMintTxLoading
+            redeemAmount === undefined ||
+            redeemAmountError !== undefined ||
+            // redeemAmount > maxMint ||
+            isRedeemLoading ||
+            isRedeemTxLoading
           }
           onClick={() => {
             if (address !== undefined) {
-              mint();
+              redeem();
             }
           }}
         >
-          {isMintLoading || isMintTxLoading ? <Loader /> : "Mint DYAD"}
+          {isRedeemLoading || isRedeemTxLoading ? <Loader /> : "Redeem DYAD"}
         </Button>
         <p className="text-red-500 text-xs pt-2">
-          {isMintError || isMintTxError ? "Error minting DYAD" : ""}
+          {isRedeemError || isRedeemTxError ? "Error redeeming DYAD" : ""}
         </p>
       </div>
     </div>
