@@ -386,7 +386,7 @@ export default function MintAndDepositTab({
           disabled={
             mintAmount === undefined ||
             mintAmountError !== undefined ||
-            mintAmount > maxMint ||
+            // mintAmount > maxMint ||
             isMintLoading ||
             isMintTxLoading
           }
