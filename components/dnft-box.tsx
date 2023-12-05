@@ -142,34 +142,62 @@ export default function DnftBox() {
     },
   });
 
+  const { data: vD } = useContractReads({
+    contracts: [
+      {
+        address: "0x2AF67FB7188ABb1f4ddBefc1Ce6177D0F09a21bf",
+        abi: VaultAbi["abi"],
+        functionName: "getUsdValue",
+        args: [selectedDnft ?? "0"],
+      },
+      {
+        address: "0x2AF67FB7188ABb1f4ddBefc1Ce6177D0F09a21bf",
+        abi: VaultAbi["abi"],
+        functionName: "id2asset",
+        args: [selectedDnft ?? "0"],
+      },
+    ],
+  });
+
+  const { data: vM } = useContractReads({
+    contracts: [
+      {
+        address: "0xC48B1bDfAD6B3a5D54EEbb48A2Eb70Cd4e7760bc",
+        abi: VaultManagerAbi["abi"],
+        functionName: "collatRatio",
+        args: [selectedDnft ?? "0"],
+      },
+    ],
+  });
+
   const { data: vaultsData } = useContractReads({
     watch: true,
     contracts: Array.apply(null, Array(vaults.length))
       .map((_, index) => [
         {
           address: (vaults[index] ?? `0x${"0".repeat(40)}`) as `0x${string}`,
-          abi: VaultAbi as Abi,
+          abi: VaultAbi["abi"],
           functionName: "asset",
         },
         {
           address: (vaults[index] ?? `0x${"0".repeat(40)}`) as `0x${string}`,
-          abi: VaultAbi as Abi,
+          abi: VaultAbi["abi"],
           functionName: "symbol",
         },
         {
           address: (vaults[index] ?? `0x${"0".repeat(40)}`) as `0x${string}`,
-          abi: VaultAbi as Abi,
+          abi: VaultAbi["abi"],
           functionName: "collatPrice",
         },
         {
           address: (vaults[index] ?? `0x${"0".repeat(40)}`) as `0x${string}`,
-          abi: VaultAbi as Abi,
+          abi: VaultAbi["abi"],
           functionName: "decimals",
         },
         {
           address: vaultManager as `0x${string}`,
-          abi: VaultManagerAbi as Abi,
-          functionName: "getVaultsUsdValue",
+          abi: VaultAbi["abi"],
+          functionName: "getUsdValue",
           args: [selectedDnft ?? "0"],
         },
         {
@@ -294,52 +322,26 @@ export default function DnftBox() {
           <div
             className={`mt-4 border p-4 ${selectedDnft ? "" : "opacity-50"}`}
           >
-            <p className="text-sm text-muted-foreground">
-              DYAD minted:{" "}
-              <span className="text-foreground">
-                {formatEther(dyadMinted ?? BigInt(0))}
-              </span>
-            </p>
-            <p className="text-sm text-muted-foreground">
-              Collateral value:{" "}
-              <span className="text-foreground">
-                ${formatEther(totalValueLocked ?? BigInt(0))}
-              </span>
-            </p>
-            <p className="text-sm text-muted-foreground">
-              Collateral Ratio:{" "}
-              <span
-                className={crColor(
-                  dyadMinted === BigInt(0)
-                    ? 100
-                    : +formatEther(collateralRatio ?? BigInt(0)) * 100,
-                  +formatEther(minCollateralizationRatio ?? BigInt(1)) * 3
-                )}
-              >
-                {dyadMinted === BigInt(0)
-                  ? "N/A"
-                  : `${+formatEther(collateralRatio ?? BigInt(0)) * 100}%`}
-              </span>
-            </p>
-
             <Table className="w-full border mt-4">
               <TableHeader>
                 <TableRow>
                   <TableHead>Vault</TableHead>
-                  <TableHead>TVL</TableHead>
-                  <TableHead>Share</TableHead>
-                  <TableHead>Value</TableHead>
+                  <TableHead>Minted DYAD</TableHead>
+                  <TableHead>Collateral</TableHead>
+                  <TableHead>Collateral Ratio</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {vaultsData?.map((data, index) => (
                   <TableRow key={index}>
                     <TableCell>{data.symbol}</TableCell>
-                    <TableCell>${formatEther(BigInt(data.tvl))}</TableCell>
                     <TableCell>
-                      {formatEther(BigInt(data.share) * BigInt(100))}%
+                      ${formatEther(BigInt(vD[1].result) * BigInt(100))}
                     </TableCell>
-                    <TableCell>${formatEther(BigInt(data.value))}</TableCell>
+                    <TableCell>${formatEther(BigInt(vD[0].result))}</TableCell>
+                    <TableCell>
+                      {formatEther(BigInt(vM[0].result) * BigInt(100))}%
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

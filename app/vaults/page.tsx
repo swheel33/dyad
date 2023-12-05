@@ -128,9 +128,6 @@ export default function Home() {
                     parseEther("1")
                 )}
               </TableCell>
-              <TableCell className="font-medium text-right">
-                {vault.votes}
-              </TableCell>
             </TableRow>
           ))}
         </TableBody>
