@@ -264,6 +264,7 @@ export default function DnftBox() {
           <MintAndDepositTab
             setSelectedVaultId={setSelectedVaultId}
             vaults={vaultsData ?? []}
+            vault={vault}
             weth={weth}
             vaultManager={vaultManager}
             selectedVault={vaultsData?.find(
@@ -277,6 +278,7 @@ export default function DnftBox() {
           <BurnAndWithdrawTab
             setSelectedVaultId={setSelectedVaultId}
             vaults={vaultsData ?? []}
+            vault={vault}
             vaultManager={vaultManager}
             selectedVault={vaultsData?.find(
               (vault) => vault?.address === selectedVaultId

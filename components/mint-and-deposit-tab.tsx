@@ -51,6 +51,7 @@ export default function MintAndDepositTab({
   setSelectedVaultId,
   selectedVault,
   vaults,
+  vault,
   weth,
   selectedDnft,
   totalValueLocked,
@@ -149,11 +150,7 @@ export default function MintAndDepositTab({
     address: vaultManager,
     abi: VaultManagerAbi["abi"],
     functionName: "deposit",
-    args: [
-      selectedDnft ?? "0",
-      selectedVault?.address,
-      depositAmount ?? BigInt(0),
-    ],
+    args: [selectedDnft ?? "0", vault, depositAmount ?? BigInt(0)],
   });
 
   const { isLoading: isDepositTxLoading, isError: isDepositTxError } =
@@ -231,36 +228,19 @@ export default function MintAndDepositTab({
     <div>
       {/* Deposit Component */}
       <div className="mb-4 p-4 border">
-        <Select
-          onValueChange={(value) => {
-            setSelectedVaultId(value);
-          }}
-          disabled={!selectedDnft}
-        >
-          <SelectTrigger className="mt-1 mb-4">
-            <SelectValue placeholder="Select Vault" />
-          </SelectTrigger>
-          <SelectContent>
-            {vaults.map((vault) => (
-              <SelectItem key={vault.address} value={vault.address}>
-                {vault.symbol}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
         <div className="flex space-x-4">
           <Input
             type="text"
             placeholder="Amount to Deposit"
             className="w-full p-2 border mb-2"
-            disabled={!selectedVault}
+            // disabled={!selectedVault}
             value={depositInput}
             onChange={(e) => setDepositInput(e.target.value)}
           />
           <Button
             className="p-2 border bg-gray-200"
             onClick={() => setDepositInput(balanceData?.formatted ?? "")}
-            disabled={!selectedVault}
+            // disabled={!selectedVault}
           >
             MAX
           </Button>
@@ -300,7 +280,7 @@ export default function MintAndDepositTab({
           className="mt-4 p-2"
           variant="default"
           disabled={
-            !selectedVault ||
+            // !selectedVault ||
             !depositAmount ||
             depositAmountError ||
             isApprovalLoading ||
@@ -321,7 +301,7 @@ export default function MintAndDepositTab({
           ) : requiresApproval ? (
             "Approve"
           ) : (
-            `Deposit ${selectedVault?.symbol ?? ""}`
+            `Deposit ${"WETH" ?? ""}`
           )}
         </Button>
         <p className="text-red-500 text-xs pt-2">

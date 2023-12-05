@@ -50,6 +50,7 @@ export default function BurnAndWithdrawTab({
   setSelectedVaultId,
   selectedVault,
   vaults,
+  vault,
   selectedDnft,
   totalValueLocked,
   dyadMinted,
@@ -125,12 +126,7 @@ export default function BurnAndWithdrawTab({
     address: vaultManager,
     abi: VaultManagerAbi["abi"],
     functionName: "withdraw",
-    args: [
-      selectedDnft ?? "0",
-      selectedVault?.address,
-      withdrawAmount ?? BigInt(0),
-      address,
-    ],
+    args: [selectedDnft ?? "0", vault, withdrawAmount ?? BigInt(0), address],
   });
 
   const { isLoading: isWithdrawTxLoading, isError: isWithdrawTxError } =
@@ -154,14 +150,9 @@ export default function BurnAndWithdrawTab({
     reset: burnReset,
   } = useContractWrite({
     address: vaultManager as `0x${string}`,
-    abi: VaultManagerAbi as Abi,
-    functionName: "redeemDyad",
-    args: [
-      vaults[0]?.address, // TODO: Add vault selector to burn section
-      selectedDnft ?? "0",
-      address,
-      burnAmount ?? BigInt(0),
-    ],
+    abi: VaultManagerAbi["abi"],
+    functionName: "burnDyad",
+    args: [selectedDnft ?? "0", burnAmount ?? BigInt(0)],
   });
 
   const { isLoading: isBurnTxLoading, isError: isBurnTxError } =
@@ -265,23 +256,6 @@ export default function BurnAndWithdrawTab({
       </div>
       {/* Withdraw Component */}
       <div className="mb-4 p-4 border">
-        <Select
-          onValueChange={(value) => {
-            setSelectedVaultId(value);
-          }}
-          disabled={!selectedDnft}
-        >
-          <SelectTrigger className="mt-1 mb-4">
-            <SelectValue placeholder="Select Vault" />
-          </SelectTrigger>
-          <SelectContent>
-            {vaults?.map((vault) => (
-              <SelectItem key={vault?.address} value={vault?.address}>
-                {vault.symbol}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
         <div className="flex space-x-4">
           <Input
             type="text"
