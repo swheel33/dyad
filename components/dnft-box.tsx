@@ -122,7 +122,7 @@ export default function DnftBox() {
     enabled: selectedDnft !== undefined && selectedVaultId !== undefined,
     address: vaultManager as `0x${string}`,
     abi: VaultManagerAbi["abi"],
-    functionName: "isDNftVault",
+    functionName: "hasVault",
     args: [selectedDnft, selectedVaultId],
     onSuccess: (result) => {
       if (
@@ -201,7 +201,6 @@ export default function DnftBox() {
         value: string;
       }[] = [];
       data.forEach((result, index) => {
-        console.log("data", data);
         if (index % 7 === 0) {
           const share =
             data[index + 5]?.result && data[index + 6]?.result

@@ -33,7 +33,7 @@ export function AddVaultModalContent({
     reset,
   } = useContractWrite({
     address: vaultManagerAddress as `0x${string}`,
-    abi: VaultManagerAbi as Abi,
+    abi: VaultManagerAbi["abi"],
     functionName: "add",
     args: [vault],
   });

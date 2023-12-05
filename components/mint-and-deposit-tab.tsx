@@ -155,7 +155,6 @@ export default function MintAndDepositTab({
       depositAmount ?? BigInt(0),
     ],
   });
-  console.log("error", selectedVault);
 
   const { isLoading: isDepositTxLoading, isError: isDepositTxError } =
     useWaitForTransaction({
