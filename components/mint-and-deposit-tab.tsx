@@ -51,6 +51,7 @@ export default function MintAndDepositTab({
   setSelectedVaultId,
   selectedVault,
   vaults,
+  weth,
   selectedDnft,
   totalValueLocked,
   dyadMinted,
@@ -105,17 +106,13 @@ export default function MintAndDepositTab({
 
   const { data: allowance } = useContractRead({
     // enabled: !!selectedVault?.asset,
-    address: deployments["5"].weth,
+    address: weth,
     abi: ERC20 as Abi,
-    args: [
-      "0xEd6715D2172BFd50C2DBF608615c2AB497904803",
-      deployments["5"].vaultManager,
-    ],
+    args: [address, vaultManager as `0x${string}`],
     functionName: "allowance",
     watch: true,
     select: (data) => data as bigint,
   });
-  console.log("allowance", allowance);
 
   const {
     data: approvalTxData,
@@ -124,10 +121,10 @@ export default function MintAndDepositTab({
     write: approve,
     reset: approvalReset,
   } = useContractWrite({
-    address: deployments["5"].weth,
+    address: weth,
     abi: ERC20 as Abi,
     functionName: "approve",
-    args: [deployments["5"].vaultManager, depositAmount ?? BigInt(0)],
+    args: [vaultManager, depositAmount ?? BigInt(0)],
   });
 
   const { isLoading: isApprovalTxLoading, isError: isApprovalTxError } =
@@ -149,19 +146,19 @@ export default function MintAndDepositTab({
     write: deposit,
     reset: depositReset,
   } = useContractWrite({
-    address: deployments["5"].vaultManager,
+    address: vaultManager,
     abi: VaultManagerAbi["abi"],
     functionName: "deposit",
     args: [
       selectedDnft ?? "0",
-      deployments["5"].vault,
-      // "0x50228B06DAd02fd6703CC2506830BFec1169C7fa",
+      selectedVault?.address,
       depositAmount ?? BigInt(0),
     ],
     onError: (err) => {
       console.error("error", err);
     },
   });
+  console.log("error", selectedVault);
 
   const { isLoading: isDepositTxLoading, isError: isDepositTxError } =
     useWaitForTransaction({
@@ -233,7 +230,6 @@ export default function MintAndDepositTab({
       ((dyadMinted ?? BigInt(0)) + (mintAmount ?? BigInt(0)))
     );
   }, [dyadMinted, totalValueLocked, mintAmount, depositAmount, selectedVault]);
-  console.log("vaults", vaults);
 
   return (
     <div>
