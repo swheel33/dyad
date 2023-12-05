@@ -10,19 +10,10 @@ import { Abi, formatEther, parseEther } from "viem";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
-import {
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import VaultManagerAbi from "@/abis/VaultManager.json";
-import VaultAbi from "@/abis/Vault.json";
 import ERC20 from "@/abis/ERC20.json";
 import Loader from "./loader";
 import { crColor } from "@/lib/utils";
-import { deployments } from "@/lib/deployments";
 
 interface Props {
   setSelectedVaultId: (value: string) => void;
@@ -310,6 +301,76 @@ export default function MintAndDepositTab({
             : isDepositError || isDepositTxError
             ? "Error depositing token"
             : ""}
+        </p>
+      </div>
+
+      {/* Mint Component */}
+      <div className="mb-4 p-4 border">
+        <div className="flex space-x-4">
+          <Input
+            type="text"
+            placeholder="Amount to Mint"
+            className="w-full p-2 border mb-2"
+            value={mintInput}
+            onChange={(e) => setMintInput(e.target.value)}
+            disabled={!selectedDnft}
+          />
+          <Button
+            className="p-2 border bg-gray-200"
+            onClick={() => setMintInput(maxMint ? formatEther(maxMint) : "")}
+            disabled={!selectedDnft}
+          >
+            MAX
+          </Button>
+        </div>
+        <p className="text-red-500 text-xs pb-2">
+          {mintAmountError
+            ? mintAmountError
+            : mintAmount && balanceData && mintAmount > maxMint
+            ? "Not enough collateral"
+            : ""}
+        </p>
+        <p className="text-green-500 text-xs">
+          {collatRatio ? (
+            <>
+              Old CR: <span>{+formatEther(collatRatio) * 100}%</span> -&gt;
+            </>
+          ) : (
+            ""
+          )}{" "}
+          {mintAmount && newCR && minCollateralizationRatio ? (
+            <span
+              className={crColor(
+                +formatEther(newCR),
+                +formatEther(minCollateralizationRatio) * 3
+              )}
+            >
+              New CR: {+formatEther(newCR) * 100}%
+            </span>
+          ) : (
+            ""
+          )}
+        </p>
+        <Button
+          className="mt-4 p-2"
+          variant="default"
+          disabled={
+            mintAmount === undefined ||
+            mintAmountError !== undefined ||
+            // mintAmount > maxMint ||
+            isMintLoading ||
+            isMintTxLoading
+          }
+          onClick={() => {
+            if (address !== undefined) {
+              mint();
+            }
+          }}
+        >
+          {isMintLoading || isMintTxLoading ? <Loader /> : "Mint DYAD"}
+        </Button>
+        <p className="text-red-500 text-xs pt-2">
+          {isMintError || isMintTxError ? "Error minting DYAD" : ""}
         </p>
       </div>
 
