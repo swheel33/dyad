@@ -154,9 +154,6 @@ export default function MintAndDepositTab({
       selectedVault?.address,
       depositAmount ?? BigInt(0),
     ],
-    onError: (err) => {
-      console.error("error", err);
-    },
   });
   console.log("error", selectedVault);
 
@@ -198,10 +195,10 @@ export default function MintAndDepositTab({
     write: mint,
     reset: mintReset,
   } = useContractWrite({
-    address: vaultManager as `0x${string}`,
-    abi: VaultManagerAbi as Abi,
+    address: vaultManager,
+    abi: VaultManagerAbi["abi"],
     functionName: "mintDyad",
-    args: [selectedDnft ?? "0", address, mintAmount ?? BigInt(0)],
+    args: [selectedDnft ?? "0", mintAmount ?? BigInt(0), address],
   });
 
   const { isLoading: isMintTxLoading, isError: isMintTxError } =

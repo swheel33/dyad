@@ -121,7 +121,7 @@ export default function DnftBox() {
   useContractRead({
     enabled: selectedDnft !== undefined && selectedVaultId !== undefined,
     address: vaultManager as `0x${string}`,
-    abi: VaultManagerAbi as Abi,
+    abi: VaultManagerAbi["abi"],
     functionName: "isDNftVault",
     args: [selectedDnft, selectedVaultId],
     onSuccess: (result) => {

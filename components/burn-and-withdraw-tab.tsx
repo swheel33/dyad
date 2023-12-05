@@ -122,10 +122,15 @@ export default function BurnAndWithdrawTab({
     write: withdraw,
     reset: withdrawReset,
   } = useContractWrite({
-    address: selectedVault?.address as `0x${string}`,
-    abi: VaultAbi as Abi,
+    address: vaultManager,
+    abi: VaultManagerAbi["abi"],
     functionName: "withdraw",
-    args: [selectedDnft ?? "0", withdrawAmount ?? BigInt(0), address],
+    args: [
+      selectedDnft ?? "0",
+      selectedVault?.address,
+      withdrawAmount ?? BigInt(0),
+      address,
+    ],
   });
 
   const { isLoading: isWithdrawTxLoading, isError: isWithdrawTxError } =
