@@ -91,9 +91,9 @@ export default function MintAndDepositTab({
   }, [redeemInput]);
 
   const { data: balanceData } = useBalance({
-    enabled: !!selectedVault?.asset,
+    // enabled: !!selectedVault?.asset,
     address,
-    token: (selectedVault?.asset ?? "") as `0x${string}`,
+    token: (weth ?? "") as `0x${string}`,
   });
 
   const maxMint = useMemo(() => {
@@ -155,7 +155,7 @@ export default function MintAndDepositTab({
     address: payments,
     abi: PaymentsAbi["abi"],
     functionName: "deposit",
-    args: [selectedDnft ?? "0", vault, depositAmount ?? BigInt(0)],
+    args: [selectedDnft, vault, depositAmount ?? BigInt(0)],
   });
 
   const { isLoading: isDepositTxLoading, isError: isDepositTxError } =
