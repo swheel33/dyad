@@ -283,7 +283,7 @@ export default function DnftBox() {
           >
             Claim Note
           </Button>
-          <WalletButton />
+          {/* <WalletButton /> */}
         </div>
       )}
 

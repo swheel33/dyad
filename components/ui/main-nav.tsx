@@ -20,12 +20,12 @@ export function MainNav({
       >
         DYAD
       </Link>
-      <Link
-        href="/vaults"
-        className="text-sm font-bold text-muted-foreground transition-colors hover:text-primary"
-      >
-        Vaults
-      </Link>
+      {/* <Link */}
+      {/*   href="/vaults" */}
+      {/*   className="text-sm font-bold text-muted-foreground transition-colors hover:text-primary" */}
+      {/* > */}
+      {/*   Vaults */}
+      {/* </Link> */}
       <Link
         href="/notes"
         className="text-sm font-bold text-muted-foreground transition-colors hover:text-primary"

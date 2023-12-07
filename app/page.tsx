@@ -10,9 +10,10 @@ export default function Home() {
         Immutable Base. Infinite Possibility.
       </h3>
       <p className="text-sm leading-loose text-muted-foreground py-2">
-        Use your Note to deposit collateral and mint DYAD <br />
-        The longer you keep your collateral deposited the more it will grow,
-        enabling you to mint DYAD for less
+        Deposit wETH into your Notes to mint DYAD. You will be able to claim
+        rewards based on how much DYAD you’ve minted once we deploy the next
+        layer of contracts. These rewards will make DYAD less expensive to mint,
+        which can increase your yield.
       </p>
       <div>
         <Separator className="my-4" />
