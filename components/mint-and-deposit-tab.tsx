@@ -11,6 +11,7 @@ import { Abi, formatEther, parseEther } from "viem";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import VaultManagerAbi from "@/abis/VaultManager.json";
+import PaymentsAbi from "@/abis/Payments.json";
 import ERC20 from "@/abis/ERC20.json";
 import Loader from "./loader";
 import { crColor } from "@/lib/utils";
@@ -43,6 +44,7 @@ export default function MintAndDepositTab({
   selectedVault,
   vaults,
   vault,
+  payments,
   weth,
   selectedDnft,
   totalValueLocked,
@@ -112,7 +114,7 @@ export default function MintAndDepositTab({
     // enabled: !!selectedVault?.asset,
     address: weth,
     abi: ERC20 as Abi,
-    args: [address, vaultManager as `0x${string}`],
+    args: [address, payments as `0x${string}`],
     functionName: "allowance",
     watch: true,
     select: (data) => data as bigint,
@@ -128,7 +130,7 @@ export default function MintAndDepositTab({
     address: weth,
     abi: ERC20 as Abi,
     functionName: "approve",
-    args: [vaultManager, depositAmount ?? BigInt(0)],
+    args: [payments, depositAmount ?? BigInt(0)],
   });
 
   const { isLoading: isApprovalTxLoading, isError: isApprovalTxError } =
@@ -150,8 +152,8 @@ export default function MintAndDepositTab({
     write: deposit,
     reset: depositReset,
   } = useContractWrite({
-    address: vaultManager,
-    abi: VaultManagerAbi["abi"],
+    address: payments,
+    abi: PaymentsAbi["abi"],
     functionName: "deposit",
     args: [selectedDnft ?? "0", vault, depositAmount ?? BigInt(0)],
   });

@@ -43,7 +43,7 @@ export default function DnftBox() {
   const [selectedVaultId, setSelectedVaultId] = useState<string>();
   const { pushModal } = useModal();
 
-  const { vaultManager, dyad, dnft, vault, weth } = useMemo(
+  const { vaultManager, dyad, dnft, vault, weth, payments } = useMemo(
     () =>
       chain && deployments[chain.id]
         ? deployments[chain.id]
@@ -293,6 +293,7 @@ export default function DnftBox() {
             setSelectedVaultId={setSelectedVaultId}
             vaults={vaultsData ?? []}
             vault={vault}
+            payments={payments}
             weth={weth}
             vaultManager={vaultManager}
             selectedVault={vaultsData?.find(
