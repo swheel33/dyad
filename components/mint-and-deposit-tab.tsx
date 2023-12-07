@@ -307,6 +307,9 @@ export default function MintAndDepositTab({
             ""
           )}
         </p>
+        <p className="text-sm leading-loose text-muted-foreground">
+          1% frontend fee on deposits only
+        </p>
         <Button
           className="mt-4 p-2"
           variant="default"
