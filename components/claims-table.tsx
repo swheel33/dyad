@@ -135,7 +135,7 @@ export default function ClaimsTable({ className }: Props) {
               className="text-right cursor-pointer"
               onClick={() => handleHeaderClick(MintedNft_OrderBy.DNftId)}
             >
-              Vault Shares
+              Collateral
             </TableHead>
           </TableRow>
         </TableHeader>
