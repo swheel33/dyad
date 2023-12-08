@@ -308,7 +308,7 @@ export default function MintAndDepositTab({
           )}
         </p>
         <p className="text-sm leading-loose text-muted-foreground">
-          1% frontend fee on deposits only
+          1% frontend fee: {isNaN(depositInput) ? 0 : depositInput * 0.01} wETH
         </p>
         <Button
           className="mt-4 p-2"
