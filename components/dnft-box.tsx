@@ -139,6 +139,7 @@ export default function DnftBox() {
           <AddVaultModalContent
             dnft={selectedDnft}
             vault={selectedVaultId}
+            vaultAddress={vault}
             vaultManagerAddress={vaultManager}
           />
         );

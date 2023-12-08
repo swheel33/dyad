@@ -19,6 +19,7 @@ interface Props {
 export function AddVaultModalContent({
   dnft,
   vault,
+  vaultAddress,
   vaultManagerAddress,
 }: Props) {
   const { shiftModal } = useModal();
@@ -32,10 +33,10 @@ export function AddVaultModalContent({
     write,
     reset,
   } = useContractWrite({
-    address: vaultManagerAddress as `0x${string}`,
+    address: vaultManagerAddress,
     abi: VaultManagerAbi["abi"],
     functionName: "add",
-    args: [vault],
+    args: [dnft, vaultAddress],
   });
 
   const { isLoading: isTxLoading, isError: isTxError } = useWaitForTransaction({
@@ -44,11 +45,11 @@ export function AddVaultModalContent({
   });
 
   const addVault = useCallback(() => {
-    if (vault && vaultManagerAddress) {
-      write({
-        args: [dnft, vault],
-      });
-    }
+    // if (vault && vaultManagerAddress) {
+    write({
+      args: [dnft, vaultAddress],
+    });
+    // }
   }, [vaultManagerAddress, vault, write, dnft]);
 
   const close = useCallback(() => {
@@ -73,16 +74,7 @@ export function AddVaultModalContent({
           : "This vault needs to be added to your dNft before you can deposit."}
       </CardContent>
       {address ? (
-        <Button
-          className="mt-2 w-full"
-          onClick={
-            isError || isTxError
-              ? reset
-              : isSuccess && !isTxLoading
-              ? close
-              : addVault
-          }
-        >
+        <Button className="mt-2 w-full" onClick={addVault}>
           {isError || isTxError ? (
             "Retry"
           ) : isSuccess && !isTxLoading ? (
