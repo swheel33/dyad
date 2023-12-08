@@ -358,13 +358,13 @@ export default function MintAndDepositTab({
             onChange={(e) => setMintInput(e.target.value)}
             disabled={!selectedDnft}
           />
-          <Button
-            className="p-2 border bg-gray-200"
-            onClick={() => setMintInput(maxMint ? formatEther(maxMint) : "")}
-            disabled={!selectedDnft}
-          >
-            MAX
-          </Button>
+          {/* <Button */}
+          {/*   className="p-2 border bg-gray-200" */}
+          {/*   onClick={() => setMintInput(maxMint ? formatEther(maxMint) : "")} */}
+          {/*   disabled={!selectedDnft} */}
+          {/* > */}
+          {/*   MAX */}
+          {/* </Button> */}
         </div>
         <p className="text-red-500 text-xs pb-2">
           {mintAmountError
@@ -424,8 +424,8 @@ export default function MintAndDepositTab({
             type="text"
             placeholder="Amount to Redeem"
             className="w-full p-2 border mb-2"
-            value={mintInput}
-            onChange={(e) => setMintInput(e.target.value)}
+            value={redeemInput}
+            onChange={(e) => setRedeemInput(e.target.value)}
             disabled={!selectedDnft}
           />
           {/* <Button */}
