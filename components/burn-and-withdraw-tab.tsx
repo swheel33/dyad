@@ -262,20 +262,20 @@ export default function BurnAndWithdrawTab({
             placeholder="Amount to Withdraw"
             className="w-full p-2 border mb-2"
             value={withdrawInput}
-            disabled={!selectedVault}
+            // disabled={!selectedVault}
             onChange={(e) => setWithdrawInput(e.target.value)}
           />
-          <Button
-            className="p-2 border bg-gray-200"
-            disabled={!selectedVault}
-            onClick={() =>
-              setWithdrawInput(
-                withdrawableBalance ? formatEther(withdrawableBalance) : ""
-              )
-            }
-          >
-            MAX
-          </Button>
+          {/* <Button */}
+          {/*   className="p-2 border bg-gray-200" */}
+          {/*   disabled={!selectedVault} */}
+          {/*   onClick={() => */}
+          {/*     setWithdrawInput( */}
+          {/*       withdrawableBalance ? formatEther(withdrawableBalance) : "" */}
+          {/*     ) */}
+          {/*   } */}
+          {/* > */}
+          {/*   MAX */}
+          {/* </Button> */}
         </div>
         <p className="text-red-500 text-xs">
           {!withdrawAmountError &&
