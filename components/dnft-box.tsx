@@ -261,29 +261,29 @@ export default function DnftBox() {
 
   return (
     <div className="pt-4">
-      {isConnected ? (
-        <Select onValueChange={setSelectedDnft}>
-          <SelectTrigger id="select-dnft" className="mt-1">
-            <SelectValue placeholder="Select Note" />
-          </SelectTrigger>
-          <SelectContent>
-            {dnfts?.map((dnft) => (
-              <SelectItem value={dnft} key={`dnft-${dnft}`}>
-                Note {dnft}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      ) : (
-        <div className="flex w-full justify-between items-center mb-2">
-          <Button
-            onClick={() => {
-              pushModal(<ClaimModalContent />);
-            }}
-          >
-            Claim Note
-          </Button>
-          {/* <WalletButton /> */}
+      {isConnected && (
+        <div className="flex space-x-4 items-center justify-between w-full">
+          <Select onValueChange={setSelectedDnft}>
+            <SelectTrigger id="select-dnft" className="mt-1">
+              <SelectValue placeholder="Select Note" />
+            </SelectTrigger>
+            <SelectContent>
+              {dnfts?.map((dnft) => (
+                <SelectItem value={dnft} key={`dnft-${dnft}`}>
+                  Note {dnft}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <div className="w-full">
+            <Button
+              onClick={() => {
+                pushModal(<ClaimModalContent />);
+              }}
+            >
+              Claim Note
+            </Button>
+          </div>
         </div>
       )}
 
