@@ -64,14 +64,14 @@ export function AddVaultModalContent({
           ? "Error"
           : isSuccess && !isTxLoading
           ? "Success!"
-          : "Add Vault"}
+          : "Enable wETH Deposit"}
       </CardTitle>
       <CardContent className="px-0 py-2 test-sm">
         {isError
           ? "Error sending transaction, please try again"
           : isSuccess && !isTxLoading
-          ? "Vault added successfully!"
-          : "This vault needs to be added to your dNft before you can deposit."}
+          ? "wETH depositing enabled successfully!"
+          : "You must enable wETH for your Note before you can deposit."}
       </CardContent>
       {address ? (
         <Button className="mt-2 w-full" onClick={addVault}>
@@ -82,7 +82,7 @@ export function AddVaultModalContent({
           ) : isLoading || isTxLoading ? (
             <Loader />
           ) : (
-            "Add vault"
+            "Enable wETH"
           )}
         </Button>
       ) : (
