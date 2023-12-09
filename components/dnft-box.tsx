@@ -27,7 +27,7 @@ import MintAndDepositTab from "@/components/mint-and-deposit-tab";
 import BurnAndWithdrawTab from "@/components/burn-and-withdraw-tab";
 import { crColor } from "@/lib/utils";
 import WalletButton from "./ui/wallet-button";
-import { deployments } from "@/lib/deployments";
+import { MAX_UINT256, deployments } from "@/lib/deployments";
 import VaultManagerAbi from "@/abis/VaultManager.json";
 import DyadAbi from "@/abis/Dyad.json";
 import VaultAbi from "@/abis/Vault.json";
@@ -40,6 +40,8 @@ export default function DnftBox() {
   const { isConnected, address } = useAccount();
   const { chain } = useNetwork();
   const [selectedDnft, setSelectedDnft] = useState<string>();
+  const [cr, setCr] = useState<string>();
+  const [mintedDyad, setMintedDyad] = useState<string>();
   const [selectedVaultId, setSelectedVaultId] = useState<string>();
   const { pushModal } = useModal();
 
@@ -84,14 +86,30 @@ export default function DnftBox() {
         abi: VaultManagerAbi as Abi,
         functionName: "MIN_COLLATERIZATION_RATIO",
       },
+      {
+        address: vaultManager,
+        abi: VaultManagerAbi["abi"],
+        functionName: "collatRatio",
+        args: [selectedDnft ?? "0"],
+      },
     ],
     watch: true,
+    onSuccess: (data) => {
+      console.log("data", data);
+      setMintedDyad(data?.dyadMinted?.toString());
+      setCr(
+        data?.collatRatio?.toString() === MAX_UINT256
+          ? "0"
+          : data?.collatRatio?.toString()
+      );
+    },
     select: (data) => ({
       dnftBalance: +(data?.[0]?.result?.toString() ?? "0"),
       collateralRatio: (data?.[1]?.result ?? BigInt(0)) as bigint,
       totalValueLocked: (data?.[2]?.result ?? BigInt(0)) as bigint,
       dyadMinted: (data?.[3]?.result ?? BigInt(0)) as bigint,
       minCollateralizationRatio: (data?.[4]?.result ?? BigInt(0)) as bigint,
+      collatRatio: (data?.[5]?.result ?? BigInt(0)) as bigint,
     }),
   });
   const {
@@ -100,7 +118,9 @@ export default function DnftBox() {
     totalValueLocked,
     dyadMinted,
     minCollateralizationRatio,
+    collatRatio,
   } = initialContractReads ?? {};
+  console.log("collatRatio", collatRatio);
 
   // Get addresses of all dnfts owned by user
   const { data: dnfts } = useContractReads({
@@ -145,34 +165,6 @@ export default function DnftBox() {
         );
       }
     },
-  });
-
-  const { data: vD } = useContractReads({
-    contracts: [
-      {
-        address: "0x2AF67FB7188ABb1f4ddBefc1Ce6177D0F09a21bf",
-        abi: VaultAbi["abi"],
-        functionName: "getUsdValue",
-        args: [selectedDnft ?? "0"],
-      },
-      {
-        address: "0x2AF67FB7188ABb1f4ddBefc1Ce6177D0F09a21bf",
-        abi: VaultAbi["abi"],
-        functionName: "id2asset",
-        args: [selectedDnft ?? "0"],
-      },
-    ],
-  });
-
-  const { data: vM } = useContractReads({
-    contracts: [
-      {
-        address: "0xC48B1bDfAD6B3a5D54EEbb48A2Eb70Cd4e7760bc",
-        abi: VaultManagerAbi["abi"],
-        functionName: "collatRatio",
-        args: [selectedDnft ?? "0"],
-      },
-    ],
   });
 
   const { data: vaultsData } = useContractReads({
@@ -267,19 +259,31 @@ export default function DnftBox() {
   return (
     <div className="pt-4">
       {isConnected && (
-        <div className="flex space-x-4 items-center justify-between w-full">
-          <Select onValueChange={setSelectedDnft}>
-            <SelectTrigger id="select-dnft" className="mt-1">
-              <SelectValue placeholder="Select Note" />
-            </SelectTrigger>
-            <SelectContent>
-              {dnfts?.map((dnft) => (
-                <SelectItem value={dnft} key={`dnft-${dnft}`}>
-                  Note {dnft}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+        <div className="flex flex-col space-y-2">
+          <div className="flex justify-between items-center space-x-10">
+            <Select onValueChange={setSelectedDnft}>
+              <SelectTrigger id="select-dnft" className="mt-1">
+                <SelectValue placeholder="Select Note" />
+              </SelectTrigger>
+              <SelectContent>
+                {dnfts?.map((dnft) => (
+                  <SelectItem value={dnft} key={`dnft-${dnft}`}>
+                    Note {dnft}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <div className="flex space-x-4">
+              <div className="flex space-x-1">
+                <div>CR:</div>
+                <div>{cr}%</div>
+              </div>
+              <div className="flex space-x-1">
+                <div>{mintedDyad}</div>
+                <div>DYAD</div>
+              </div>
+            </div>
+          </div>
           <div className="w-full">
             <Button
               onClick={() => {
@@ -291,7 +295,6 @@ export default function DnftBox() {
           </div>
         </div>
       )}
-
       {
         <div className="pt-4">
           <MintAndDepositTab
