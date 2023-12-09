@@ -15,18 +15,8 @@ import {
   SelectContent,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import MintAndDepositTab from "@/components/mint-and-deposit-tab";
 import BurnAndWithdrawTab from "@/components/burn-and-withdraw-tab";
-import { crColor } from "@/lib/utils";
-import WalletButton from "./ui/wallet-button";
 import { MAX_UINT256, deployments } from "@/lib/deployments";
 import VaultManagerAbi from "@/abis/VaultManager.json";
 import DyadAbi from "@/abis/Dyad.json";
@@ -35,6 +25,7 @@ import DNftAbi from "@/abis/DNft.json";
 import useModal from "@/contexts/modal";
 import { AddVaultModalContent } from "./add-vault-modal-content";
 import { ClaimModalContent } from "./claim-modal-content";
+import { round } from "../utils/currency";
 
 export default function DnftBox() {
   const { isConnected, address } = useAccount();
@@ -42,6 +33,7 @@ export default function DnftBox() {
   const [selectedDnft, setSelectedDnft] = useState<string>();
   const [cr, setCr] = useState<string>();
   const [mintedDyad, setMintedDyad] = useState<string>();
+  const [usdValue, setUsdValue] = useState<string>();
   const [selectedVaultId, setSelectedVaultId] = useState<string>();
   const { pushModal } = useModal();
 
@@ -92,6 +84,12 @@ export default function DnftBox() {
         functionName: "collatRatio",
         args: [selectedDnft ?? "0"],
       },
+      {
+        address: vaultManager,
+        abi: VaultManagerAbi["abi"],
+        functionName: "getTotalUsdValue",
+        args: [selectedDnft ?? "0"],
+      },
     ],
     watch: true,
     onSuccess: (data) => {
@@ -102,6 +100,7 @@ export default function DnftBox() {
           ? "0"
           : data?.collatRatio?.toString()
       );
+      setUsdValue(data?.usdValue?.toString());
     },
     select: (data) => ({
       dnftBalance: +(data?.[0]?.result?.toString() ?? "0"),
@@ -110,6 +109,7 @@ export default function DnftBox() {
       dyadMinted: (data?.[3]?.result ?? BigInt(0)) as bigint,
       minCollateralizationRatio: (data?.[4]?.result ?? BigInt(0)) as bigint,
       collatRatio: (data?.[5]?.result ?? BigInt(0)) as bigint,
+      usdValue: (data?.[6]?.result ?? BigInt(0)) as bigint,
     }),
   });
   const {
@@ -279,8 +279,15 @@ export default function DnftBox() {
                 <div>{cr}%</div>
               </div>
               <div className="flex space-x-1">
-                <div>{mintedDyad}</div>
-                <div>DYAD</div>
+                <div className="flex space-x-1">
+                  <div>{mintedDyad}</div>
+                  <div>DYAD</div>
+                </div>
+                <div>/</div>
+                <div className="flex ">
+                  <div>$</div>
+                  <div>{round(usdValue / 10 ** 18, 2)}</div>
+                </div>
               </div>
             </div>
           </div>
