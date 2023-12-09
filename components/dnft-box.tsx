@@ -297,7 +297,7 @@ export default function DnftBox() {
                 pushModal(<ClaimModalContent />);
               }}
             >
-              Claim Note
+              {dnfts?.length === 0 ? "Claim Note" : "Claim additional Note"}
             </Button>
           </div>
         </div>
