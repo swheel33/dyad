@@ -260,6 +260,15 @@ export default function DnftBox() {
     <div className="pt-4">
       {isConnected && (
         <div className="flex flex-col space-y-2">
+          <div className="w-full">
+            <Button
+              onClick={() => {
+                pushModal(<ClaimModalContent />);
+              }}
+            >
+              {dnfts?.length === 0 ? "Claim Note" : "Claim additional Note"}
+            </Button>
+          </div>
           <div className="flex justify-between items-center space-x-10">
             <Select onValueChange={setSelectedDnft}>
               <SelectTrigger id="select-dnft" className="mt-1">
@@ -290,15 +299,6 @@ export default function DnftBox() {
                 </div>
               </div>
             </div>
-          </div>
-          <div className="w-full">
-            <Button
-              onClick={() => {
-                pushModal(<ClaimModalContent />);
-              }}
-            >
-              {dnfts?.length === 0 ? "Claim Note" : "Claim additional Note"}
-            </Button>
           </div>
         </div>
       )}
