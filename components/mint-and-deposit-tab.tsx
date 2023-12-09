@@ -269,7 +269,8 @@ export default function MintAndDepositTab({
             onChange={(e) => setDepositInput(e.target.value)}
           />
           <Button
-            className="p-2 border bg-gray-200"
+            variant="outline"
+            // {/* className="p-2 border bg-gray-200" */}
             onClick={() => setDepositInput(balanceData?.formatted ?? "")}
             // disabled={!selectedVault}
           >

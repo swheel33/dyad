@@ -206,7 +206,7 @@ export default function BurnAndWithdrawTab({
             disabled={!selectedDnft}
           />
           <Button
-            className="p-2 border bg-gray-200"
+            variant="outline"
             onClick={() => setBurnInput(dyadBalance?.formatted ?? "")}
             disabled={!selectedDnft}
           >
