@@ -264,7 +264,7 @@ export default function MintAndDepositTab({
             type="text"
             placeholder="Amount to Deposit"
             className="w-full p-2 border mb-2"
-            // disabled={!selectedVault}
+            disabled={!selectedDnft}
             value={depositInput}
             onChange={(e) => setDepositInput(e.target.value)}
           />

@@ -258,7 +258,7 @@ export default function DnftBox() {
 
   return (
     <div className="pt-4">
-      <div className="w-full">
+      <div className="w-full mb-4">
         <Button
           onClick={() => {
             pushModal(<ClaimModalContent />);

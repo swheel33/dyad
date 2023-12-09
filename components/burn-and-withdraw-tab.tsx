@@ -263,6 +263,7 @@ export default function BurnAndWithdrawTab({
             className="w-full p-2 border mb-2"
             value={withdrawInput}
             // disabled={!selectedVault}
+            disabled={!selectedDnft}
             onChange={(e) => setWithdrawInput(e.target.value)}
           />
           {/* <Button */}
