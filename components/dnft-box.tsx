@@ -257,7 +257,13 @@ export default function DnftBox() {
   });
 
   return (
-    <div className="pt-4">
+    <div className="pt-1">
+      {(!isConnected || dnfts?.length === 0) && (
+        <div className="text-sm leading-loose text-muted-foreground py-2">
+          To start, claim your first Note. Notes are ERC-721 NFTs that track
+          your collateral and DYAD minted balance.
+        </div>
+      )}
       <div className="w-full mb-4">
         <Button
           onClick={() => {
