@@ -281,7 +281,7 @@ export default function MintAndDepositTab({
           {depositAmountError
             ? depositAmountError
             : depositAmount && balanceData && depositAmount > balanceData?.value
-            ? "Not enough balance"
+            ? "Insufficient wETH Balance"
             : ""}
         </p>
         <p className="text-green-500 text-xs">

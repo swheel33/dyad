@@ -267,7 +267,7 @@ export default function DnftBox() {
           {dnfts?.length === 0 ? "Claim Note" : "Claim additional Note"}
         </Button>
       </div>
-      {isConnected && (
+      {isConnected && dnfts?.length > 0 && (
         <div className="flex flex-col space-y-2">
           <div className="flex justify-between items-center space-x-10">
             <Select onValueChange={setSelectedDnft}>
