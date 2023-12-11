@@ -45,11 +45,13 @@ export function AddVaultModalContent({
   });
 
   const addVault = useCallback(() => {
-    // if (vault && vaultManagerAddress) {
-    write({
-      args: [dnft, vaultAddress],
-    });
-    // }
+    if (isSuccess && !isTxLoading) {
+      close();
+    } else {
+      write({
+        args: [dnft, vaultAddress],
+      });
+    }
   }, [vaultManagerAddress, vault, write, dnft]);
 
   const close = useCallback(() => {
