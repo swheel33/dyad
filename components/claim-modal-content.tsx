@@ -47,6 +47,11 @@ export function ClaimModalContent() {
         abi: DnftAbi,
         functionName: "publicMints",
       },
+      {
+        address: dnftAddress,
+        abi: DnftAbi,
+        functionName: "INSIDER_MINTS",
+      },
     ],
   });
   console.log("ddd", data);
@@ -69,15 +74,18 @@ export function ClaimModalContent() {
     onError: console.error,
   });
 
-  const { startPrice, priceIncrease, publicMints } = useMemo(() => {
-    let startPrice = BigInt(0);
-    let priceIncrease = BigInt(0);
-    let publicMints = BigInt(0);
-    if (data?.[0]?.result) startPrice = data[0].result as bigint;
-    if (data?.[1]?.result) priceIncrease = data?.[1]?.result as bigint;
-    if (data?.[2]?.result) publicMints = data?.[2]?.result as bigint;
-    return { startPrice, priceIncrease, publicMints };
-  }, [data]);
+  const { startPrice, priceIncrease, publicMints, insiderMints } =
+    useMemo(() => {
+      let startPrice = BigInt(0);
+      let priceIncrease = BigInt(0);
+      let publicMints = BigInt(0);
+      let insiderMints = BigInt(0);
+      if (data?.[0]?.result) startPrice = data[0].result as bigint;
+      if (data?.[1]?.result) priceIncrease = data?.[1]?.result as bigint;
+      if (data?.[2]?.result) publicMints = data?.[2]?.result as bigint;
+      if (data?.[3]?.result) insiderMints = data?.[3]?.result as bigint;
+      return { startPrice, priceIncrease, publicMints, insiderMints };
+    }, [data]);
 
   const mintPrice = useMemo(() => {
     if (
