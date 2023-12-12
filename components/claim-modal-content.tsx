@@ -28,7 +28,6 @@ export function ClaimModalContent() {
         : Object.values(deployments)[0].dnft) as `0x${string}`,
     [chain]
   );
-  console.log("dnftAddress", dnftAddress);
 
   const { data } = useContractReads({
     contracts: [
@@ -50,11 +49,10 @@ export function ClaimModalContent() {
       {
         address: dnftAddress,
         abi: DnftAbi,
-        functionName: "INSIDER_MINTS",
+        functionName: "totalSupply",
       },
     ],
   });
-  console.log("ddd", data);
 
   const {
     data: txData,
@@ -74,17 +72,18 @@ export function ClaimModalContent() {
     onError: console.error,
   });
 
-  const { startPrice, priceIncrease, publicMints, insiderMints } =
+  const { startPrice, priceIncrease, publicMints, totalSupply } =
     useMemo(() => {
       let startPrice = BigInt(0);
       let priceIncrease = BigInt(0);
       let publicMints = BigInt(0);
       let insiderMints = BigInt(0);
+      let totalSupply = BigInt(0);
       if (data?.[0]?.result) startPrice = data[0].result as bigint;
       if (data?.[1]?.result) priceIncrease = data?.[1]?.result as bigint;
       if (data?.[2]?.result) publicMints = data?.[2]?.result as bigint;
-      if (data?.[3]?.result) insiderMints = data?.[3]?.result as bigint;
-      return { startPrice, priceIncrease, publicMints, insiderMints };
+      if (data?.[3]?.result) totalSupply = data?.[3]?.result as bigint;
+      return { startPrice, priceIncrease, publicMints, totalSupply };
     }, [data]);
 
   const mintPrice = useMemo(() => {
@@ -151,7 +150,7 @@ export function ClaimModalContent() {
           ) : isLoading || isTxLoading ? (
             <Loader />
           ) : (
-            `Claim Note No. ${publicMints.toString()}`
+            `Claim Note No. ${totalSupply.toString()}`
           )}
         </Button>
       ) : (
