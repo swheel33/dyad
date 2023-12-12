@@ -11,9 +11,17 @@ interface Deployment {
 }
 
 export const deployments: { [id: string]: Deployment } = {
-  // "1": {
-  //   dnft: "0xdc400bbe0b8b79c07a962ea99a642f5819e3b712",
-  // },
+  "1": {
+    dnft: "0xDc400bBe0B8B79C07A962EA99a642F5819e3b712",
+    vaultManagerSLL: "0x0686d75307040EE0C86790D0a62b6c95e3E857C9",
+    vaultSLL: "0x25B716D9dCc09842413161abF0F3ff336d165a87",
+    dyad: "0x305B58c5F6B5b6606fb13edD11FbDD5e532d5A26",
+    vaultManager: "0xfaa785c041181a54c700fD993CDdC61dbBfb420f",
+    staking: "0x9D5Fd41ee4A4A09c3135936C7B1595D6b3A779d3",
+    vault: "0xcF97cEc1907CcF9d4A0DC4F492A3448eFc744F6c",
+    weth: "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6",
+    payments: "0xcDC13a7fcF393f1b404D9102c5Ab46D5b0A6c721",
+  },
   "5": {
     dnft: "0x952E31dFeEB29F5398a36602E0E276F2b09B6651",
     vaultManagerSLL: "0x0686d75307040EE0C86790D0a62b6c95e3E857C9",

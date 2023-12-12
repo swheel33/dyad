@@ -33,18 +33,23 @@ export function ClaimModalContent() {
     contracts: [
       {
         address: dnftAddress,
-        abi: DnftAbi as Abi,
+        abi: DnftAbi,
         functionName: "START_PRICE",
       },
       {
         address: dnftAddress,
-        abi: DnftAbi as Abi,
+        abi: DnftAbi,
         functionName: "PRICE_INCREASE",
       },
       {
         address: dnftAddress,
-        abi: DnftAbi as Abi,
+        abi: DnftAbi,
         functionName: "publicMints",
+      },
+      {
+        address: dnftAddress,
+        abi: DnftAbi,
+        functionName: "totalSupply",
       },
     ],
   });
@@ -67,15 +72,19 @@ export function ClaimModalContent() {
     onError: console.error,
   });
 
-  const { startPrice, priceIncrease, publicMints } = useMemo(() => {
-    let startPrice = BigInt(0);
-    let priceIncrease = BigInt(0);
-    let publicMints = BigInt(0);
-    if (data?.[0]?.result) startPrice = data[0].result as bigint;
-    if (data?.[1]?.result) priceIncrease = data?.[1]?.result as bigint;
-    if (data?.[2]?.result) publicMints = data?.[2]?.result as bigint;
-    return { startPrice, priceIncrease, publicMints };
-  }, [data]);
+  const { startPrice, priceIncrease, publicMints, totalSupply } =
+    useMemo(() => {
+      let startPrice = BigInt(0);
+      let priceIncrease = BigInt(0);
+      let publicMints = BigInt(0);
+      let insiderMints = BigInt(0);
+      let totalSupply = BigInt(0);
+      if (data?.[0]?.result) startPrice = data[0].result as bigint;
+      if (data?.[1]?.result) priceIncrease = data?.[1]?.result as bigint;
+      if (data?.[2]?.result) publicMints = data?.[2]?.result as bigint;
+      if (data?.[3]?.result) totalSupply = data?.[3]?.result as bigint;
+      return { startPrice, priceIncrease, publicMints, totalSupply };
+    }, [data]);
 
   const mintPrice = useMemo(() => {
     if (
@@ -141,7 +150,7 @@ export function ClaimModalContent() {
           ) : isLoading || isTxLoading ? (
             <Loader />
           ) : (
-            `Claim Note No. ${publicMints.toString()}`
+            `Claim Note No. ${totalSupply.toString()}`
           )}
         </Button>
       ) : (

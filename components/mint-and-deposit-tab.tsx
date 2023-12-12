@@ -154,7 +154,7 @@ export default function MintAndDepositTab({
   } = useContractWrite({
     address: payments,
     abi: PaymentsAbi["abi"],
-    functionName: "deposit",
+    functionName: "depositWithFee",
     args: [selectedDnft, vault, depositAmount ?? BigInt(0)],
   });
 
@@ -309,7 +309,8 @@ export default function MintAndDepositTab({
           )}
         </p>
         <p className="text-sm leading-loose text-muted-foreground">
-          1% frontend fee: {isNaN(depositInput) ? 0 : depositInput * 0.01} wETH
+          0.15% frontend fee: {isNaN(depositInput) ? 0 : depositInput * 0.0015}{" "}
+          wETH
         </p>
         <Button
           className="mt-4 p-2"
