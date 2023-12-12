@@ -12,7 +12,7 @@ interface Deployment {
 
 export const deployments: { [id: string]: Deployment } = {
   "1": {
-    dnft: "0x952E31dFeEB29F5398a36602E0E276F2b09B6651",
+    dnft: "0xDc400bBe0B8B79C07A962EA99a642F5819e3b712",
     vaultManagerSLL: "0x0686d75307040EE0C86790D0a62b6c95e3E857C9",
     vaultSLL: "0x25B716D9dCc09842413161abF0F3ff336d165a87",
     dyad: "0x305B58c5F6B5b6606fb13edD11FbDD5e532d5A26",
