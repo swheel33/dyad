@@ -25,7 +25,7 @@ const inter = Inter({ subsets: ["latin"] });
 const wagmiConfig = createConfig({
   autoConnect: true,
   publicClient: createPublicClient({
-    chain: mainnet,
+    chain: goerli,
     transport: http(),
   }),
 });

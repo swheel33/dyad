@@ -154,7 +154,7 @@ export default function MintAndDepositTab({
   } = useContractWrite({
     address: payments,
     abi: PaymentsAbi["abi"],
-    functionName: "deposit",
+    functionName: "depositWithFee",
     args: [selectedDnft, vault, depositAmount ?? BigInt(0)],
   });
 
