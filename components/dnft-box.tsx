@@ -69,7 +69,7 @@ export default function DnftBox() {
       },
       {
         address: dyad as `0x${string}`,
-        abi: DyadAbi as Abi,
+        abi: DyadAbi["abi"],
         functionName: "mintedDyad",
         args: [vaultManager, selectedDnft ?? "0"],
       },
@@ -295,7 +295,7 @@ export default function DnftBox() {
               </div>
               <div className="flex space-x-1">
                 <div className="flex space-x-1">
-                  <div>{mintedDyad}</div>
+                  <div>{round(mintedDyad / 10 ** 18, 2)}</div>
                   <div>DYAD</div>
                 </div>
                 <div>/</div>

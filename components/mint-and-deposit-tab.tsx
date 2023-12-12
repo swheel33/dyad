@@ -368,13 +368,13 @@ export default function MintAndDepositTab({
           {/*   MAX */}
           {/* </Button> */}
         </div>
-        <p className="text-red-500 text-xs pb-2">
-          {mintAmountError
-            ? mintAmountError
-            : mintAmount && balanceData && mintAmount > maxMint
-            ? "Not enough collateral"
-            : ""}
-        </p>
+        {/* <p className="text-red-500 text-xs pb-2"> */}
+        {/*   {mintAmountError */}
+        {/*     ? mintAmountError */}
+        {/*     : mintAmount && balanceData && mintAmount > maxMint */}
+        {/*     ? "Not enough collateral" */}
+        {/*     : ""} */}
+        {/* </p> */}
         <p className="text-green-500 text-xs">
           {collatRatio ? (
             <>
