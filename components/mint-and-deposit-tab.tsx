@@ -80,7 +80,7 @@ export default function MintAndDepositTab({
   }, [mintInput]);
 
   const [redeemAmount, redeemAmountError] = useMemo(() => {
-    if (mintInput === undefined || mintInput === "") {
+    if (redeemInput === undefined || redeemInput === "") {
       return [undefined, undefined];
     }
     try {
@@ -239,7 +239,7 @@ export default function MintAndDepositTab({
     address: vaultManager,
     abi: VaultManagerAbi["abi"],
     functionName: "redeemDyad",
-    args: [selectedDnft ?? "0", redeemAmount ?? BigInt(0), address],
+    args: [selectedDnft ?? "0", vault, redeemAmount ?? BigInt(0), address],
   });
 
   const { isLoading: isRedeemTxLoading, isError: isRedeemTxError } =
@@ -471,7 +471,7 @@ export default function MintAndDepositTab({
           variant="default"
           disabled={
             redeemAmount === undefined ||
-            redeemAmountError !== undefined ||
+            // redeemAmountError !== undefined ||
             // redeemAmount > maxMint ||
             isRedeemLoading ||
             isRedeemTxLoading
