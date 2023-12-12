@@ -28,26 +28,28 @@ export function ClaimModalContent() {
         : Object.values(deployments)[0].dnft) as `0x${string}`,
     [chain]
   );
+  console.log("dnftAddress", dnftAddress);
 
   const { data } = useContractReads({
     contracts: [
       {
         address: dnftAddress,
-        abi: DnftAbi as Abi,
+        abi: DnftAbi,
         functionName: "START_PRICE",
       },
       {
         address: dnftAddress,
-        abi: DnftAbi as Abi,
+        abi: DnftAbi,
         functionName: "PRICE_INCREASE",
       },
       {
         address: dnftAddress,
-        abi: DnftAbi as Abi,
+        abi: DnftAbi,
         functionName: "publicMints",
       },
     ],
   });
+  console.log("ddd", data);
 
   const {
     data: txData,
