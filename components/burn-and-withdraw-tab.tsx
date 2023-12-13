@@ -10,18 +10,13 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
-import {
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { round } from "../utils/currency";
 import VaultManagerAbi from "@/abis/VaultManager.json";
 import VaultAbi from "@/abis/Vault.json";
 import { Abi, formatEther, getAddress, numberToHex, parseEther } from "viem";
 import Loader from "./loader";
 import { crColor } from "@/lib/utils";
+import useCR from "@/hooks/useCR";
 
 interface Props {
   setSelectedVaultId: (value: string) => void;
@@ -58,11 +53,19 @@ export default function BurnAndWithdrawTab({
   vaultManager,
   dyad,
   collatRatio,
+  usdValue,
 }: Props) {
   const [oldCR, setOldCR] = useState(0);
   const [withdrawInput, setWithdrawInput] = useState<string>();
   const [burnInput, setBurnInput] = useState<string>();
   const { address } = useAccount();
+
+  const { cr: crAfterBurn } = useCR(
+    usdValue,
+    dyadMinted,
+    0,
+    -1 * parseFloat(burnInput)
+  );
 
   const [withdrawAmount, withdrawAmountError] = useMemo(() => {
     if (withdrawInput === undefined || withdrawInput === "") {
@@ -213,24 +216,9 @@ export default function BurnAndWithdrawTab({
             MAX
           </Button>
         </div>
-        <p className="text-red-500 text-xs">
-          {burnAmount &&
-          !burnAmountError &&
-          newCR !== undefined &&
-          minCollateralizationRatio ? (
-            <span
-              className={crColor(
-                +formatEther(newCR),
-                +formatEther(minCollateralizationRatio) * 3
-              )}
-            >
-              New CR:{" "}
-              {newCR > BigInt(0) ? `${+formatEther(newCR) * 100}%` : "Invalid"}
-            </span>
-          ) : (
-            ""
-          )}
-        </p>
+        <div className="text-sm leading-loose text-muted-foreground">
+          <p>{crAfterBurn && <p>New CR: {round(crAfterBurn, 2)}%</p>}</p>
+        </div>
         <Button
           className="mt-4 p-2"
           variant="default"

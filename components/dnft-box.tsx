@@ -342,6 +342,7 @@ export default function DnftBox() {
             minCollateralizationRatio={minCollateralizationRatio}
             dyad={dyad}
             collatRatio={collateralRatio}
+            usdValue={usdValue}
           />
           {/* Persistent Note Data Block */}
           {/* <div */}
