@@ -67,6 +67,13 @@ export default function BurnAndWithdrawTab({
     -1 * parseFloat(burnInput)
   );
 
+  const { cr: crAfterWithdraw } = useCR(
+    usdValue,
+    dyadMinted,
+    -1 * parseFloat(withdrawInput),
+    0
+  );
+
   const [withdrawAmount, withdrawAmountError] = useMemo(() => {
     if (withdrawInput === undefined || withdrawInput === "") {
       return [undefined, undefined];
@@ -284,6 +291,11 @@ export default function BurnAndWithdrawTab({
             ""
           )}
         </p>
+        <div className="text-sm leading-loose text-muted-foreground">
+          <p>
+            {crAfterWithdraw && <p>New CR: {round(crAfterWithdraw, 2)}%</p>}
+          </p>
+        </div>
         <Button
           className="mt-4 p-2"
           variant="default"
