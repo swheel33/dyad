@@ -313,11 +313,13 @@ export default function MintAndDepositTab({
             ""
           )}
         </p>
-        <p className="text-sm leading-loose text-muted-foreground">
-          0.15% frontend fee: {isNaN(depositInput) ? 0 : depositInput * 0.0015}{" "}
-          wETH
-        </p>
-        {cr && <p>New CR: {round(cr, 2)}%</p>}
+        <div className="text-sm leading-loose text-muted-foreground">
+          <p>
+            0.15% frontend fee:{" "}
+            {isNaN(depositInput) ? 0 : depositInput * 0.0015} wETH
+          </p>
+          <p>{cr && <p>New CR: {round(cr, 2)}%</p>}</p>
+        </div>
 
         <Button
           className="mt-4 p-2"
