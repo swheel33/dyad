@@ -288,23 +288,25 @@ export default function DnftBox() {
                 ))}
               </SelectContent>
             </Select>
-            <div className="flex space-x-4">
-              <div className="flex space-x-1">
-                <div>CR:</div>
-                <div>{round(cr / 10 ** 16, 0)}%</div>
-              </div>
-              <div className="flex space-x-1">
+            {selectedDnft !== undefined && (
+              <div className="flex space-x-4">
                 <div className="flex space-x-1">
-                  <div>{round(mintedDyad / 10 ** 18, 2)}</div>
-                  <div>DYAD</div>
+                  <div>CR:</div>
+                  <div>{round(cr / 10 ** 16, 0)}%</div>
                 </div>
-                <div>/</div>
-                <div className="flex ">
-                  <div>$</div>
-                  <div>{round(usdValue / 10 ** 18, 2)}</div>
+                <div className="flex space-x-1">
+                  <div className="flex space-x-1">
+                    <div>{round(mintedDyad / 10 ** 18, 2)}</div>
+                    <div>DYAD</div>
+                  </div>
+                  <div>/</div>
+                  <div className="flex ">
+                    <div>$</div>
+                    <div>{round(usdValue / 10 ** 18, 2)}</div>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       )}
