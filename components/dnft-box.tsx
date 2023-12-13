@@ -291,7 +291,7 @@ export default function DnftBox() {
             <div className="flex space-x-4">
               <div className="flex space-x-1">
                 <div>CR:</div>
-                <div>{cr}%</div>
+                <div>{round(cr / 10 ** 16, 0)}%</div>
               </div>
               <div className="flex space-x-1">
                 <div className="flex space-x-1">

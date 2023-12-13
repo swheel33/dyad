@@ -300,7 +300,7 @@ export default function BurnAndWithdrawTab({
           className="mt-4 p-2"
           variant="default"
           disabled={
-            !selectedVault ||
+            // !selectedVault ||
             !withdrawAmount ||
             withdrawAmountError ||
             isWithdrawLoading ||
