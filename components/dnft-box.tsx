@@ -26,6 +26,15 @@ import useModal from "@/contexts/modal";
 import { AddVaultModalContent } from "./add-vault-modal-content";
 import { ClaimModalContent } from "./claim-modal-content";
 import { round } from "../utils/currency";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import ClaimsTable from "./claims-table";
 
 export default function DnftBox() {
   const { isConnected, address } = useAccount();
@@ -344,35 +353,6 @@ export default function DnftBox() {
             collatRatio={collateralRatio}
             usdValue={usdValue}
           />
-          {/* Persistent Note Data Block */}
-          {/* <div */}
-          {/*   className={`mt-4 border p-4 ${selectedDnft ? "" : "opacity-50"}`} */}
-          {/* > */}
-          {/*   <Table className="w-full border mt-4"> */}
-          {/*     <TableHeader> */}
-          {/*       <TableRow> */}
-          {/*         <TableHead>Vault</TableHead> */}
-          {/*         <TableHead>Minted DYAD</TableHead> */}
-          {/*         <TableHead>Collateral</TableHead> */}
-          {/*         <TableHead>Collateral Ratio</TableHead> */}
-          {/*       </TableRow> */}
-          {/*     </TableHeader> */}
-          {/*     <TableBody> */}
-          {/*       {vaultsData?.map((data, index) => ( */}
-          {/*         <TableRow key={index}> */}
-          {/*           <TableCell>{data.symbol}</TableCell> */}
-          {/*           <TableCell> */}
-          {/*             ${formatEther(BigInt(vD[1].result) * BigInt(100))} */}
-          {/*           </TableCell> */}
-          {/*           <TableCell>${formatEther(BigInt(vD[0].result))}</TableCell> */}
-          {/*           <TableCell> */}
-          {/*             {formatEther(BigInt(vM[0].result) * BigInt(100))}% */}
-          {/*           </TableCell> */}
-          {/*         </TableRow> */}
-          {/*       ))} */}
-          {/*     </TableBody> */}
-          {/*   </Table> */}
-          {/* </div> */}
         </div>
       }
     </div>
