@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import useEthPrice from "./useEthPrice";
 
-export default function useCR(usdValue, dyadMinted, newAmountAdded = 0) {
+export default function useCR(
+  usdValue,
+  dyadMinted,
+  newCollat = 0,
+  newDebt = 0
+) {
   const [cr, setCR] = useState(0);
 
   const { ethPrice } = useEthPrice();
@@ -10,11 +15,14 @@ export default function useCR(usdValue, dyadMinted, newAmountAdded = 0) {
     // to uint
     usdValue = parseFloat(usdValue) / 10 ** 18;
     dyadMinted = parseFloat(dyadMinted) / 10 ** 18;
-    newAmountAdded = parseFloat(newAmountAdded);
+    newCollat = parseFloat(newCollat);
+    newDebt = parseFloat(newDebt);
 
-    const amountAddedInEth = newAmountAdded * ethPrice;
+    const amountAddedInEth = newCollat * ethPrice;
     const newUsdValue = usdValue + parseFloat(amountAddedInEth);
+    dyadMinted = parseFloat(dyadMinted) + parseFloat(newDebt);
     const newCR = newUsdValue / dyadMinted;
+    console.log("newCR", newCR);
 
     // check if not nan
     if (newCR !== newCR) {
@@ -22,7 +30,7 @@ export default function useCR(usdValue, dyadMinted, newAmountAdded = 0) {
     } else {
       setCR(newCR * 100);
     }
-  }, [newAmountAdded]);
+  }, [newCollat, newDebt]);
 
   return { cr };
 }

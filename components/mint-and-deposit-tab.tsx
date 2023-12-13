@@ -60,7 +60,8 @@ export default function MintAndDepositTab({
   const [mintInput, setMintInput] = useState<string>();
   const [redeemInput, setRedeemInput] = useState<string>();
 
-  const { cr } = useCR(usdValue, dyadMinted, depositInput);
+  const { cr } = useCR(usdValue, dyadMinted, depositInput, 0);
+  const { cr: crAfterMint } = useCR(usdValue, dyadMinted, 0, mintInput);
 
   const [depositAmount, depositAmountError] = useMemo(() => {
     if (depositInput === undefined || depositInput === "") {
@@ -405,6 +406,9 @@ export default function MintAndDepositTab({
             ""
           )}
         </p>
+        <div className="text-sm leading-loose text-muted-foreground">
+          <p>{crAfterMint && <p>New CR: {round(crAfterMint, 2)}%</p>}</p>
+        </div>
         <Button
           className="mt-4 p-2"
           variant="default"
