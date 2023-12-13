@@ -17,6 +17,7 @@ import { Abi, formatEther, getAddress, numberToHex, parseEther } from "viem";
 import Loader from "./loader";
 import { crColor } from "@/lib/utils";
 import useCR from "@/hooks/useCR";
+import CR from "./cr";
 
 interface Props {
   setSelectedVaultId: (value: string) => void;
@@ -224,7 +225,13 @@ export default function BurnAndWithdrawTab({
           </Button>
         </div>
         <div className="text-sm leading-loose text-muted-foreground">
-          <p>{crAfterBurn && <p>New CR: {round(crAfterBurn, 2)}%</p>}</p>
+          <p>
+            {crAfterBurn && (
+              <p>
+                New CR: <CR cr={crAfterBurn} />%
+              </p>
+            )}
+          </p>
         </div>
         <Button
           className="mt-4 p-2"
@@ -293,7 +300,11 @@ export default function BurnAndWithdrawTab({
         </p>
         <div className="text-sm leading-loose text-muted-foreground">
           <p>
-            {crAfterWithdraw && <p>New CR: {round(crAfterWithdraw, 2)}%</p>}
+            {crAfterWithdraw && (
+              <p>
+                New CR: <CR cr={crAfterWithdraw} />%
+              </p>
+            )}
           </p>
         </div>
         <Button

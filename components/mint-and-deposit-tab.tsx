@@ -16,7 +16,7 @@ import ERC20 from "@/abis/ERC20.json";
 import Loader from "./loader";
 import { crColor } from "@/lib/utils";
 import useCR from "../hooks/useCR";
-import { round } from "../utils/currency";
+import CR from "./cr";
 
 interface Props {
   setSelectedVaultId: (value: string) => void;
@@ -60,7 +60,7 @@ export default function MintAndDepositTab({
   const [mintInput, setMintInput] = useState<string>();
   const [redeemInput, setRedeemInput] = useState<string>();
 
-  const { cr } = useCR(usdValue, dyadMinted, depositInput, 0);
+  const { cr: crAfterDeposit } = useCR(usdValue, dyadMinted, depositInput, 0);
   const { cr: crAfterMint } = useCR(usdValue, dyadMinted, 0, mintInput);
 
   const [depositAmount, depositAmountError] = useMemo(() => {
@@ -319,7 +319,13 @@ export default function MintAndDepositTab({
             0.15% frontend fee:{" "}
             {isNaN(depositInput) ? 0 : depositInput * 0.0015} wETH
           </p>
-          <p>{cr && <p>New CR: {round(cr, 2)}%</p>}</p>
+          <p>
+            {crAfterDeposit && (
+              <p>
+                New CR: <CR cr={crAfterDeposit} />%
+              </p>
+            )}
+          </p>
         </div>
 
         <Button
@@ -407,7 +413,13 @@ export default function MintAndDepositTab({
           )}
         </p>
         <div className="text-sm leading-loose text-muted-foreground">
-          <p>{crAfterMint && <p>New CR: {round(crAfterMint, 2)}%</p>}</p>
+          <p>
+            {crAfterMint && (
+              <p>
+                New CR: <CR cr={crAfterMint} />%
+              </p>
+            )}
+          </p>
         </div>
         <Button
           className="mt-4 p-2"
