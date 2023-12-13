@@ -326,7 +326,7 @@ export default function BurnAndWithdrawTab({
           {isWithdrawLoading || isWithdrawTxLoading ? (
             <Loader />
           ) : (
-            `Withdraw ${selectedVault?.symbol ?? ""}`
+            `Withdraw wETH`
           )}
         </Button>
         <p className="text-red-500 text-xs pb-2">
