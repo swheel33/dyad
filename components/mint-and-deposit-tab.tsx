@@ -15,6 +15,8 @@ import PaymentsAbi from "@/abis/Payments.json";
 import ERC20 from "@/abis/ERC20.json";
 import Loader from "./loader";
 import { crColor } from "@/lib/utils";
+import useCR from "../hooks/useCR";
+import { round } from "../utils/currency";
 
 interface Props {
   setSelectedVaultId: (value: string) => void;
@@ -51,11 +53,14 @@ export default function MintAndDepositTab({
   dyadMinted,
   minCollateralizationRatio,
   vaultManager,
+  usdValue,
 }: Props) {
   const { address } = useAccount();
   const [depositInput, setDepositInput] = useState<string>();
   const [mintInput, setMintInput] = useState<string>();
   const [redeemInput, setRedeemInput] = useState<string>();
+
+  const { cr } = useCR(usdValue, dyadMinted, depositInput);
 
   const [depositAmount, depositAmountError] = useMemo(() => {
     if (depositInput === undefined || depositInput === "") {
@@ -312,6 +317,8 @@ export default function MintAndDepositTab({
           0.15% frontend fee: {isNaN(depositInput) ? 0 : depositInput * 0.0015}{" "}
           wETH
         </p>
+        {cr && <p>New CR: {round(cr, 2)}%</p>}
+
         <Button
           className="mt-4 p-2"
           variant="default"

@@ -326,6 +326,7 @@ export default function DnftBox() {
             dyadMinted={dyadMinted}
             totalValueLocked={totalValueLocked}
             minCollateralizationRatio={minCollateralizationRatio}
+            usdValue={usdValue}
           />
           <BurnAndWithdrawTab
             setSelectedVaultId={setSelectedVaultId}
