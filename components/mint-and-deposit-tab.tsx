@@ -17,6 +17,7 @@ import Loader from "./loader";
 import { crColor } from "@/lib/utils";
 import useCR from "../hooks/useCR";
 import CR from "./cr";
+import Info from "./info.tsx";
 
 interface Props {
   setSelectedVaultId: (value: string) => void;
@@ -266,7 +267,7 @@ export default function MintAndDepositTab({
     <div>
       {/* Deposit Component */}
       <div className="mb-4 p-4 border">
-        <div className="flex space-x-4">
+        <div className="flex space-x-4 items-center">
           <Input
             type="text"
             placeholder="Amount to Deposit"
@@ -277,6 +278,11 @@ export default function MintAndDepositTab({
               setDepositInput(e.target.value);
             }}
           />
+          <Info>
+            Deposit ETH or wETH into your Note as backing collateral for minting
+            DYAD. You must have a minimum of $1.50 deposited for each DYAD that
+            you mint, but we recommend more than that.
+          </Info>
           <Button
             variant="outline"
             // {/* className="p-2 border bg-gray-200" */}
@@ -368,7 +374,7 @@ export default function MintAndDepositTab({
 
       {/* Mint Component */}
       <div className="mb-4 p-4 border">
-        <div className="flex space-x-4">
+        <div className="flex space-x-4 items-center">
           <Input
             type="text"
             placeholder="Amount to Mint"
@@ -379,6 +385,13 @@ export default function MintAndDepositTab({
             }}
             disabled={!selectedDnft}
           />
+          <Info>
+            Mint DYAD stablecoins against the ETH and wETH you deposit into your
+            Note. Your DYAD will be available in your connected wallet once you
+            mint it. The more DYAD you mint now, the more rewards you will be
+            able to claim in the near future.
+          </Info>
+
           {/* <Button */}
           {/*   className="p-2 border bg-gray-200" */}
           {/*   onClick={() => setMintInput(maxMint ? formatEther(maxMint) : "")} */}
@@ -449,7 +462,7 @@ export default function MintAndDepositTab({
 
       {/* Mint Component */}
       <div className="mb-4 p-4 border">
-        <div className="flex space-x-4">
+        <div className="flex space-x-4 items-center">
           <Input
             type="text"
             placeholder="Amount to Redeem"
@@ -458,6 +471,11 @@ export default function MintAndDepositTab({
             onChange={(e) => setRedeemInput(e.target.value)}
             disabled={!selectedDnft}
           />
+          <Info>
+            Burn DYAD that you have in your connected wallet and receive the
+            equivalent dollar-denominated amount of wETH. Redeeming combines the
+            Burn and Withdraw functions automatically.
+          </Info>
           {/* <Button */}
           {/*   className="p-2 border bg-gray-200" */}
           {/*   onClick={() => setMintInput(maxMint ? formatEther(maxMint) : "")} */}

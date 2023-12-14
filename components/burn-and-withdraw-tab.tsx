@@ -18,6 +18,7 @@ import Loader from "./loader";
 import { crColor } from "@/lib/utils";
 import useCR from "@/hooks/useCR";
 import CR from "./cr";
+import Info from "./info.tsx";
 
 interface Props {
   setSelectedVaultId: (value: string) => void;
@@ -207,7 +208,7 @@ export default function BurnAndWithdrawTab({
     <div>
       {/* Burn Component */}
       <div className="mb-4 p-4 border">
-        <div className="flex space-x-4">
+        <div className="flex space-x-4 items-center">
           <Input
             type="text"
             placeholder="Amount to Burn"
@@ -216,6 +217,12 @@ export default function BurnAndWithdrawTab({
             onChange={(e) => setBurnInput(e.target.value)}
             disabled={!selectedDnft}
           />
+          <Info>
+            Burn DYAD that you have in your connected wallet to reduce your
+            Note’s DYAD minted balance. This raises your Note’s
+            collateralization ratio, which makes it safer from liquidation and
+            allows you to withdraw more deposited collateral.
+          </Info>
           <Button
             variant="outline"
             onClick={() => setBurnInput(dyadBalance?.formatted ?? "")}
@@ -257,7 +264,7 @@ export default function BurnAndWithdrawTab({
         </p>
       </div>
       {/* Withdraw Component */}
-      <div className="mb-4 p-4 border">
+      <div className="mb-4 p-4 border items-center">
         <div className="flex space-x-4">
           <Input
             type="text"
@@ -268,6 +275,11 @@ export default function BurnAndWithdrawTab({
             disabled={!selectedDnft}
             onChange={(e) => setWithdrawInput(e.target.value)}
           />
+          <Info>
+            Withdraw collateral that you have deposited into your Note. This
+            will reduce your collateralization ratio. You can only withdraw down
+            to the minimum 175% CR to protect your Note from liquidation.
+          </Info>
           {/* <Button */}
           {/*   className="p-2 border bg-gray-200" */}
           {/*   disabled={!selectedVault} */}
