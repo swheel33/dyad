@@ -99,8 +99,8 @@ export default function MintAndDepositTab({
   const { data: balanceData } = useBalance({
     // enabled: !!selectedVault?.asset,
     address,
-    token: (weth ?? "") as `0x${string}`,
   });
+  console.log("balanceData", balanceData);
 
   const maxMint = useMemo(() => {
     if (
@@ -160,8 +160,9 @@ export default function MintAndDepositTab({
   } = useContractWrite({
     address: payments,
     abi: PaymentsAbi["abi"],
-    functionName: "depositWithFee",
-    args: [selectedDnft, vault, depositAmount ?? BigInt(0)],
+    functionName: "depositETHWithFee",
+    args: [selectedDnft, vault],
+    value: parseEther((depositInput as string) ?? "0"),
   });
 
   const { isLoading: isDepositTxLoading, isError: isDepositTxError } =
@@ -273,9 +274,7 @@ export default function MintAndDepositTab({
             disabled={!selectedDnft}
             value={depositInput}
             onChange={(e) => {
-              if (e.target.value !== "0") {
-                setDepositInput(e.target.value);
-              }
+              setDepositInput(e.target.value);
             }}
           />
           <Button
@@ -291,7 +290,7 @@ export default function MintAndDepositTab({
           {depositAmountError
             ? depositAmountError
             : depositAmount && balanceData && depositAmount > balanceData?.value
-            ? "Insufficient wETH Balance"
+            ? "Insufficient ETH Balance"
             : ""}
         </p>
         <p className="text-green-500 text-xs">
@@ -345,8 +344,8 @@ export default function MintAndDepositTab({
             isDepositTxLoading
           }
           onClick={() => {
-            approvalReset();
-            requiresApproval ? setApproval() : deposit();
+            // approvalReset();
+            deposit();
           }}
         >
           {isApprovalLoading ||
@@ -354,19 +353,17 @@ export default function MintAndDepositTab({
           isDepositLoading ||
           isDepositTxLoading ? (
             <Loader />
-          ) : requiresApproval ? (
-            "Approve"
           ) : (
-            `Deposit ${"WETH" ?? ""}`
+            `Deposit ${"ETH" ?? ""}`
           )}
         </Button>
-        <p className="text-red-500 text-xs pt-2">
-          {isApprovalError || isApprovalTxError
-            ? "Error approving token for deposit"
-            : isDepositError || isDepositTxError
-            ? "Error depositing token"
-            : ""}
-        </p>
+        {/* <p className="text-red-500 text-xs pt-2"> */}
+        {/*   {isApprovalError || isApprovalTxError */}
+        {/*     ? "Error approving token for deposit" */}
+        {/*     : isDepositError || isDepositTxError */}
+        {/*     ? "Error depositing token" */}
+        {/*     : ""} */}
+        {/* </p> */}
       </div>
 
       {/* Mint Component */}
@@ -378,9 +375,7 @@ export default function MintAndDepositTab({
             className="w-full p-2 border mb-2"
             value={mintInput}
             onChange={(e) => {
-              if (e.target.value !== "0") {
-                setMintInput(e.target.value);
-              }
+              setMintInput(e.target.value);
             }}
             disabled={!selectedDnft}
           />
