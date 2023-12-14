@@ -278,7 +278,7 @@ export default function MintAndDepositTab({
             variant="outline"
             // {/* className="p-2 border bg-gray-200" */}
             onClick={() => setDepositInput(balanceData?.formatted ?? "")}
-            // disabled={!selectedVault}
+            disabled={!selectedDnft}
           >
             MAX
           </Button>
