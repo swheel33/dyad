@@ -76,3 +76,15 @@
     @apply bg-background text-foreground;
   }
 }
+
+@media only screen and (max-width: 600px) {
+  .hide-on-mobile {
+    display: none; 
+  }
+}
+
+@media only screen and (min-width: 601px) {
+  .show-on-mobile {
+    display: none; 
+  }
+}
