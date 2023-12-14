@@ -272,7 +272,11 @@ export default function MintAndDepositTab({
             className="w-full p-2 border mb-2"
             disabled={!selectedDnft}
             value={depositInput}
-            onChange={(e) => setDepositInput(e.target.value)}
+            onChange={(e) => {
+              if (e.target.value !== "0") {
+                setDepositInput(e.target.value);
+              }
+            }}
           />
           <Button
             variant="outline"
@@ -373,7 +377,11 @@ export default function MintAndDepositTab({
             placeholder="Amount to Mint"
             className="w-full p-2 border mb-2"
             value={mintInput}
-            onChange={(e) => setMintInput(e.target.value)}
+            onChange={(e) => {
+              if (e.target.value !== "0") {
+                setMintInput(e.target.value);
+              }
+            }}
             disabled={!selectedDnft}
           />
           {/* <Button */}
