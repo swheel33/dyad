@@ -118,15 +118,18 @@ export default function BurnAndWithdrawTab({
       dyadMinted !== undefined &&
       ethPrice !== undefined
     ) {
-      const a =
-        BigInt(usdValue) -
-        (BigInt(minCollateralizationRatio) * BigInt(dyadMinted)) /
-          BigInt(10 ** 18);
-      let total = parseEther((parseFloat(a) / 10 ** 18 / ethPrice).toString());
-
-      total = parseFloat(total) / 10 ** 18;
-
-      return total;
+      try {
+        const a =
+          BigInt(usdValue) -
+          (BigInt(minCollateralizationRatio) * BigInt(dyadMinted)) /
+            BigInt(10 ** 18);
+        let total = 0;
+        total = parseEther((parseFloat(a) / 10 ** 18 / ethPrice).toString());
+        total = parseFloat(total) / 10 ** 18;
+        return total;
+      } catch {
+        return 0;
+      }
     } else {
       return BigInt(0);
     }
