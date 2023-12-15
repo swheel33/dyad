@@ -122,13 +122,7 @@ export default function BurnAndWithdrawTab({
         BigInt(usdValue) -
         (BigInt(minCollateralizationRatio) * BigInt(dyadMinted)) /
           BigInt(10 ** 18);
-      console.log(
-        "xx a",
-        parseEther((parseFloat(a) / 10 ** 18 / ethPrice).toString())
-      );
       let total = parseEther((parseFloat(a) / 10 ** 18 / ethPrice).toString());
-      console.log("xx total", total / BigInt(10 ** 18));
-      console.log("xx total", parseFloat(total) / 10 ** 18);
 
       total = parseFloat(total) / 10 ** 18;
 
