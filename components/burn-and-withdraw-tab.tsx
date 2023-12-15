@@ -19,6 +19,7 @@ import { crColor } from "@/lib/utils";
 import useCR from "@/hooks/useCR";
 import CR from "./cr";
 import Info from "./info.tsx";
+import useEthPrice from "@/hooks/useEthPrice";
 
 interface Props {
   setSelectedVaultId: (value: string) => void;
@@ -62,6 +63,8 @@ export default function BurnAndWithdrawTab({
   const [burnInput, setBurnInput] = useState<string>();
   const { address } = useAccount();
 
+  const { ethPrice } = useEthPrice();
+
   const { cr: crAfterBurn } = useCR(
     usdValue,
     dyadMinted,
@@ -102,6 +105,38 @@ export default function BurnAndWithdrawTab({
     address,
     token: dyad as `0x${string}`,
   });
+
+  const maxWithdraw = useMemo(() => {
+    minCollateralizationRatio = "1700000000000000000";
+    console.log("xx usdValue", usdValue);
+    console.log("xx minCollateralizationRatio", minCollateralizationRatio);
+    console.log("xx dyadMinted", dyadMinted);
+    console.log("xx ethPrice", ethPrice);
+    if (
+      usdValue !== undefined &&
+      minCollateralizationRatio !== undefined &&
+      dyadMinted !== undefined &&
+      ethPrice !== undefined
+    ) {
+      const a =
+        BigInt(usdValue) -
+        (BigInt(minCollateralizationRatio) * BigInt(dyadMinted)) /
+          BigInt(10 ** 18);
+      console.log(
+        "xx a",
+        parseEther((parseFloat(a) / 10 ** 18 / ethPrice).toString())
+      );
+      let total = parseEther((parseFloat(a) / 10 ** 18 / ethPrice).toString());
+      console.log("xx total", total / BigInt(10 ** 18));
+      console.log("xx total", parseFloat(total) / 10 ** 18);
+
+      total = parseFloat(total) / 10 ** 18;
+
+      return total;
+    } else {
+      return BigInt(0);
+    }
+  }, [minCollateralizationRatio, dyadMinted, usdValue, ethPrice]);
 
   const { data: withdrawableBalance } = useContractReads({
     contracts: [
@@ -280,17 +315,13 @@ export default function BurnAndWithdrawTab({
             will reduce your collateralization ratio. You can only withdraw down
             to the minimum 175% CR to protect your Note from liquidation.
           </Info>
-          {/* <Button */}
-          {/*   className="p-2 border bg-gray-200" */}
-          {/*   disabled={!selectedVault} */}
-          {/*   onClick={() => */}
-          {/*     setWithdrawInput( */}
-          {/*       withdrawableBalance ? formatEther(withdrawableBalance) : "" */}
-          {/*     ) */}
-          {/*   } */}
-          {/* > */}
-          {/*   MAX */}
-          {/* </Button> */}
+          <Button
+            variant="outline"
+            disabled={!selectedDnft}
+            onClick={() => setWithdrawInput(maxWithdraw.toString())}
+          >
+            MAX
+          </Button>
         </div>
         <p className="text-red-500 text-xs">
           {!withdrawAmountError &&
