@@ -12,7 +12,7 @@ export function Footer({
       {...props}
     >
       <Link
-        href="https://dyadstable.notion.site/DYAD-full-52096aed265247e7a50b14f06c228a7e?pvs=4"
+        href="https://dyadstable.notion.site/dyadstable/DYAD-design-outline-v3-28b79ebd6acb42009ff5a751c3158781"
         className="text-xs font-medium text-muted-foreground transition-colors hover:text-primary"
       >
         Docs
@@ -24,10 +24,16 @@ export function Footer({
         Discord
       </Link>
       <Link
-        href="https://twitter.com/0xDYAD"
+        href="https://x.com/0xDYAD"
         className="text-xs font-medium text-muted-foreground transition-colors hover:text-primary"
       >
-        Twitter
+        X
+      </Link>
+      <Link
+        href="https://github.com/DyadStablecoin"
+        className="text-xs font-medium text-muted-foreground transition-colors hover:text-primary"
+      >
+        Github
       </Link>
     </footer>
   );
