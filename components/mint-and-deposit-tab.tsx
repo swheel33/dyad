@@ -478,13 +478,15 @@ export default function MintAndDepositTab({
             equivalent dollar-denominated amount of wETH. Redeeming combines the
             Burn and Withdraw functions automatically.
           </Info>
-          {/* <Button */}
-          {/*   className="p-2 border bg-gray-200" */}
-          {/*   onClick={() => setMintInput(maxMint ? formatEther(maxMint) : "")} */}
-          {/*   disabled={!selectedDnft} */}
-          {/* > */}
-          {/*   MAX */}
-          {/* </Button> */}
+          <Button
+            variant="outline"
+            onClick={() =>
+              setRedeemInput((dyadMinted / BigInt(10 ** 18)).toString())
+            }
+            disabled={!selectedDnft}
+          >
+            MAX
+          </Button>
         </div>
         {/* <p className="text-red-500 text-xs pb-2"> */}
         {/*   {mintAmountError */}
