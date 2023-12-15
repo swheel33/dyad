@@ -57,6 +57,7 @@ export default function BurnAndWithdrawTab({
   dyad,
   collatRatio,
   usdValue,
+  id2asset,
 }: Props) {
   const [oldCR, setOldCR] = useState(0);
   const [withdrawInput, setWithdrawInput] = useState<string>();
@@ -106,12 +107,17 @@ export default function BurnAndWithdrawTab({
     token: dyad as `0x${string}`,
   });
 
+  const maxBurn = useMemo(() => {
+    // if (parseInt(dyadBalance.value) > parseInt(id2asset)) {
+    //   return id2asset;
+    // } else {
+    if (dyadBalance?.value === undefined) return 0;
+    return dyadBalance.value / BigInt(10 ** 18);
+    // }
+  }, [dyadBalance, id2asset]);
+
   const maxWithdraw = useMemo(() => {
     minCollateralizationRatio = "1700000000000000000";
-    console.log("xx usdValue", usdValue);
-    console.log("xx minCollateralizationRatio", minCollateralizationRatio);
-    console.log("xx dyadMinted", dyadMinted);
-    console.log("xx ethPrice", ethPrice);
     if (
       usdValue !== undefined &&
       minCollateralizationRatio !== undefined &&
@@ -257,7 +263,7 @@ export default function BurnAndWithdrawTab({
           </Info>
           <Button
             variant="outline"
-            onClick={() => setBurnInput(dyadBalance?.formatted ?? "")}
+            onClick={() => setBurnInput(maxBurn.toString())}
             disabled={!selectedDnft}
           >
             MAX

@@ -43,6 +43,7 @@ export default function DnftBox() {
   const [cr, setCr] = useState<string>();
   const [mintedDyad, setMintedDyad] = useState<string>();
   const [usdValue, setUsdValue] = useState<string>();
+  const [id2asset, setId2asset] = useState<string>();
   const [selectedVaultId, setSelectedVaultId] = useState<string>();
   const { pushModal } = useModal();
 
@@ -99,6 +100,12 @@ export default function DnftBox() {
         functionName: "getTotalUsdValue",
         args: [selectedDnft ?? "0"],
       },
+      {
+        address: vault,
+        abi: VaultAbi["abi"],
+        functionName: "id2asset",
+        args: [selectedDnft ?? "0"],
+      },
     ],
     watch: true,
     onSuccess: (data) => {
@@ -110,6 +117,7 @@ export default function DnftBox() {
           : data?.collatRatio?.toString()
       );
       setUsdValue(data?.usdValue?.toString());
+      setId2asset(data?.id2asset?.toString());
     },
     select: (data) => ({
       dnftBalance: +(data?.[0]?.result?.toString() ?? "0"),
@@ -119,6 +127,7 @@ export default function DnftBox() {
       minCollateralizationRatio: (data?.[4]?.result ?? BigInt(0)) as bigint,
       collatRatio: (data?.[5]?.result ?? BigInt(0)) as bigint,
       usdValue: (data?.[6]?.result ?? BigInt(0)) as bigint,
+      id2asset: (data?.[7]?.result ?? BigInt(0)) as bigint,
     }),
   });
   const {
@@ -352,6 +361,7 @@ export default function DnftBox() {
             dyad={dyad}
             collatRatio={collateralRatio}
             usdValue={usdValue}
+            id2asset={id2asset}
           />
         </div>
       }
