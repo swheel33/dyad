@@ -101,21 +101,23 @@ export default function MintAndDepositTab({
     // enabled: !!selectedVault?.asset,
     address,
   });
-  console.log("balanceData", balanceData);
 
   const maxMint = useMemo(() => {
+    minCollateralizationRatio = "1700000000000000000";
     if (
-      totalValueLocked === undefined ||
-      minCollateralizationRatio === undefined ||
-      minCollateralizationRatio === BigInt(0) ||
-      dyadMinted === undefined
-    )
+      usdValue !== undefined &&
+      minCollateralizationRatio !== undefined &&
+      dyadMinted !== undefined
+    ) {
+      const a =
+        BigInt(usdValue) / BigInt(minCollateralizationRatio) -
+        BigInt(dyadMinted) / BigInt(10 ** 18);
+
+      return BigInt(a);
+    } else {
       return BigInt(0);
-    return (
-      (totalValueLocked * BigInt(10 ** 18)) / minCollateralizationRatio -
-      dyadMinted
-    );
-  }, [minCollateralizationRatio, totalValueLocked, dyadMinted]);
+    }
+  }, [minCollateralizationRatio, dyadMinted, usdValue]);
 
   const { data: allowance } = useContractRead({
     // enabled: !!selectedVault?.asset,
@@ -392,13 +394,13 @@ export default function MintAndDepositTab({
             able to claim in the near future.
           </Info>
 
-          {/* <Button */}
-          {/*   className="p-2 border bg-gray-200" */}
-          {/*   onClick={() => setMintInput(maxMint ? formatEther(maxMint) : "")} */}
-          {/*   disabled={!selectedDnft} */}
-          {/* > */}
-          {/*   MAX */}
-          {/* </Button> */}
+          <Button
+            variant="outline"
+            onClick={() => setMintInput(maxMint.toString())}
+            disabled={!selectedDnft}
+          >
+            MAX
+          </Button>
         </div>
         {/* <p className="text-red-500 text-xs pb-2"> */}
         {/*   {mintAmountError */}
