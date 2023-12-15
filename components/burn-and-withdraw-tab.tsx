@@ -300,7 +300,7 @@ export default function BurnAndWithdrawTab({
       </div>
       {/* Withdraw Component */}
       <div className="mb-4 p-4 border items-center">
-        <div className="flex space-x-4">
+        <div className="flex space-x-4 items-center">
           <Input
             type="text"
             placeholder="Amount to Withdraw"
