@@ -1,0 +1,9 @@
+query userOwnedDnfts($user: String) {
+  dnfts(where: { owner: $user }) {
+    id
+    tokenId
+    owner {
+      address
+    }
+  }
+}

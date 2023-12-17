@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { formatEther } from "viem";
 
-import { useAllDnftMintsQuery } from "@/gql";
+import { MintedNft_OrderBy, OrderDirection, useAllDnftMintsQuery } from "@/gql";
 import {
   Table,
   TableBody,
@@ -23,10 +23,17 @@ const perPage = 15;
 export default function ClaimsTable({ className }: Props) {
   const [page, setPage] = useState(0);
 
+  const [sortBy, setSortBy] = useState<MintedNft_OrderBy>(
+    MintedNft_OrderBy.DNftId
+  );
+  const [sortDir, setSortDir] = useState<OrderDirection>(OrderDirection.Desc);
+
   const [{ data }] = useAllDnftMintsQuery({
     variables: {
       numResults: perPage,
       skip: page * perPage,
+      orderBy: sortBy,
+      orderDirection: sortDir,
     },
   });
 
