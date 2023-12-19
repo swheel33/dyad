@@ -328,7 +328,7 @@ export default function MintAndDepositTab({
         <div className="text-sm leading-loose text-muted-foreground">
           <p>
             0.15% frontend fee:{" "}
-            {isNaN(depositInput) ? 0 : depositInput * 0.0015} wETH
+            {isNaN(depositInput) ? 0 : depositInput * 0.0015} ETH
           </p>
           <p>
             {crAfterDeposit && (
