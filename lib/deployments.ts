@@ -7,6 +7,7 @@ interface Deployment {
   staking: string;
   vault: string;
   weth: string;
+  wsteth: string;
   payments: string;
 }
 
@@ -21,6 +22,7 @@ export const deployments: { [id: string]: Deployment } = {
     vault: "0xcF97cEc1907CcF9d4A0DC4F492A3448eFc744F6c",
     weth: "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6",
     payments: "0x7363936FC85575Ff59D721B2B0171584880ba55B",
+    wsteth: "0x3c97a8a0210076C2841d1Cf684FeC6234fB314C1",
   },
   // "5": {
   //   dnft: "0x952E31dFeEB29F5398a36602E0E276F2b09B6651",
@@ -32,6 +34,7 @@ export const deployments: { [id: string]: Deployment } = {
   //   vault: "0xba9591e5e7AA188Bb2eEaC0D916F0173Dc5E4701",
   //   weth: "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6",
   //   payments: "0x4CA5aF6eCaa88DF00f37EBf08D92F65a8f9192e5",
+  //   wsteth: "0x3c97a8a0210076C2841d1Cf684FeC6234fB314C1",
   // },
 };
 
