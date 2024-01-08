@@ -26,15 +26,6 @@ import useModal from "@/contexts/modal";
 import { AddVaultModalContent } from "./add-vault-modal-content";
 import { ClaimModalContent } from "./claim-modal-content";
 import { round } from "../utils/currency";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import ClaimsTable from "./claims-table";
 
 export default function DnftBox() {
   const { isConnected, address } = useAccount();
@@ -47,7 +38,9 @@ export default function DnftBox() {
   const [selectedVaultId, setSelectedVaultId] = useState<string>();
   const { pushModal } = useModal();
 
-  const { vaultManager, dyad, dnft, vault, weth, payments } = useMemo(
+  const [selectedVault, setSelectedVault] = useState<string>();
+
+  const { vaultManager, dyad, dnft, vault, wsteth, weth, payments } = useMemo(
     () =>
       chain && deployments[chain.id]
         ? deployments[chain.id]
@@ -55,7 +48,7 @@ export default function DnftBox() {
     [chain]
   );
 
-  const vaults = vault ? [vault] : [];
+  const vaults = vault ? [vault, wsteth] : [];
 
   const { data: initialContractReads } = useContractReads({
     contracts: [
@@ -274,6 +267,7 @@ export default function DnftBox() {
     },
   });
 
+  console.log("vaults", vaultsData);
   return (
     <div className="pt-1">
       {(!isConnected || dnfts?.length === 0) && (
@@ -325,6 +319,23 @@ export default function DnftBox() {
                 </div>
               </div>
             )}
+          </div>
+          <div>
+            <Select onValueChange={setSelectedVault}>
+              <SelectTrigger id="select-dnft" className="mt-1">
+                <SelectValue placeholder="Select Vault" />
+              </SelectTrigger>
+              <SelectContent>
+                {vaultsData?.map((vault) => (
+                  <SelectItem
+                    value={vault.address}
+                    key={`collat-${vault.address}`}
+                  >
+                    {vault.symbol}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </div>
       )}

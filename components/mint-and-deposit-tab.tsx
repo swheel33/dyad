@@ -67,9 +67,6 @@ export default function MintAndDepositTab({
   const [mintInput, setMintInput] = useState<string>();
   const [redeemInput, setRedeemInput] = useState<string>();
 
-  const [collats, setCollats] = useState(["test", "allo", "333"]);
-  const [selectedCollat, setSelectedColat] = useState<string>();
-
   const { cr: crAfterDeposit } = useCR(usdValue, dyadMinted, depositInput, 0);
   const { cr: crAfterMint } = useCR(usdValue, dyadMinted, 0, mintInput);
 
@@ -347,18 +344,6 @@ export default function MintAndDepositTab({
             )}
           </p>
         </div>
-        <Select onValueChange={setSelectedColat}>
-          <SelectTrigger id="select-dnft" className="mt-1">
-            <SelectValue placeholder="Select Vault" />
-          </SelectTrigger>
-          <SelectContent>
-            {collats?.map((collat) => (
-              <SelectItem value={collat} key={`collat-${collat}`}>
-                {collat}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
 
         <Button
           className="mt-4 p-2"
