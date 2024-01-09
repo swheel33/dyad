@@ -61,6 +61,7 @@ export default function MintAndDepositTab({
   minCollateralizationRatio,
   vaultManager,
   usdValue,
+  selectedVaultAddress,
 }: Props) {
   const { address } = useAccount();
   const [depositInput, setDepositInput] = useState<string>();
