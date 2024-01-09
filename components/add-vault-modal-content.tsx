@@ -20,6 +20,7 @@ export function AddVaultModalContent({
   dnft,
   vault,
   vaultAddress,
+  vaultSymbol,
   vaultManagerAddress,
 }: Props) {
   const { shiftModal } = useModal();
@@ -66,14 +67,14 @@ export function AddVaultModalContent({
           ? "Error"
           : isSuccess && !isTxLoading
           ? "Success!"
-          : "Enable wETH Deposit"}
+          : `Enable ${vaultSymbol} Deposit`}
       </CardTitle>
       <CardContent className="px-0 py-2 test-sm">
         {isError
           ? "Error sending transaction, please try again"
           : isSuccess && !isTxLoading
-          ? "wETH depositing enabled successfully!"
-          : "You must enable wETH for your Note before you can deposit."}
+          ? `${vaultSymbol} depositing enabled successfully!`
+          : `You must enable ${vaultSymbol} for your Note before you can deposit.`}
       </CardContent>
       {address ? (
         <Button className="mt-2 w-full" onClick={addVault}>
@@ -84,7 +85,7 @@ export function AddVaultModalContent({
           ) : isLoading || isTxLoading ? (
             <Loader />
           ) : (
-            "Enable wETH"
+            `Enable ${vaultSymbol}`
           )}
         </Button>
       ) : (

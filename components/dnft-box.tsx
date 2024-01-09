@@ -150,11 +150,11 @@ export default function DnftBox() {
 
   // Prompt user to add vault if they haven't already
   useContractRead({
-    // enabled: selectedDnft !== undefined && selectedVaultId !== undefined,
+    enabled: selectedDnft !== undefined && selectedVault !== undefined,
     address: vaultManager,
     abi: VaultManagerAbi["abi"],
     functionName: "hasVault",
-    args: [selectedDnft, vault],
+    args: [selectedDnft, selectedVault.address],
     onErr: (err) => {
       console.log("xxxx", err);
     },
@@ -163,15 +163,16 @@ export default function DnftBox() {
       if (
         result !== undefined &&
         selectedDnft !== undefined &&
-        // selectedVaultId !== undefined &&
+        selectedVault !== undefined &&
         !result
       ) {
         pushModal(
           <AddVaultModalContent
             dnft={selectedDnft}
             vault={selectedVaultId}
-            vaultAddress={vault}
+            vaultAddress={selectedVault.address}
             vaultManagerAddress={vaultManager}
+            vaultSymbol={selectedVault.symbol}
           />
         );
       }
@@ -320,23 +321,22 @@ export default function DnftBox() {
               </div>
             )}
           </div>
-          <div>
-            <Select onValueChange={setSelectedVault}>
-              <SelectTrigger id="select-dnft" className="mt-1">
-                <SelectValue placeholder="Select Vault" />
-              </SelectTrigger>
-              <SelectContent>
-                {vaultsData?.map((vault) => (
-                  <SelectItem
-                    value={vault.address}
-                    key={`collat-${vault.address}`}
-                  >
-                    {vault.symbol}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+          {selectedDnft && (
+            <div className="w-[33.5rem]">
+              <Select onValueChange={setSelectedVault}>
+                <SelectTrigger id="select-dnft" className="mt-1">
+                  <SelectValue placeholder="Select Collateral" />
+                </SelectTrigger>
+                <SelectContent>
+                  {vaultsData?.map((vault) => (
+                    <SelectItem value={vault} key={`collat-${vault.address}`}>
+                      {vault.symbol}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
         </div>
       )}
       {
