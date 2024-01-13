@@ -58,6 +58,7 @@ export default function BurnAndWithdrawTab({
   collatRatio,
   usdValue,
   id2asset,
+  selectedV,
 }: Props) {
   const [oldCR, setOldCR] = useState(0);
   const [withdrawInput, setWithdrawInput] = useState<string>();
@@ -176,7 +177,12 @@ export default function BurnAndWithdrawTab({
     address: vaultManager,
     abi: VaultManagerAbi["abi"],
     functionName: "withdraw",
-    args: [selectedDnft ?? "0", vault, withdrawAmount ?? BigInt(0), address],
+    args: [
+      selectedDnft ?? "0",
+      selectedV.address,
+      withdrawAmount ?? BigInt(0),
+      address,
+    ],
   });
 
   const { isLoading: isWithdrawTxLoading, isError: isWithdrawTxError } =

@@ -62,6 +62,7 @@ export default function MintAndDepositTab({
   vaultManager,
   usdValue,
   selectedVaultAddress,
+  selectedV,
 }: Props) {
   const { address } = useAccount();
   const [depositInput, setDepositInput] = useState<string>();
@@ -175,6 +176,19 @@ export default function MintAndDepositTab({
     value: parseEther((depositInput as string) ?? "0"),
   });
 
+  const {
+    data: deposit2TxData,
+    isLoading: isDeposit2Loading,
+    isError: isDeposit2Error,
+    write: deposit2,
+    reset: deposit2Reset,
+  } = useContractWrite({
+    address: payments,
+    abi: PaymentsAbi["abi"],
+    functionName: "depositWithFee",
+    args: [selectedDnft, vault, parseEther((depositInput as string) ?? "0")],
+  });
+
   const { isLoading: isDepositTxLoading, isError: isDepositTxError } =
     useWaitForTransaction({
       hash: depositTxData?.hash,
@@ -184,6 +198,19 @@ export default function MintAndDepositTab({
       },
       onSuccess: () => {
         depositReset();
+        setDepositInput("");
+      },
+    });
+
+  const { isLoading: isDeposit2TxLoading, isError: isDeposit2TxError } =
+    useWaitForTransaction({
+      hash: deposit2TxData?.hash,
+      onError: (err) => {
+        console.error(err);
+        deposit2Reset();
+      },
+      onSuccess: () => {
+        deposit2Reset();
         setDepositInput("");
       },
     });
@@ -256,7 +283,12 @@ export default function MintAndDepositTab({
     address: vaultManager,
     abi: VaultManagerAbi["abi"],
     functionName: "redeemDyad",
-    args: [selectedDnft ?? "0", vault, redeemAmount ?? BigInt(0), address],
+    args: [
+      selectedDnft ?? "0",
+      selectedV.address,
+      redeemAmount ?? BigInt(0),
+      address,
+    ],
   });
 
   const { isLoading: isRedeemTxLoading, isError: isRedeemTxError } =
@@ -356,16 +388,20 @@ export default function MintAndDepositTab({
             isApprovalLoading ||
             isApprovalTxLoading ||
             isDepositLoading ||
-            isDepositTxLoading
+            isDeposit2Loading ||
+            isDepositTxLoading ||
+            isDeposit2TxLoading
           }
           onClick={() => {
             // approvalReset();
-            deposit();
+            !selectedV.isWrapped ? deposit() : deposit2();
           }}
         >
           {isApprovalLoading ||
           isApprovalTxLoading ||
           isDepositLoading ||
+          isDeposit2Loading ||
+          isDeposit2TxLoading ||
           isDepositTxLoading ? (
             <Loader />
           ) : (

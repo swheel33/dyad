@@ -362,6 +362,7 @@ export default function DnftBox() {
             minCollateralizationRatio={minCollateralizationRatio}
             usdValue={usdValue}
             selectedVaultAddress={selectedV?.address}
+            selectedV={selectedV}
           />
           <BurnAndWithdrawTab
             setSelectedVaultId={setSelectedVaultId}
@@ -379,6 +380,7 @@ export default function DnftBox() {
             collatRatio={collateralRatio}
             usdValue={usdValue}
             id2asset={id2asset}
+            selectedV={selectedV}
           />
         </div>
       }
