@@ -154,7 +154,7 @@ export default function DnftBox() {
     address: vaultManager,
     abi: VaultManagerAbi["abi"],
     functionName: "hasVault",
-    args: [selectedDnft, selectedVault.address],
+    args: [selectedDnft, selectedVault?.address],
     onErr: (err) => {
       console.log("xxxx", err);
     },
@@ -356,7 +356,7 @@ export default function DnftBox() {
             totalValueLocked={totalValueLocked}
             minCollateralizationRatio={minCollateralizationRatio}
             usdValue={usdValue}
-            selectedVaultAddress={selectedVault.address}
+            selectedVaultAddress={selectedVault?.address}
           />
           <BurnAndWithdrawTab
             setSelectedVaultId={setSelectedVaultId}
