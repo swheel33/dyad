@@ -105,7 +105,6 @@ export default function DnftBox() {
     ],
     watch: true,
     onSuccess: (data) => {
-      console.log("data", data);
       setMintedDyad(data?.dyadMinted?.toString());
       setCr(
         data?.collatRatio?.toString() === MAX_UINT256
@@ -134,7 +133,6 @@ export default function DnftBox() {
     minCollateralizationRatio,
     collatRatio,
   } = initialContractReads ?? {};
-  console.log("collatRatio", collatRatio);
 
   // Get addresses of all dnfts owned by user
   const { data: dnfts } = useContractReads({
@@ -244,6 +242,7 @@ export default function DnftBox() {
 
       data.forEach((result, index) => {
         const symbol = SYMBOLS[index];
+        console.log("symbol", symbol);
         if (index % 7 === 0) {
           const share =
             data[index + 5]?.result && data[index + 6]?.result
@@ -261,7 +260,7 @@ export default function DnftBox() {
           v.push({
             address: vaults[index / 7] ?? "",
             asset: weth,
-            symbol: symbol,
+            symbol: SYMBOLS[index / 7],
             collatPrice: data[index + 2]?.result?.toString() ?? "",
             decimals: data[index + 3]?.result?.toString() ?? "",
             tvl,
