@@ -40,3 +40,16 @@ export const deployments: { [id: string]: Deployment } = {
 
 export const MAX_UINT256 =
   "115792089237316195423570985008687907853269984665640564039457584007913129639935";
+
+export const VAULTS = [
+  {
+    address: "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6",
+    symbol: "WETH",
+    isWrapped: false,
+  },
+  {
+    address: "0x7aE80418051b2897729Cbdf388b07C5158C557A1",
+    symbol: "wstETH",
+    isWrapped: true,
+  },
+];

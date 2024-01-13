@@ -17,7 +17,7 @@ import {
 import { Button } from "@/components/ui/button";
 import MintAndDepositTab from "@/components/mint-and-deposit-tab";
 import BurnAndWithdrawTab from "@/components/burn-and-withdraw-tab";
-import { MAX_UINT256, deployments } from "@/lib/deployments";
+import { MAX_UINT256, deployments, VAULTS } from "@/lib/deployments";
 import VaultManagerAbi from "@/abis/VaultManager.json";
 import DyadAbi from "@/abis/Dyad.json";
 import VaultAbi from "@/abis/Vault.json";
@@ -41,7 +41,8 @@ export default function DnftBox() {
   const [selectedVaultId, setSelectedVaultId] = useState<string>();
   const { pushModal } = useModal();
 
-  const [selectedVault, setSelectedVault] = useState<string>();
+  const [selectedV, setSelectedV] = useState(VAULTS[0]);
+  console.log("selectedV", selectedV);
 
   const { vaultManager, dyad, dnft, vault, wsteth, weth, payments } = useMemo(
     () =>
@@ -151,11 +152,11 @@ export default function DnftBox() {
 
   // Prompt user to add vault if they haven't already
   useContractRead({
-    enabled: selectedDnft !== undefined && selectedVault !== undefined,
+    enabled: selectedDnft !== undefined && selectedV.address !== undefined,
     address: vaultManager,
     abi: VaultManagerAbi["abi"],
     functionName: "hasVault",
-    args: [selectedDnft, selectedVault?.address],
+    args: [selectedDnft, selectedV?.address],
     onErr: (err) => {
       console.log("xxxx", err);
     },
@@ -164,16 +165,16 @@ export default function DnftBox() {
       if (
         result !== undefined &&
         selectedDnft !== undefined &&
-        selectedVault !== undefined &&
+        selectedV !== undefined &&
         !result
       ) {
         pushModal(
           <AddVaultModalContent
             dnft={selectedDnft}
             vault={selectedVaultId}
-            vaultAddress={selectedVault.address}
+            vaultAddress={selectedV.address}
             vaultManagerAddress={vaultManager}
-            vaultSymbol={selectedVault.symbol}
+            vaultSymbol={selectedV.symbol}
           />
         );
       }
@@ -327,14 +328,14 @@ export default function DnftBox() {
           </div>
           {selectedDnft && (
             <div className="w-[33.5rem]">
-              <Select onValueChange={setSelectedVault}>
+              <Select onValueChange={setSelectedV}>
                 <SelectTrigger id="select-dnft" className="mt-1">
                   <SelectValue placeholder="Select Collateral" />
                 </SelectTrigger>
                 <SelectContent>
-                  {vaultsData?.map((vault, index) => (
+                  {VAULTS?.map((vault) => (
                     <SelectItem value={vault} key={`collat-${vault.address}`}>
-                      {SYMBOLS[index]}
+                      {vault.symbol}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -360,7 +361,7 @@ export default function DnftBox() {
             totalValueLocked={totalValueLocked}
             minCollateralizationRatio={minCollateralizationRatio}
             usdValue={usdValue}
-            selectedVaultAddress={selectedVault?.address}
+            selectedVaultAddress={selectedV?.address}
           />
           <BurnAndWithdrawTab
             setSelectedVaultId={setSelectedVaultId}
