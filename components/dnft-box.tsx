@@ -27,6 +27,9 @@ import { AddVaultModalContent } from "./add-vault-modal-content";
 import { ClaimModalContent } from "./claim-modal-content";
 import { round } from "../utils/currency";
 
+// TODO: REFACTOR!!!!
+const SYMBOLS = ["ETH", "wstETH"];
+
 export default function DnftBox() {
   const { isConnected, address } = useAccount();
   const { chain } = useNetwork();
@@ -237,7 +240,10 @@ export default function DnftBox() {
         share: string;
         value: string;
       }[] = [];
+      console.log("data", data);
+
       data.forEach((result, index) => {
+        const symbol = SYMBOLS[index];
         if (index % 7 === 0) {
           const share =
             data[index + 5]?.result && data[index + 6]?.result
@@ -255,7 +261,7 @@ export default function DnftBox() {
           v.push({
             address: vaults[index / 7] ?? "",
             asset: weth,
-            symbol: "WETH",
+            symbol: symbol,
             collatPrice: data[index + 2]?.result?.toString() ?? "",
             decimals: data[index + 3]?.result?.toString() ?? "",
             tvl,
@@ -268,7 +274,6 @@ export default function DnftBox() {
     },
   });
 
-  console.log("vaults", vaultsData);
   return (
     <div className="pt-1">
       {(!isConnected || dnfts?.length === 0) && (
@@ -328,9 +333,9 @@ export default function DnftBox() {
                   <SelectValue placeholder="Select Collateral" />
                 </SelectTrigger>
                 <SelectContent>
-                  {vaultsData?.map((vault) => (
+                  {vaultsData?.map((vault, index) => (
                     <SelectItem value={vault} key={`collat-${vault.address}`}>
-                      {vault.symbol}
+                      {SYMBOLS[index]}
                     </SelectItem>
                   ))}
                 </SelectContent>
