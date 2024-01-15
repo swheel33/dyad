@@ -26,13 +26,15 @@ export const deployments: { [id: string]: Deployment } = {
     vaults: [
       {
         address: "0xcF97cEc1907CcF9d4A0DC4F492A3448eFc744F6c",
-        symbol: "WETH",
+        symbol: "ETH",
+        asset: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
         isWrapped: false,
         requiresApproval: false,
       },
       {
         address: "0x7aE80418051b2897729Cbdf388b07C5158C557A1",
         symbol: "wstETH",
+        asset: "0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0",
         isWrapped: true,
         requiresApproval: true,
       },

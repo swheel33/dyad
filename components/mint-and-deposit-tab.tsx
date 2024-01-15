@@ -59,7 +59,6 @@ export default function MintAndDepositTab({
   minCollateralizationRatio,
   vaultManager,
   usdValue,
-  selectedV,
 }: Props) {
   const { address } = useAccount();
   const [depositInput, setDepositInput] = useState<string>();
@@ -103,9 +102,11 @@ export default function MintAndDepositTab({
   }, [redeemInput]);
 
   const { data: balanceData } = useBalance({
-    // enabled: !!selectedVault?.asset,
+    enabled: vault !== undefined,
     address,
+    token: vault.asset,
   });
+  console.log("balanceData", balanceData);
 
   const maxMint = useMemo(() => {
     minCollateralizationRatio = "1700000000000000000";
@@ -125,8 +126,8 @@ export default function MintAndDepositTab({
   }, [minCollateralizationRatio, dyadMinted, usdValue]);
 
   const { data: allowance } = useContractRead({
-    // enabled: !!selectedVault?.asset,
-    address: weth,
+    enabled: vault !== undefined,
+    address: vault?.asset,
     abi: ERC20 as Abi,
     args: [address, payments as `0x${string}`],
     functionName: "allowance",
@@ -141,7 +142,8 @@ export default function MintAndDepositTab({
     write: approve,
     reset: approvalReset,
   } = useContractWrite({
-    address: weth,
+    enabled: vault !== undefined,
+    address: vault?.asset,
     abi: ERC20 as Abi,
     functionName: "approve",
     args: [payments, depositAmount ?? BigInt(0)],
@@ -228,6 +230,8 @@ export default function MintAndDepositTab({
 
   const requiresApproval = useMemo(
     () =>
+      vault !== undefined &&
+      vault.requiresApproval &&
       allowance !== undefined &&
       depositAmount !== undefined &&
       allowance < depositAmount,
@@ -338,7 +342,7 @@ export default function MintAndDepositTab({
           {depositAmountError
             ? depositAmountError
             : depositAmount && balanceData && depositAmount > balanceData?.value
-            ? "Insufficient ETH Balance"
+            ? `Insufficient ${vault?.symbol} Balance`
             : ""}
         </p>
         <p className="text-green-500 text-xs">
@@ -394,8 +398,12 @@ export default function MintAndDepositTab({
             isDeposit2TxLoading
           }
           onClick={() => {
-            // approvalReset();
-            !vault?.isWrapped ? deposit() : deposit2();
+            approvalReset();
+            requiresApproval
+              ? setApproval()
+              : !vault?.isWrapped
+              ? deposit()
+              : deposit2();
           }}
         >
           {isApprovalLoading ||
@@ -405,8 +413,10 @@ export default function MintAndDepositTab({
           isDeposit2TxLoading ||
           isDepositTxLoading ? (
             <Loader />
+          ) : requiresApproval ? (
+            "Approve"
           ) : (
-            `Deposit ${"ETH" ?? ""}`
+            `Deposit ${vault.symbol ?? ""}`
           )}
         </Button>
         {/* <p className="text-red-500 text-xs pt-2"> */}
