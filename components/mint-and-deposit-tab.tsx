@@ -172,7 +172,7 @@ export default function MintAndDepositTab({
     address: payments,
     abi: PaymentsAbi["abi"],
     functionName: "depositETHWithFee",
-    args: [selectedDnft, vault],
+    args: [selectedDnft, vault?.address],
     value: parseEther((depositInput as string) ?? "0"),
   });
 
@@ -186,7 +186,11 @@ export default function MintAndDepositTab({
     address: payments,
     abi: PaymentsAbi["abi"],
     functionName: "depositWithFee",
-    args: [selectedDnft, vault, parseEther((depositInput as string) ?? "0")],
+    args: [
+      selectedDnft,
+      vault?.address,
+      parseEther((depositInput as string) ?? "0"),
+    ],
   });
 
   const { isLoading: isDepositTxLoading, isError: isDepositTxError } =

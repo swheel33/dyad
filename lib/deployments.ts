@@ -23,7 +23,7 @@ export const deployments: { [id: string]: Deployment } = {
     weth: "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6",
     payments: "0x7363936FC85575Ff59D721B2B0171584880ba55B",
     wsteth: "0x7aE80418051b2897729Cbdf388b07C5158C557A1",
-    VAULTS: [
+    vaults: [
       {
         address: "0xcF97cEc1907CcF9d4A0DC4F492A3448eFc744F6c",
         symbol: "WETH",
