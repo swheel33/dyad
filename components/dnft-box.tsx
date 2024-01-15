@@ -41,7 +41,7 @@ export default function DnftBox() {
   const [selectedVaultId, setSelectedVaultId] = useState<string>();
   const { pushModal } = useModal();
 
-  const [selectedV, setSelectedV] = useState(VAULTS[0]);
+  const [selectedV, setSelectedV] = useState();
   console.log("selectedV", selectedV);
 
   const { vaultManager, dyad, dnft, vault, wsteth, weth, payments } = useMemo(
@@ -152,7 +152,7 @@ export default function DnftBox() {
 
   // Prompt user to add vault if they haven't already
   useContractRead({
-    enabled: selectedDnft !== undefined && selectedV.address !== undefined,
+    enabled: selectedDnft !== undefined && selectedV?.address !== undefined,
     address: vaultManager,
     abi: VaultManagerAbi["abi"],
     functionName: "hasVault",
@@ -172,9 +172,9 @@ export default function DnftBox() {
           <AddVaultModalContent
             dnft={selectedDnft}
             vault={selectedVaultId}
-            vaultAddress={selectedV.address}
+            vaultAddress={selectedV?.address}
             vaultManagerAddress={vaultManager}
-            vaultSymbol={selectedV.symbol}
+            vaultSymbol={selectedV?.symbol}
           />
         );
       }

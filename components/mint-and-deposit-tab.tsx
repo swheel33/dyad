@@ -285,7 +285,7 @@ export default function MintAndDepositTab({
     functionName: "redeemDyad",
     args: [
       selectedDnft ?? "0",
-      selectedV.address,
+      selectedV?.address,
       redeemAmount ?? BigInt(0),
       address,
     ],
@@ -394,7 +394,7 @@ export default function MintAndDepositTab({
           }
           onClick={() => {
             // approvalReset();
-            !selectedV.isWrapped ? deposit() : deposit2();
+            !selectedV?.isWrapped ? deposit() : deposit2();
           }}
         >
           {isApprovalLoading ||

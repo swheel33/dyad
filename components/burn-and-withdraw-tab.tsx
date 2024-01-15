@@ -179,7 +179,7 @@ export default function BurnAndWithdrawTab({
     functionName: "withdraw",
     args: [
       selectedDnft ?? "0",
-      selectedV.address,
+      selectedV?.address,
       withdrawAmount ?? BigInt(0),
       address,
     ],
