@@ -4,7 +4,7 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import { WagmiConfig, createConfig } from "wagmi";
 import { createPublicClient, http } from "viem";
-import { goerli, mainnet } from "viem/chains";
+import { goerli, mainnet, foundry } from "viem/chains";
 import {
   Client,
   Provider as UrqlProvider,
@@ -25,6 +25,7 @@ const inter = Inter({ subsets: ["latin"] });
 const wagmiConfig = createConfig({
   autoConnect: true,
   publicClient: createPublicClient({
+    // chain: foundry,
     chain: mainnet,
     transport: http(),
   }),

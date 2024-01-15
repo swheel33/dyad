@@ -5,7 +5,7 @@ import {
   useNetwork,
 } from "wagmi";
 import { Abi, formatEther, getAddress, numberToHex } from "viem";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 
 import {
   Select,
@@ -17,7 +17,7 @@ import {
 import { Button } from "@/components/ui/button";
 import MintAndDepositTab from "@/components/mint-and-deposit-tab";
 import BurnAndWithdrawTab from "@/components/burn-and-withdraw-tab";
-import { MAX_UINT256, deployments, VAULTS } from "@/lib/deployments";
+import { MAX_UINT256, deployments } from "@/lib/deployments";
 import VaultManagerAbi from "@/abis/VaultManager.json";
 import DyadAbi from "@/abis/Dyad.json";
 import VaultAbi from "@/abis/Vault.json";
@@ -44,13 +44,14 @@ export default function DnftBox() {
   const [selectedV, setSelectedV] = useState();
   console.log("selectedV", selectedV);
 
-  const { vaultManager, dyad, dnft, vault, wsteth, weth, payments } = useMemo(
-    () =>
-      chain && deployments[chain.id]
-        ? deployments[chain.id]
-        : Object.values(deployments)[0],
-    [chain]
-  );
+  const { vaultManager, dyad, dnft, vault, wsteth, weth, payments, VAULTS } =
+    useMemo(
+      () =>
+        chain && deployments[chain.id]
+          ? deployments[chain.id]
+          : Object.values(deployments)[0],
+      [chain]
+    );
 
   const vaults = vault ? [vault, wsteth] : [];
 
@@ -149,10 +150,11 @@ export default function DnftBox() {
         .map((dnft) => (dnft?.result ?? -1).toString())
         .filter((id) => id !== "-1"),
   });
+  console.log("res", selectedDnft, selectedV?.address);
 
   // Prompt user to add vault if they haven't already
   useContractRead({
-    enabled: selectedDnft !== undefined && selectedV?.address !== undefined,
+    // enabled: selectedDnft !== undefined && selectedV?.address !== undefined,
     address: vaultManager,
     abi: VaultManagerAbi["abi"],
     functionName: "hasVault",

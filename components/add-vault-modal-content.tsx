@@ -23,6 +23,7 @@ export function AddVaultModalContent({
   vaultSymbol,
   vaultManagerAddress,
 }: Props) {
+  console.log("vaultAddress", vaultAddress, dnft);
   const { shiftModal } = useModal();
   const { address } = useAccount();
 
