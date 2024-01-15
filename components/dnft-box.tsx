@@ -20,16 +20,11 @@ import BurnAndWithdrawTab from "@/components/burn-and-withdraw-tab";
 import { MAX_UINT256, deployments } from "@/lib/deployments";
 import VaultManagerAbi from "@/abis/VaultManager.json";
 import DyadAbi from "@/abis/Dyad.json";
-import VaultAbi from "@/abis/Vault.json";
 import DNftAbi from "@/abis/DNft.json";
 import useModal from "@/contexts/modal";
 import { AddVaultModalContent } from "./add-vault-modal-content";
 import { ClaimModalContent } from "./claim-modal-content";
 import { round } from "../utils/currency";
-import useVaultData from "../hooks/useVaultData";
-
-// TODO: REFACTOR!!!!
-const SYMBOLS = ["ETH", "wstETH"];
 
 export default function DnftBox() {
   const { isConnected, address } = useAccount();
@@ -38,12 +33,8 @@ export default function DnftBox() {
   const [cr, setCr] = useState<string>();
   const [mintedDyad, setMintedDyad] = useState<string>();
   const [usdValue, setUsdValue] = useState<string>();
-  const [selectedVaultId, setSelectedVaultId] = useState<string>();
   const [selectedVault, setSelectedVault] = useState();
   const { pushModal } = useModal();
-
-  const data = useVaultData(selectedVault?.address);
-  console.log("ttt", data);
 
   const { vaultManager, dyad, dnft, weth, payments, vaults } = useMemo(
     () =>
@@ -243,7 +234,6 @@ export default function DnftBox() {
       {
         <div className="pt-4">
           <MintAndDepositTab
-            setSelectedVaultId={setSelectedVaultId}
             vault={selectedVault}
             payments={payments}
             weth={weth}
@@ -257,7 +247,6 @@ export default function DnftBox() {
             selectedV={selectedVault}
           />
           <BurnAndWithdrawTab
-            setSelectedVaultId={setSelectedVaultId}
             vault={selectedVault}
             vaultManager={vaultManager}
             selectedDnft={selectedDnft}
