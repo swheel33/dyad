@@ -134,22 +134,13 @@ export default function DnftBox() {
 
   // Prompt user to add vault if they haven't already
   useContractRead({
-    // enabled: selectedDnft !== undefined && selectedV?.address !== undefined,
+    enabled: selectedDnft !== undefined && selectedVault !== undefined,
     address: vaultManager,
     abi: VaultManagerAbi["abi"],
     functionName: "hasVault",
     args: [selectedDnft, selectedVault?.address],
-    onErr: (err) => {
-      console.log("xxxx", err);
-    },
     onSuccess: (result) => {
-      console.log("result", result);
-      if (
-        result !== undefined &&
-        selectedDnft !== undefined &&
-        selectedVault !== undefined &&
-        !result
-      ) {
+      if (result !== undefined && !result) {
         pushModal(
           <AddVaultModalContent
             dnft={selectedDnft}
