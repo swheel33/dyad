@@ -26,6 +26,7 @@ import useModal from "@/contexts/modal";
 import { AddVaultModalContent } from "./add-vault-modal-content";
 import { ClaimModalContent } from "./claim-modal-content";
 import { round } from "../utils/currency";
+import useVaultData from "../hooks/useVaultData";
 
 // TODO: REFACTOR!!!!
 const SYMBOLS = ["ETH", "wstETH"];
@@ -40,6 +41,9 @@ export default function DnftBox() {
   const [selectedVaultId, setSelectedVaultId] = useState<string>();
   const [selectedVault, setSelectedVault] = useState();
   const { pushModal } = useModal();
+
+  const data = useVaultData(selectedVault?.address);
+  console.log("ttt", data);
 
   const { vaultManager, dyad, dnft, weth, payments, vaults } = useMemo(
     () =>
@@ -113,13 +117,13 @@ export default function DnftBox() {
       usdValue: (data?.[6]?.result ?? BigInt(0)) as bigint,
     }),
   });
+
   const {
     dnftBalance,
     collateralRatio,
     totalValueLocked,
     dyadMinted,
     minCollateralizationRatio,
-    collatRatio,
   } = initialContractReads ?? {};
 
   // Get addresses of all dnfts owned by user
@@ -136,7 +140,6 @@ export default function DnftBox() {
         .map((dnft) => (dnft?.result ?? -1).toString())
         .filter((id) => id !== "-1"),
   });
-  console.log("ddd", dnfts);
 
   // Prompt user to add vault if they haven't already
   useContractRead({
@@ -164,99 +167,6 @@ export default function DnftBox() {
           />
         );
       }
-    },
-  });
-
-  const { data: vaultsData } = useContractReads({
-    watch: true,
-    contracts: Array.apply(null, Array(vaults.length))
-      .map((_, index) => [
-        {
-          address: (vaults[index] ?? `0x${"0".repeat(40)}`) as `0x${string}`,
-          abi: VaultAbi["abi"],
-          functionName: "asset",
-        },
-        {
-          address: (vaults[index] ?? `0x${"0".repeat(40)}`) as `0x${string}`,
-          abi: VaultAbi["abi"],
-          functionName: "symbol",
-        },
-        {
-          address: (vaults[index] ?? `0x${"0".repeat(40)}`) as `0x${string}`,
-          abi: VaultAbi["abi"],
-          functionName: "collatPrice",
-        },
-        {
-          address: (vaults[index] ?? `0x${"0".repeat(40)}`) as `0x${string}`,
-          abi: VaultAbi["abi"],
-          functionName: "decimals",
-        },
-        {
-          address: vaultManager as `0x${string}`,
-          abi: VaultAbi["abi"],
-          functionName: "getUsdValue",
-          args: [selectedDnft ?? "0"],
-        },
-        {
-          address: (vaults[index] ?? `0x${"0".repeat(40)}`) as `0x${string}`,
-          abi: VaultAbi as Abi,
-          functionName: "balanceOf",
-          args: [
-            getAddress(
-              numberToHex(BigInt(selectedDnft ?? "0"), { size: 20 })
-            ) as `0x${string}`,
-          ],
-        },
-        {
-          address: (vaults[index] ?? `0x${"0".repeat(40)}`) as `0x${string}`,
-          abi: VaultAbi as Abi,
-          functionName: "totalSupply",
-        },
-      ])
-      .flat(),
-    select: (data) => {
-      const v: {
-        address: string;
-        asset: string;
-        symbol: string;
-        collatPrice: string;
-        decimals: string;
-        tvl: string;
-        share: string;
-        value: string;
-      }[] = [];
-      console.log("data", data);
-
-      data.forEach((result, index) => {
-        const symbol = SYMBOLS[index];
-        console.log("symbol", symbol);
-        if (index % 7 === 0) {
-          const share =
-            data[index + 5]?.result && data[index + 6]?.result
-              ? (
-                  (BigInt(data[index + 5]?.result?.toString() ?? "0") *
-                    BigInt(10 ** 18)) /
-                  BigInt(data[index + 6]?.result?.toString() ?? "1")
-                ).toString()
-              : "0";
-          const tvl = data[index + 4]?.result?.toString() ?? "";
-          const value =
-            share !== "0"
-              ? ((BigInt(tvl) * BigInt(share)) / BigInt(10 ** 18)).toString()
-              : "0";
-          v.push({
-            address: vaults[index / 7] ?? "",
-            asset: weth,
-            symbol: SYMBOLS[index / 7],
-            collatPrice: data[index + 2]?.result?.toString() ?? "",
-            decimals: data[index + 3]?.result?.toString() ?? "",
-            tvl,
-            share,
-            value,
-          });
-        }
-      });
-      return v;
     },
   });
 
@@ -334,14 +244,10 @@ export default function DnftBox() {
         <div className="pt-4">
           <MintAndDepositTab
             setSelectedVaultId={setSelectedVaultId}
-            vaults={vaultsData ?? []}
             vault={selectedVault}
             payments={payments}
             weth={weth}
             vaultManager={vaultManager}
-            selectedVault={vaultsData?.find(
-              (vault) => vault?.address === selectedVaultId
-            )}
             selectedDnft={selectedDnft}
             dyadMinted={dyadMinted}
             totalValueLocked={totalValueLocked}
@@ -352,12 +258,8 @@ export default function DnftBox() {
           />
           <BurnAndWithdrawTab
             setSelectedVaultId={setSelectedVaultId}
-            vaults={vaultsData ?? []}
             vault={selectedVault}
             vaultManager={vaultManager}
-            selectedVault={vaultsData?.find(
-              (vault) => vault?.address === selectedVaultId
-            )}
             selectedDnft={selectedDnft}
             dyadMinted={dyadMinted}
             totalValueLocked={totalValueLocked}
