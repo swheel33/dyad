@@ -28,11 +28,13 @@ export const deployments: { [id: string]: Deployment } = {
         address: "0xcF97cEc1907CcF9d4A0DC4F492A3448eFc744F6c",
         symbol: "WETH",
         isWrapped: false,
+        requiresApproval: false,
       },
       {
         address: "0x7aE80418051b2897729Cbdf388b07C5158C557A1",
         symbol: "wstETH",
         isWrapped: true,
+        requiresApproval: true,
       },
     ],
   },

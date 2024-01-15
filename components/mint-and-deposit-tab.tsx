@@ -49,9 +49,7 @@ interface Props {
 
 export default function MintAndDepositTab({
   collatRatio,
-  setSelectedVaultId,
   selectedVault,
-  vaults,
   vault,
   payments,
   weth,
@@ -61,7 +59,6 @@ export default function MintAndDepositTab({
   minCollateralizationRatio,
   vaultManager,
   usdValue,
-  selectedVaultAddress,
   selectedV,
 }: Props) {
   const { address } = useAccount();
@@ -289,7 +286,7 @@ export default function MintAndDepositTab({
     functionName: "redeemDyad",
     args: [
       selectedDnft ?? "0",
-      selectedV?.address,
+      vault?.address,
       redeemAmount ?? BigInt(0),
       address,
     ],
@@ -398,7 +395,7 @@ export default function MintAndDepositTab({
           }
           onClick={() => {
             // approvalReset();
-            !selectedV?.isWrapped ? deposit() : deposit2();
+            !vault?.isWrapped ? deposit() : deposit2();
           }}
         >
           {isApprovalLoading ||
