@@ -173,10 +173,8 @@ export default function DnftBox() {
         pushModal(
           <AddVaultModalContent
             dnft={selectedDnft}
-            vault={selectedVaultId}
-            vaultAddress={selectedV?.address}
-            vaultManagerAddress={vaultManager}
-            vaultSymbol={selectedV?.symbol}
+            vault={selectedV}
+            vaultManager={vaultManager}
           />
         );
       }
