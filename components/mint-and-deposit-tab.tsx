@@ -97,7 +97,7 @@ export default function MintAndDepositTab({
   const { data: balanceData } = useBalance({
     enabled: vault !== undefined,
     address,
-    token: vault?.asset,
+    token: vault?.isWrapped ? vault?.asset : undefined,
   });
   console.log("balanceData", balanceData);
 
