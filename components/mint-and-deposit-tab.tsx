@@ -7,13 +7,6 @@ import {
   useWaitForTransaction,
 } from "wagmi";
 import { Abi, formatEther, parseEther } from "viem";
-import {
-  Select,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import VaultManagerAbi from "@/abis/VaultManager.json";
@@ -416,7 +409,7 @@ export default function MintAndDepositTab({
           ) : requiresApproval ? (
             "Approve"
           ) : (
-            `Deposit ${vault.symbol ?? ""}`
+            `Deposit ${vault?.symbol ?? ""}`
           )}
         </Button>
         {/* <p className="text-red-500 text-xs pt-2"> */}
