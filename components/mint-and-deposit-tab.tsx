@@ -169,11 +169,11 @@ export default function MintAndDepositTab({
   });
 
   const {
-    data: deposit2TxData,
-    isLoading: isDeposit2Loading,
-    isError: isDeposit2Error,
-    write: deposit2,
-    reset: deposit2Reset,
+    data: depositWithFeeTxData,
+    isLoading: isDepositWithFeeLoading,
+    isError: isDepositWithFeeError,
+    write: depositWithFee,
+    reset: depositWithFeeReset,
   } = useContractWrite({
     address: payments,
     abi: PaymentsAbi["abi"],
@@ -198,18 +198,20 @@ export default function MintAndDepositTab({
       },
     });
 
-  const { isLoading: isDeposit2TxLoading, isError: isDeposit2TxError } =
-    useWaitForTransaction({
-      hash: deposit2TxData?.hash,
-      onError: (err) => {
-        console.error(err);
-        deposit2Reset();
-      },
-      onSuccess: () => {
-        deposit2Reset();
-        setDepositInput("");
-      },
-    });
+  const {
+    isLoading: isDepositWithFeeTxLoading,
+    isError: isDepositWithFeeTxError,
+  } = useWaitForTransaction({
+    hash: depositWithFeeTxData?.hash,
+    onError: (err) => {
+      console.error(err);
+      depositWithFeeReset();
+    },
+    onSuccess: () => {
+      depositWithFeeReset();
+      setDepositInput("");
+    },
+  });
 
   const setApproval = useCallback(() => {
     if (
@@ -386,9 +388,9 @@ export default function MintAndDepositTab({
             isApprovalLoading ||
             isApprovalTxLoading ||
             isDepositLoading ||
-            isDeposit2Loading ||
+            isDepositWithFeeLoading ||
             isDepositTxLoading ||
-            isDeposit2TxLoading
+            isDepositWithFeeTxLoading
           }
           onClick={() => {
             approvalReset();
@@ -396,14 +398,14 @@ export default function MintAndDepositTab({
               ? setApproval()
               : !vault?.isWrapped
               ? deposit()
-              : deposit2();
+              : depositWithFee();
           }}
         >
           {isApprovalLoading ||
           isApprovalTxLoading ||
           isDepositLoading ||
-          isDeposit2Loading ||
-          isDeposit2TxLoading ||
+          isDepositWithFeeLoading ||
+          isDepositWithFeeTxLoading ||
           isDepositTxLoading ? (
             <Loader />
           ) : requiresApproval ? (
