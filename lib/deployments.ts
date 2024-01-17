@@ -7,6 +7,7 @@ interface Deployment {
   staking: string;
   vault: string;
   weth: string;
+  wsteth: string;
   payments: string;
 }
 
@@ -21,6 +22,23 @@ export const deployments: { [id: string]: Deployment } = {
     vault: "0xcF97cEc1907CcF9d4A0DC4F492A3448eFc744F6c",
     weth: "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6",
     payments: "0x7363936FC85575Ff59D721B2B0171584880ba55B",
+    wsteth: "0x7aE80418051b2897729Cbdf388b07C5158C557A1",
+    vaults: [
+      {
+        address: "0xcF97cEc1907CcF9d4A0DC4F492A3448eFc744F6c",
+        symbol: "ETH",
+        asset: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+        isWrapped: false,
+        requiresApproval: false,
+      },
+      {
+        address: "0x7aE80418051b2897729Cbdf388b07C5158C557A1",
+        symbol: "wstETH",
+        asset: "0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0",
+        isWrapped: true,
+        requiresApproval: true,
+      },
+    ],
   },
   // "5": {
   //   dnft: "0x952E31dFeEB29F5398a36602E0E276F2b09B6651",
@@ -32,8 +50,22 @@ export const deployments: { [id: string]: Deployment } = {
   //   vault: "0xba9591e5e7AA188Bb2eEaC0D916F0173Dc5E4701",
   //   weth: "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6",
   //   payments: "0x4CA5aF6eCaa88DF00f37EBf08D92F65a8f9192e5",
+  //   wsteth: "0x3c97a8a0210076C2841d1Cf684FeC6234fB314C1",
   // },
 };
 
 export const MAX_UINT256 =
   "115792089237316195423570985008687907853269984665640564039457584007913129639935";
+
+export const VAULTS = [
+  {
+    address: "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6",
+    symbol: "WETH",
+    isWrapped: false,
+  },
+  {
+    address: "0x7aE80418051b2897729Cbdf388b07C5158C557A1",
+    symbol: "wstETH",
+    isWrapped: true,
+  },
+];

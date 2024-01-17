@@ -7,7 +7,6 @@ import {
   useWaitForTransaction,
 } from "wagmi";
 import { Abi, formatEther, parseEther } from "viem";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import VaultManagerAbi from "@/abis/VaultManager.json";
@@ -43,9 +42,7 @@ interface Props {
 
 export default function MintAndDepositTab({
   collatRatio,
-  setSelectedVaultId,
   selectedVault,
-  vaults,
   vault,
   payments,
   weth,
@@ -98,9 +95,11 @@ export default function MintAndDepositTab({
   }, [redeemInput]);
 
   const { data: balanceData } = useBalance({
-    // enabled: !!selectedVault?.asset,
+    enabled: vault !== undefined,
     address,
+    token: vault?.isWrapped ? vault?.asset : undefined,
   });
+  console.log("balanceData", balanceData);
 
   const maxMint = useMemo(() => {
     minCollateralizationRatio = "1700000000000000000";
@@ -120,8 +119,8 @@ export default function MintAndDepositTab({
   }, [minCollateralizationRatio, dyadMinted, usdValue]);
 
   const { data: allowance } = useContractRead({
-    // enabled: !!selectedVault?.asset,
-    address: weth,
+    enabled: vault !== undefined,
+    address: vault?.asset,
     abi: ERC20 as Abi,
     args: [address, payments as `0x${string}`],
     functionName: "allowance",
@@ -136,7 +135,8 @@ export default function MintAndDepositTab({
     write: approve,
     reset: approvalReset,
   } = useContractWrite({
-    address: weth,
+    enabled: vault !== undefined,
+    address: vault?.asset,
     abi: ERC20 as Abi,
     functionName: "approve",
     args: [payments, depositAmount ?? BigInt(0)],
@@ -164,8 +164,25 @@ export default function MintAndDepositTab({
     address: payments,
     abi: PaymentsAbi["abi"],
     functionName: "depositETHWithFee",
-    args: [selectedDnft, vault],
+    args: [selectedDnft, vault?.address],
     value: parseEther((depositInput as string) ?? "0"),
+  });
+
+  const {
+    data: depositWithFeeTxData,
+    isLoading: isDepositWithFeeLoading,
+    isError: isDepositWithFeeError,
+    write: depositWithFee,
+    reset: depositWithFeeReset,
+  } = useContractWrite({
+    address: payments,
+    abi: PaymentsAbi["abi"],
+    functionName: "depositWithFee",
+    args: [
+      selectedDnft,
+      vault?.address,
+      parseEther((depositInput as string) ?? "0"),
+    ],
   });
 
   const { isLoading: isDepositTxLoading, isError: isDepositTxError } =
@@ -181,6 +198,21 @@ export default function MintAndDepositTab({
       },
     });
 
+  const {
+    isLoading: isDepositWithFeeTxLoading,
+    isError: isDepositWithFeeTxError,
+  } = useWaitForTransaction({
+    hash: depositWithFeeTxData?.hash,
+    onError: (err) => {
+      console.error(err);
+      depositWithFeeReset();
+    },
+    onSuccess: () => {
+      depositWithFeeReset();
+      setDepositInput("");
+    },
+  });
+
   const setApproval = useCallback(() => {
     if (
       allowance !== undefined &&
@@ -193,6 +225,8 @@ export default function MintAndDepositTab({
 
   const requiresApproval = useMemo(
     () =>
+      vault !== undefined &&
+      vault.requiresApproval &&
       allowance !== undefined &&
       depositAmount !== undefined &&
       allowance < depositAmount,
@@ -249,7 +283,12 @@ export default function MintAndDepositTab({
     address: vaultManager,
     abi: VaultManagerAbi["abi"],
     functionName: "redeemDyad",
-    args: [selectedDnft ?? "0", vault, redeemAmount ?? BigInt(0), address],
+    args: [
+      selectedDnft ?? "0",
+      vault?.address,
+      redeemAmount ?? BigInt(0),
+      address,
+    ],
   });
 
   const { isLoading: isRedeemTxLoading, isError: isRedeemTxError } =
@@ -298,7 +337,7 @@ export default function MintAndDepositTab({
           {depositAmountError
             ? depositAmountError
             : depositAmount && balanceData && depositAmount > balanceData?.value
-            ? "Insufficient ETH Balance"
+            ? `Insufficient ${vault?.symbol} Balance`
             : ""}
         </p>
         <p className="text-green-500 text-xs">
@@ -349,20 +388,30 @@ export default function MintAndDepositTab({
             isApprovalLoading ||
             isApprovalTxLoading ||
             isDepositLoading ||
-            isDepositTxLoading
+            isDepositWithFeeLoading ||
+            isDepositTxLoading ||
+            isDepositWithFeeTxLoading
           }
           onClick={() => {
-            // approvalReset();
-            deposit();
+            approvalReset();
+            requiresApproval
+              ? setApproval()
+              : !vault?.isWrapped
+              ? deposit()
+              : depositWithFee();
           }}
         >
           {isApprovalLoading ||
           isApprovalTxLoading ||
           isDepositLoading ||
+          isDepositWithFeeLoading ||
+          isDepositWithFeeTxLoading ||
           isDepositTxLoading ? (
             <Loader />
+          ) : requiresApproval ? (
+            "Approve"
           ) : (
-            `Deposit ${"ETH" ?? ""}`
+            `Deposit ${vault?.symbol ?? ""}`
           )}
         </Button>
         {/* <p className="text-red-500 text-xs pt-2"> */}
