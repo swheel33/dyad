@@ -145,7 +145,7 @@ export default function BurnAndWithdrawTab({
   const { data: withdrawableBalance } = useContractReads({
     contracts: [
       {
-        address: selectedVault?.address as `0x${string}`,
+        address: vault?.address as `0x${string}`,
         abi: VaultAbi as Abi,
         functionName: "balanceOf",
         args: [
@@ -153,7 +153,7 @@ export default function BurnAndWithdrawTab({
         ],
       },
       {
-        address: selectedVault?.address as `0x${string}`,
+        address: vault?.address as `0x${string}`,
         abi: VaultAbi as Abi,
         functionName: "convertToAssets",
         args: [parseEther("1")],
@@ -179,7 +179,7 @@ export default function BurnAndWithdrawTab({
     functionName: "withdraw",
     args: [
       selectedDnft ?? "0",
-      selectedV?.address,
+      vault?.address,
       withdrawAmount ?? BigInt(0),
       address,
     ],
@@ -245,6 +245,7 @@ export default function BurnAndWithdrawTab({
     burnAmount,
     withdrawAmount,
     selectedVault,
+    vault,
     collatRatio,
   ]);
 
@@ -378,7 +379,7 @@ export default function BurnAndWithdrawTab({
           {isWithdrawLoading || isWithdrawTxLoading ? (
             <Loader />
           ) : (
-            `Withdraw wETH`
+            `Withdraw ${vault?.symbol ?? ""}`
           )}
         </Button>
         <p className="text-red-500 text-xs pb-2">
