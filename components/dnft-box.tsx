@@ -19,6 +19,7 @@ import MintAndDepositTab from "@/components/mint-and-deposit-tab";
 import BurnAndWithdrawTab from "@/components/burn-and-withdraw-tab";
 import { MAX_UINT256, deployments } from "@/lib/deployments";
 import VaultManagerAbi from "@/abis/VaultManager.json";
+import VaultAbi from "@/abis/Vault.json";
 import DyadAbi from "@/abis/Dyad.json";
 import DNftAbi from "@/abis/DNft.json";
 import useModal from "@/contexts/modal";
@@ -87,9 +88,16 @@ export default function DnftBox() {
         functionName: "getTotalUsdValue",
         args: [selectedDnft ?? "0"],
       },
+      {
+        address: selectedVault?.address ?? vaults[0]?.address,
+        abi: VaultAbi["abi"],
+        functionName: "id2asset",
+        args: [selectedDnft ?? "0"],
+      },
     ],
     watch: true,
     onSuccess: (data) => {
+      console.log("data", data);
       setMintedDyad(data?.dyadMinted?.toString());
       setCr(
         data?.collatRatio?.toString() === MAX_UINT256
@@ -106,6 +114,7 @@ export default function DnftBox() {
       minCollateralizationRatio: (data?.[4]?.result ?? BigInt(0)) as bigint,
       collatRatio: (data?.[5]?.result ?? BigInt(0)) as bigint,
       usdValue: (data?.[6]?.result ?? BigInt(0)) as bigint,
+      id2asset: data?.[7]?.result?.toString(),
     }),
   });
 
@@ -115,6 +124,7 @@ export default function DnftBox() {
     totalValueLocked,
     dyadMinted,
     minCollateralizationRatio,
+    id2asset,
   } = initialContractReads ?? {};
 
   // Get addresses of all dnfts owned by user
@@ -248,6 +258,7 @@ export default function DnftBox() {
             collatRatio={collateralRatio}
             usdValue={usdValue}
             selectedV={selectedVault}
+            id2asset={id2asset}
           />
         </div>
       }

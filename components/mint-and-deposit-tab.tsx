@@ -127,6 +127,7 @@ export default function MintAndDepositTab({
     watch: true,
     select: (data) => data as bigint,
   });
+  console.log("allowance", allowance);
 
   const {
     data: approvalTxData,

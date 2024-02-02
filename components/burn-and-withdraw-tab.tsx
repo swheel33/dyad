@@ -117,14 +117,18 @@ export default function BurnAndWithdrawTab({
     // }
   }, [dyadBalance, id2asset]);
 
+  // return id2asset / 10 ** 18;
   const maxWithdraw = useMemo(() => {
-    minCollateralizationRatio = "1700000000000000000";
+    const minCollateralizationRatio = "1700000000000000000";
     if (
       usdValue !== undefined &&
       minCollateralizationRatio !== undefined &&
       dyadMinted !== undefined &&
       ethPrice !== undefined
     ) {
+      if (parseInt(dyadMinted) === 0) {
+        return id2asset / 10 ** 18;
+      }
       try {
         const a =
           BigInt(usdValue) -
@@ -135,10 +139,10 @@ export default function BurnAndWithdrawTab({
         total = parseFloat(total) / 10 ** 18;
         return total;
       } catch {
-        return 0;
+        return id2asset / 10 ** 18;
       }
     } else {
-      return BigInt(0);
+      return id2asset / 10 ** 18;
     }
   }, [minCollateralizationRatio, dyadMinted, usdValue, ethPrice]);
 
