@@ -97,7 +97,6 @@ export default function DnftBox() {
     ],
     watch: true,
     onSuccess: (data) => {
-      console.log("data", data);
       setMintedDyad(data?.dyadMinted?.toString());
       setCr(
         data?.collatRatio?.toString() === MAX_UINT256
