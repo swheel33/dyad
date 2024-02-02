@@ -117,7 +117,6 @@ export default function BurnAndWithdrawTab({
     // }
   }, [dyadBalance, id2asset]);
 
-  // return id2asset / 10 ** 18;
   const maxWithdraw = useMemo(() => {
     const minCollateralizationRatio = "1700000000000000000";
     if (
