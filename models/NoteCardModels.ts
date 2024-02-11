@@ -8,3 +8,8 @@ export interface NoteNumberDataModel {
   left: NoteNumberDataColumnModel[];
   right: NoteNumberDataColumnModel[];
 }
+
+export interface VaultCardDataModel {
+  currency: string;
+  value: string;
+}
