@@ -15,8 +15,8 @@ export default function TabsComponent({
     <div className="w-full px-0.5 flex relative">
       <div>
         {logo && (
-          <div className="h-12 w-1/6 absolute flex ">
-            <div className="w-full mt-auto">{logo}</div>
+          <div className="h-7 w-1/6 absolute flex">
+            <div className="w-full h-7 text-2xl">{logo}</div>
           </div>
         )}
         <Tabs
@@ -24,17 +24,21 @@ export default function TabsComponent({
           aria-label="Tabs variants"
           className="p-0 w-full"
           classNames={{
-            base: "w-1/2",
             tabList: `justify-between ${
               logo ? "w-5/6" : "w-full"
             } relative rounded-none p-0 border-b border-divider ml-auto`,
             cursor: "w-full bg-[#FAFAFA]",
-            tab: "max-w-fit h-12 font-semibold",
+            tab: "max-w-fit h-7 font-semibold",
           }}
         >
           {tabsData.map((tab: any) => (
             <Tab key={tab.tabKey} title={tab.label}>
-              {tab.content}
+              <div
+                className="max-h-52 overflow-auto"
+                style={{ width: "640px" }}
+              >
+                {tab.content}
+              </div>
             </Tab>
           ))}
         </Tabs>

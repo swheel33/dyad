@@ -1,4 +1,43 @@
+import NoteNumber from "@/components/NoteCard/Children/NoteNumber";
+import { NoteNumberDataModel } from "@/models/NoteCardModels";
 import { TabsDataModel } from "@/models/TabsModel";
+
+export const NOTE_NUMBER_MOCK_DATA: NoteNumberDataModel = {
+  left: [
+    {
+      text: "DYAD mint cost",
+      value: "$0.78",
+      highlighted: true,
+    },
+    {
+      text: "Momentum",
+      value: "2.5x",
+      highlighted: false,
+    },
+    {
+      text: "LP stake",
+      value: "1.85%",
+      highlighted: false,
+    },
+  ],
+  right: [
+    {
+      text: "Collateralization ratio",
+      value: "385%",
+      highlighted: true,
+    },
+    {
+      text: "DYAD minted",
+      value: "3,000",
+      highlighted: false,
+    },
+    {
+      text: "Collateral",
+      value: "$10,805",
+      highlighted: false,
+    },
+  ],
+};
 
 export const TABS_MOCK_DATA: TabsDataModel[] = [
   {
@@ -6,12 +45,7 @@ export const TABS_MOCK_DATA: TabsDataModel[] = [
     tabKey: "Note Nº 223",
     content: (
       <div>
-        The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes
-        from a line in section 1.10.32. The standard chunk of Lorem Ipsum used
-        since the 1500s is reproduced below for those interested. Sections
-        1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are
-        also reproduced in their exact original form, accompanied by English
-        versions
+        <NoteNumber data={NOTE_NUMBER_MOCK_DATA} />
       </div>
     ),
   },

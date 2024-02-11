@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Separator } from "@/components/ui/separator";
 import DnftBox from "@/components/dnft-box";
 import TabsComponent from "@/components/reusable/TabsComponent";
-import { TABS_MOCK_DATA } from "@/mockData/tabsMockData";
+import NoteCard from "@/components/NoteCard/NoteCard";
 
 export default function Home() {
   const [showMobileWarning, setShowMobileWarning] = useState(false);
@@ -34,8 +34,8 @@ export default function Home() {
         The DYAD app is not yet available on mobile. Please use a desktop
         browser.
       </div> */}
-      <div className="flex-1 max-w-screen-md p-4 w-full hide-on-mobile">
-        <TabsComponent tabsData={TABS_MOCK_DATA} logo={<div>Test</div>} />
+      <div className=" my-5">
+        <NoteCard />
       </div>
     </>
   );
