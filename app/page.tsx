@@ -34,7 +34,9 @@ export default function Home() {
         The DYAD app is not yet available on mobile. Please use a desktop
         browser.
       </div> */}
-      <TabsComponent tabsData={TABS_MOCK_DATA} />
+      <div className="flex-1 max-w-screen-md p-4 w-full hide-on-mobile">
+        <TabsComponent tabsData={TABS_MOCK_DATA} logo={<div>Test</div>} />
+      </div>
     </>
   );
 }
