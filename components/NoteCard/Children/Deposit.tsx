@@ -2,6 +2,9 @@ import AddVaultButton from "@/components/reusable/AddVaultButton";
 import VaultCard from "@/components/reusable/VaultCard";
 import { VaultCardDataModel } from "@/models/NoteCardModels";
 import React from "react";
+import useModal from "@/contexts/modal";
+import { getVaultModalData } from "@/mockData/tabsMockData";
+import EditVaultModal from "@/components/Modals/NoteCardModals/DepositModals/EditVault/EditVaultModal";
 
 interface DepositProps {
   total_collateral: string;
@@ -14,6 +17,8 @@ const Deposit: React.FC<DepositProps> = ({
   collateralization_ratio,
   vault_cards,
 }) => {
+  const { pushModal } = useModal();
+
   return (
     <div className="w-full">
       <div className="flex justify-between text-sm font-semibold my-[37px] px-[15px]">
@@ -27,8 +32,19 @@ const Deposit: React.FC<DepositProps> = ({
         </div>
       </div>
       <div className="grid grid-cols-5 gap-[35px]">
-        {vault_cards.map((card: VaultCardDataModel) => (
-          <VaultCard data={card} />
+        {vault_cards.map((card: VaultCardDataModel, index: number) => (
+          <VaultCard
+            key={index}
+            data={card}
+            onClick={() =>
+              pushModal(
+                <EditVaultModal
+                  tabsData={getVaultModalData(card.currency)}
+                  logo={card.currency}
+                />
+              )
+            }
+          />
         ))}
         <AddVaultButton />
       </div>

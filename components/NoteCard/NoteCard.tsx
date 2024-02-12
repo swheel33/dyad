@@ -6,10 +6,7 @@ import { TABS_MOCK_DATA } from "@/mockData/tabsMockData";
 function NoteCard() {
   return (
     <NoteCardsContainer>
-      <TabsComponent
-        tabsData={TABS_MOCK_DATA}
-        // logo={<div className="">TEST</div>}
-      />
+      <TabsComponent tabsData={TABS_MOCK_DATA} />
     </NoteCardsContainer>
   );
 }

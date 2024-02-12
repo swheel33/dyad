@@ -1,3 +1,4 @@
+import EditVaultTabContent from "@/components/Modals/NoteCardModals/DepositModals/EditVault/EditVaultTabContent";
 import Deposit from "@/components/NoteCard/Children/Deposit";
 import NoteNumber from "@/components/NoteCard/Children/NoteNumber";
 import {
@@ -130,6 +131,42 @@ export const TABS_MOCK_DATA: TabsDataModel[] = [
         infancy. Various versions have evolved over the years, sometimes by
         accident, sometimes on purpose (injected humour and the like).
       </div>
+    ),
+  },
+];
+
+export const getVaultModalData = (currency: string) => [
+  {
+    label: "Deposit",
+    tabKey: "Deposit",
+    content: (
+      <EditVaultTabContent
+        currentCollateralizationRatio="300%"
+        newCollateralizationRatio="320%"
+        currency={currency}
+      />
+    ),
+  },
+  {
+    label: "Withdraw",
+    tabKey: "Withdraw",
+    content: (
+      <EditVaultTabContent
+        currentCollateralizationRatio="300%"
+        newCollateralizationRatio="320%"
+        currency={currency}
+      />
+    ),
+  },
+  {
+    label: "Redeem",
+    tabKey: "Redeem",
+    content: (
+      <EditVaultTabContent
+        currentCollateralizationRatio="300%"
+        newCollateralizationRatio="320%"
+        currency={currency}
+      />
     ),
   },
 ];
