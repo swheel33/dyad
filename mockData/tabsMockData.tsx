@@ -1,6 +1,7 @@
 import EditVaultTabContent from "@/components/Modals/NoteCardModals/DepositModals/EditVault/EditVaultTabContent";
 import Deposit from "@/components/NoteCard/Children/Deposit";
 import NoteNumber from "@/components/NoteCard/Children/NoteNumber";
+import ButtonComponent from "@/components/reusable/ButtonComponent";
 import {
   NoteNumberDataModel,
   VaultCardDataModel,
@@ -168,5 +169,55 @@ export const getVaultModalData = (currency: string) => [
         currency={currency}
       />
     ),
+  },
+];
+
+export const rows = [
+  {
+    key: "1",
+    collateral: "wETH",
+    oracle_price: "$2300",
+    tvl: "$800,000",
+    action: <ButtonComponent>Add</ButtonComponent>,
+  },
+  {
+    key: "1",
+    collateral: "wstETH",
+    oracle_price: "$2300",
+    tvl: "$800,000",
+    action: <ButtonComponent>Add</ButtonComponent>,
+  },
+  {
+    key: "1",
+    collateral: "sfrxETH ",
+    oracle_price: "$2300",
+    tvl: "$800,000",
+    action: <ButtonComponent>Add</ButtonComponent>,
+  },
+  {
+    key: "1",
+    collateral: "Kerosene ",
+    oracle_price: "$2300",
+    tvl: "$800,000",
+    action: <ButtonComponent>Add</ButtonComponent>,
+  },
+];
+
+export const columns = [
+  {
+    key: "collateral",
+    label: "Collateral",
+  },
+  {
+    key: "oracle_price",
+    label: "Oracle price",
+  },
+  {
+    key: "tvl",
+    label: "TVL",
+  },
+  {
+    key: "action",
+    label: "",
   },
 ];

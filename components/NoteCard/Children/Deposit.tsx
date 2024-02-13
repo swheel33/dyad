@@ -5,6 +5,7 @@ import React from "react";
 import useModal from "@/contexts/modal";
 import { getVaultModalData } from "@/mockData/tabsMockData";
 import EditVaultModal from "@/components/Modals/NoteCardModals/DepositModals/EditVault/EditVaultModal";
+import AddVaultModal from "@/components/Modals/NoteCardModals/DepositModals/AddVault/AddVaultModal";
 
 interface DepositProps {
   total_collateral: string;
@@ -46,7 +47,7 @@ const Deposit: React.FC<DepositProps> = ({
             }
           />
         ))}
-        <AddVaultButton />
+        <AddVaultButton onClick={() => pushModal(<AddVaultModal />)} />
       </div>
     </div>
   );
