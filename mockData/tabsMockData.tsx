@@ -1,5 +1,6 @@
 import EditVaultTabContent from "@/components/Modals/NoteCardModals/DepositModals/EditVault/EditVaultTabContent";
 import Deposit from "@/components/NoteCard/Children/Deposit";
+import Mint from "@/components/NoteCard/Children/Mint";
 import NoteNumber from "@/components/NoteCard/Children/NoteNumber";
 import ButtonComponent from "@/components/reusable/ButtonComponent";
 import {
@@ -88,15 +89,7 @@ export const TABS_MOCK_DATA: TabsDataModel[] = [
   {
     label: "Mint",
     tabKey: "Mint",
-    content: (
-      <div>
-        The standard chunk of Lorem Ipsum used since the 1500s is reproduced
-        below for those interested. Sections 1.10.32 and 1.10.33 from "de
-        Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact
-        original form, accompanied by English versions from the 1914 translation
-        by H. Rackham.
-      </div>
-    ),
+    content: <Mint dyadMinted="3,000" currentCr="300%" newCr="320%" />,
   },
   {
     label: "LP",
