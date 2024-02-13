@@ -15,7 +15,7 @@ export default function TabsComponent({
     <div className="w-full px-0.5 flex relative">
       <div>
         {logo && (
-          <div className="h-7 w-1/6 absolute flex">
+          <div className="h-7 w-2/6 absolute flex">
             <div className="w-full h-7 text-2xl">{logo}</div>
           </div>
         )}
@@ -25,7 +25,7 @@ export default function TabsComponent({
           className="p-0 w-full"
           classNames={{
             tabList: `justify-between ${
-              logo ? "w-5/6" : "w-full"
+              logo ? "w-4/6" : "w-full"
             } relative rounded-none p-0 border-b border-divider ml-auto`,
             cursor: "w-full bg-[#FAFAFA]",
             tab: "max-w-fit h-7 font-semibold",

@@ -63,6 +63,10 @@ export const VAULT_CARDS_DATA: VaultCardDataModel[] = [
     currency: "Kerosene",
     value: "$4,500",
   },
+  // {
+  //   currency: "Kerosene",
+  //   value: "$4,500",
+  // },
 ];
 
 export const TABS_MOCK_DATA: TabsDataModel[] = [
