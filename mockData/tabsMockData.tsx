@@ -1,5 +1,7 @@
 import EditVaultTabContent from "@/components/Modals/NoteCardModals/DepositModals/EditVault/EditVaultTabContent";
+import LpStakeModalTab from "@/components/Modals/NoteCardModals/LpModals/LpStakeModalTab";
 import Deposit from "@/components/NoteCard/Children/Deposit";
+import Lp from "@/components/NoteCard/Children/Lp";
 import Mint from "@/components/NoteCard/Children/Mint";
 import NoteNumber from "@/components/NoteCard/Children/NoteNumber";
 import ButtonComponent from "@/components/reusable/ButtonComponent";
@@ -99,19 +101,7 @@ export const TABS_MOCK_DATA: TabsDataModel[] = [
     label: "LP",
     tabKey: "LP",
     content: (
-      <div>
-        There are many variations of passages of Lorem Ipsum available, but the
-        majority have suffered alteration in some form, by injected humour, or
-        randomised words which don't look even slightly believable. If you are
-        going to use a passage of Lorem Ipsum, you need to be sure there isn't
-        anything embarrassing hidden in the middle of text. All the Lorem Ipsum
-        generators on the Internet tend to repeat predefined chunks as
-        necessary, making this the first true generator on the Internet. It uses
-        a dictionary of over 200 Latin words, combined with a handful of model
-        sentence structures, to generate Lorem Ipsum which looks reasonable. The
-        generated Lorem Ipsum is therefore always free from repetition, injected
-        humour, or non-characteristic words etc.
-      </div>
+      <Lp totalStake="$18,043" totalPercentage="1.30%" momentum="2.5x" />
     ),
   },
   {
@@ -129,6 +119,23 @@ export const TABS_MOCK_DATA: TabsDataModel[] = [
         infancy. Various versions have evolved over the years, sometimes by
         accident, sometimes on purpose (injected humour and the like).
       </div>
+    ),
+  },
+];
+
+export const getLpModalData = (pool: string) => [
+  {
+    label: "Stake",
+    tabKey: "Stake",
+    content: (
+      <LpStakeModalTab NewMomentum="2.2x" currentMomentum="2.5x" pool={pool} />
+    ),
+  },
+  {
+    label: "Unstake",
+    tabKey: "Unstake",
+    content: (
+      <LpStakeModalTab NewMomentum="2.2x" currentMomentum="2.5x" pool={pool} />
     ),
   },
 ];
@@ -216,5 +223,47 @@ export const columns = [
   {
     key: "action",
     label: "",
+  },
+];
+
+export const LpRows = [
+  {
+    key: "ETH - DYAD (Uniswap)",
+    pool: "ETH - DYAD (Uniswap)",
+    staked: "$2300",
+    tvl: "$800,000",
+  },
+  {
+    key: "USDC - DYAD (Uniswap)",
+    pool: "USDC - DYAD (Uniswap)",
+    staked: "$2300",
+    tvl: "$800,000",
+  },
+  {
+    key: "LUSD - DYAD (Zero)",
+    pool: "LUSD - DYAD (Zero)",
+    staked: "$2300",
+    tvl: "$800,000",
+  },
+  {
+    key: "ETH - DYAD (Zero)",
+    pool: "ETH - DYAD (Zero)",
+    staked: "$2300",
+    tvl: "$800,000",
+  },
+];
+
+export const LpColumns = [
+  {
+    key: "pool",
+    label: "Pool",
+  },
+  {
+    key: "staked",
+    label: "Staked",
+  },
+  {
+    key: "tvl",
+    label: "TVL",
   },
 ];
