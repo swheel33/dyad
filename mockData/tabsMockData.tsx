@@ -1,6 +1,7 @@
 import EditVaultTabContent from "@/components/Modals/NoteCardModals/DepositModals/EditVault/EditVaultTabContent";
 import LpStakeModalTab from "@/components/Modals/NoteCardModals/LpModals/LpStakeModalTab";
 import Deposit from "@/components/NoteCard/Children/Deposit";
+import Earn from "@/components/NoteCard/Children/Earn";
 import Lp from "@/components/NoteCard/Children/Lp";
 import Mint from "@/components/NoteCard/Children/Mint";
 import NoteNumber from "@/components/NoteCard/Children/NoteNumber";
@@ -109,15 +110,7 @@ export const TABS_MOCK_DATA: TabsDataModel[] = [
     tabKey: "Earn",
     content: (
       <div>
-        It is a long established fact that a reader will be distracted by the
-        readable content of a page when looking at its layout. The point of
-        using Lorem Ipsum is that it has a more-or-less normal distribution of
-        letters, as opposed to using 'Content here, content here', making it
-        look like readable English. Many desktop publishing packages and web
-        page editors now use Lorem Ipsum as their default model text, and a
-        search for 'lorem ipsum' will uncover many web sites still in their
-        infancy. Various versions have evolved over the years, sometimes by
-        accident, sometimes on purpose (injected humour and the like).
+        <Earn apy="8.7%" currentCr="300%" newCr="320%" />
       </div>
     ),
   },
@@ -135,7 +128,12 @@ export const getLpModalData = (pool: string) => [
     label: "Unstake",
     tabKey: "Unstake",
     content: (
-      <LpStakeModalTab NewMomentum="2.2x" currentMomentum="2.5x" pool={pool} />
+      <LpStakeModalTab
+        NewMomentum="2.2x"
+        currentMomentum="2.5x"
+        pool={pool}
+        type="unstake"
+      />
     ),
   },
 ];

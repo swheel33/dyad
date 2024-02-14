@@ -7,12 +7,14 @@ interface LpStakeModalTabProps {
   pool: string;
   currentMomentum: string;
   NewMomentum: string;
+  type?: "stake" | "unstake";
 }
 
 const LpStakeModalTab: React.FC<LpStakeModalTabProps> = ({
   pool,
   currentMomentum,
   NewMomentum,
+  type = "stake",
 }) => {
   const { shiftModal } = useModal();
 
@@ -22,7 +24,7 @@ const LpStakeModalTab: React.FC<LpStakeModalTabProps> = ({
     setInputValue("9999999");
   };
 
-  const stakeHandler = () => {
+  const submitHandler = () => {
     console.log("Staked");
   };
 
@@ -34,7 +36,7 @@ const LpStakeModalTab: React.FC<LpStakeModalTabProps> = ({
       <div className="flex justify-between w-full mt-[35px]">
         <div className="w-5/6 ">
           <InputComponent
-            placeHolder={`Amount of ${pool} to stake`}
+            placeHolder={`Amount of ${pool} to ${type}`}
             onValueChange={setInputValue}
             value={inputValue}
             type="number"
@@ -59,8 +61,8 @@ const LpStakeModalTab: React.FC<LpStakeModalTabProps> = ({
       </div>
       <div className="flex justify-between mt-[35px] ">
         <div className="w-[280px]">
-          <ButtonComponent onClick={stakeHandler} variant="solid">
-            {`Stake ${pool}`}
+          <ButtonComponent onClick={submitHandler} variant="solid">
+            {`${type === "stake" ? "Stake" : "Unstake"} ${pool}`}
           </ButtonComponent>
         </div>
         <div className="w-[280px] ">
