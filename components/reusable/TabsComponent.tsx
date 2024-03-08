@@ -33,10 +33,7 @@ export default function TabsComponent({
         >
           {tabsData.map((tab: any) => (
             <Tab key={tab.tabKey} title={tab.label}>
-              <div
-                className="max-h-52 overflow-auto"
-                style={{ width: "640px" }}
-              >
+              <div className=" overflow-auto" style={{ width: "640px" }}>
                 {tab.content}
               </div>
             </Tab>

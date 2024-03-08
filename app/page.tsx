@@ -2,10 +2,11 @@
 
 import { Separator } from "@/components/ui/separator";
 import DnftBox from "@/components/dnft-box";
+import TabsComponent from "@/components/reusable/TabsComponent";
 
 export default function Home() {
-  return (
-    <div className="flex-1 max-w-screen-md p-4 w-full">
+  const manageNotesContent = (
+    <>
       <h3 className="text-md font-medium leading-loose pt-3">
         Immutable Base. Infinite Possibility.
       </h3>
@@ -19,6 +20,25 @@ export default function Home() {
         <Separator className="my-4" />
       </div>
       <DnftBox />
+    </>
+  );
+
+  const tabsData = [
+    {
+      label: "Manage Notes",
+      tabKey: "Manage Notes",
+      content: manageNotesContent,
+    },
+    {
+      label: "Earn Kerosene",
+      tabKey: "Earn Kerosene",
+      content: <div>Earn Kerosene</div>,
+    },
+  ];
+
+  return (
+    <div className="flex-1 max-w-screen-md p-4 w-full">
+      <TabsComponent tabsData={tabsData} />
     </div>
   );
 }
