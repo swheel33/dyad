@@ -13,7 +13,7 @@ export default function TabsComponent({
 }: tabsComponentPropsInterface) {
   return (
     <div className="w-full px-0.5 flex relative">
-      <div>
+      <div className="w-full">
         {logo && (
           <div className="h-7 w-3/6 absolute flex">
             <div className="w-full h-7 text-2xl">{logo}</div>
@@ -24,6 +24,7 @@ export default function TabsComponent({
           aria-label="Tabs variants"
           className="p-0 w-full"
           classNames={{
+            base: "w-full",
             tabList: `justify-between ${
               logo ? "w-3/6" : "w-full"
             } relative rounded-none p-0 border-b border-divider ml-auto`,
@@ -33,9 +34,7 @@ export default function TabsComponent({
         >
           {tabsData.map((tab: any) => (
             <Tab key={tab.tabKey} title={tab.label}>
-              <div className=" overflow-auto" style={{ width: "640px" }}>
-                {tab.content}
-              </div>
+              <div className=" overflow-auto">{tab.content}</div>
             </Tab>
           ))}
         </Tabs>

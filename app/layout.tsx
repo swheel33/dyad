@@ -55,13 +55,13 @@ export default function RootLayout({
               <UrqlProvider value={client}>
                 <main className="flex flex-col min-h-screen items-center">
                   <ModalProvider>
-                    <div className="flex max-w-screen-md w-full h-16 justify-start box-border">
+                    <div className="flex max-w-screen-md w-[745px] h-16 justify-start box-border">
                       <MainNav className="mx-4 flex-1 max-w-screen-md" />
                       <div className="ml-auto flex items-center space-x-4 mr-4">
-                        <WalletButton />
+                        <WalletButton className=" w-[138px]" />
                       </div>
                     </div>
-                    <Separator />
+                    {/* <Separator /> */}
                     {children}
                     <Footer />
                   </ModalProvider>
