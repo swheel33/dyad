@@ -100,15 +100,15 @@ export const TABS_MOCK_DATA: TabsDataModel[] = [
   //     </div>
   //   ),
   // },
-  {
-    label: "Fuse Kerosene",
-    tabKey: "Fuse Kerosene",
-    content: (
-      <div>
-        <Fuse fusedKerosene="400" currentCr="300%" newCr="320%" />
-      </div>
-    ),
-  },
+  // {
+  //   label: "Fuse Kerosene",
+  //   tabKey: "Fuse Kerosene",
+  //   content: (
+  //     <div>
+  //       <Fuse fusedKerosene="400" currentCr="300%" newCr="320%" />
+  //     </div>
+  //   ),
+  // },
 ];
 
 export const getLpModalData = (pool: string) => [
