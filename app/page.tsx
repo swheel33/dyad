@@ -44,8 +44,8 @@ export default function Home() {
       <div className="mt-12">
         <ButtonComponent>Claim 1,863 Kerosene</ButtonComponent>
       </div>
-      {keroseneCardsData.map((card) => (
-        <div className="mt-6">
+      {keroseneCardsData.map((card, index) => (
+        <div className="mt-6" key={index}>
           <KeroseneCard
             currency={card.currency}
             staked={card.staked}
