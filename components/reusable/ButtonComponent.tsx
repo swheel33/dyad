@@ -1,6 +1,7 @@
 import React from "react";
 
 interface ButtonComponentProps {
+  styles?: {};
   variant?: "solid" | "bordered";
   children: JSX.Element | string;
   onClick?: () => void;
@@ -17,6 +18,7 @@ const classNames: any = {
 };
 
 const ButtonComponent: React.FC<ButtonComponentProps> = ({
+  styles = {},
   variant = "solid",
   children,
   onClick = () => {},
@@ -24,6 +26,7 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
   return (
     <button
       className={`${classNames[variant]} ${MAIN_BUTTON_STYLES}`}
+      style={styles}
       onClick={onClick}
     >
       {children}

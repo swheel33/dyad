@@ -1,12 +1,13 @@
 import AddVaultButton from "@/components/reusable/AddVaultButton";
 import VaultCard from "@/components/reusable/VaultCard";
 import { VaultCardDataModel } from "@/models/NoteCardModels";
-import React from "react";
+import React, { useState } from "react";
 import useModal from "@/contexts/modal";
-import { getVaultModalData } from "@/mockData/tabsMockData";
 import EditVaultModal from "@/components/Modals/NoteCardModals/DepositModals/EditVault/EditVaultModal";
 import AddVaultModal from "@/components/Modals/NoteCardModals/DepositModals/AddVault/AddVaultModal";
 import { MAX_DEPOSIT_VAULTS } from "@/constants/NoteCards";
+import EditVaultTabContent from "@/components/Modals/NoteCardModals/DepositModals/EditVault/EditVaultTabContent";
+import { VaultTypes } from "@/mockData/cardModels";
 
 interface DepositProps {
   total_collateral: string;
@@ -19,7 +20,67 @@ const Deposit: React.FC<DepositProps> = ({
   collateralization_ratio,
   vault_cards,
 }) => {
+  const [depositInput, setDepositInput] = useState("");
+  const [withdrawInput, setWithdrawInput] = useState("");
+  const [redeemInput, setRedeemInput] = useState("");
   const { pushModal } = useModal();
+
+  const getVaultModalData = (currency: string) => [
+    {
+      label: "Deposit",
+      tabKey: "Deposit",
+      content: (
+        <EditVaultTabContent
+          type={VaultTypes.deposit}
+          inputValue={depositInput}
+          setInputValue={setDepositInput}
+          currentCollateralizationRatio="300%"
+          newCollateralizationRatio="320%"
+          currency={currency}
+          submitHandler={() => {
+            console.log(VaultTypes.deposit);
+          }}
+          maxValue="99999"
+        />
+      ),
+    },
+    {
+      label: "Withdraw",
+      tabKey: "Withdraw",
+      content: (
+        <EditVaultTabContent
+          type={VaultTypes.withdraw}
+          inputValue={withdrawInput}
+          setInputValue={setWithdrawInput}
+          currentCollateralizationRatio="350%"
+          newCollateralizationRatio="370%"
+          currency={currency}
+          submitHandler={() => {
+            console.log(VaultTypes.withdraw);
+          }}
+          maxValue="99999"
+        />
+      ),
+    },
+    {
+      label: "Redeem",
+      tabKey: "Redeem",
+      content: (
+        <EditVaultTabContent
+          type={VaultTypes.redeem}
+          inputValue={redeemInput}
+          setInputValue={setRedeemInput}
+          currentCollateralizationRatio="200%"
+          newCollateralizationRatio="220%"
+          currency={currency}
+          submitHandler={() => {
+            console.log(VaultTypes.redeem);
+          }}
+          maxValue="99999"
+        />
+      ),
+    },
+  ];
 
   return (
     <div className="w-full">
@@ -33,7 +94,7 @@ const Deposit: React.FC<DepositProps> = ({
           <div>{collateralization_ratio}</div>
         </div>
       </div>
-      <div className="grid grid-cols-5 gap-[35px]">
+      <div className="grid grid-cols-5 gap-[30px]">
         {vault_cards.map((card: VaultCardDataModel, index: number) => (
           <VaultCard
             key={index}

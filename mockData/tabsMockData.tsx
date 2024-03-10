@@ -1,53 +1,39 @@
-import EditVaultTabContent from "@/components/Modals/NoteCardModals/DepositModals/EditVault/EditVaultTabContent";
 import LpStakeModalTab from "@/components/Modals/NoteCardModals/LpModals/LpStakeModalTab";
 import Deposit from "@/components/NoteCard/Children/Deposit";
 import Earn from "@/components/NoteCard/Children/Earn";
+import Fuse from "@/components/NoteCard/Children/Fuse";
 import Lp from "@/components/NoteCard/Children/Lp";
 import Mint from "@/components/NoteCard/Children/Mint";
 import NoteNumber from "@/components/NoteCard/Children/NoteNumber";
 import ButtonComponent from "@/components/reusable/ButtonComponent";
 import {
-  NoteNumberDataModel,
+  NoteNumberDataColumnModel,
   VaultCardDataModel,
 } from "@/models/NoteCardModels";
 import { TabsDataModel } from "@/models/TabsModel";
 
-export const NOTE_NUMBER_MOCK_DATA: NoteNumberDataModel = {
-  left: [
-    {
-      text: "DYAD mint cost",
-      value: "$0.78",
-      highlighted: true,
-    },
-    {
-      text: "Momentum",
-      value: "2.5x",
-      highlighted: false,
-    },
-    {
-      text: "LP stake",
-      value: "1.85%",
-      highlighted: false,
-    },
-  ],
-  right: [
-    {
-      text: "Collateralization ratio",
-      value: "385%",
-      highlighted: true,
-    },
-    {
-      text: "DYAD minted",
-      value: "3,000",
-      highlighted: false,
-    },
-    {
-      text: "Collateral",
-      value: "$10,805",
-      highlighted: false,
-    },
-  ],
-};
+export const NOTE_NUMBER_MOCK_DATA: NoteNumberDataColumnModel[] = [
+  {
+    text: "Collateralization ratio",
+    value: "385%",
+    highlighted: true,
+  },
+  {
+    text: "DYAD minted",
+    value: "3,000",
+    highlighted: false,
+  },
+  {
+    text: "Collateral",
+    value: "$10,805",
+    highlighted: false,
+  },
+  {
+    text: "Fused Kerosene",
+    value: "800",
+    highlighted: false,
+  },
+];
 
 export const VAULT_CARDS_DATA: VaultCardDataModel[] = [
   {
@@ -83,8 +69,8 @@ export const TABS_MOCK_DATA: TabsDataModel[] = [
     ),
   },
   {
-    label: "Deposit",
-    tabKey: "Deposit",
+    label: "Deposit and Withdraw",
+    tabKey: "Deposit and Withdraw",
     content: (
       <Deposit
         total_collateral="$10,801"
@@ -94,23 +80,32 @@ export const TABS_MOCK_DATA: TabsDataModel[] = [
     ),
   },
   {
-    label: "Mint",
-    tabKey: "Mint",
+    label: "Mint DYAD",
+    tabKey: "Mint DYAD",
     content: <Mint dyadMinted="3,000" currentCr="300%" newCr="320%" />,
   },
+  // {
+  //   label: "LP",
+  //   tabKey: "LP",
+  //   content: (
+  //     <Lp totalStake="$18,043" totalPercentage="1.30%" momentum="2.5x" />
+  //   ),
+  // },
+  // {
+  //   label: "Earn",
+  //   tabKey: "Earn",
+  //   content: (
+  //     <div>
+  //       <Earn apy="8.7%" currentCr="300%" newCr="320%" />
+  //     </div>
+  //   ),
+  // },
   {
-    label: "LP",
-    tabKey: "LP",
-    content: (
-      <Lp totalStake="$18,043" totalPercentage="1.30%" momentum="2.5x" />
-    ),
-  },
-  {
-    label: "Earn",
-    tabKey: "Earn",
+    label: "Fuse Kerosene",
+    tabKey: "Fuse Kerosene",
     content: (
       <div>
-        <Earn apy="8.7%" currentCr="300%" newCr="320%" />
+        <Fuse fusedKerosene="400" currentCr="300%" newCr="320%" />
       </div>
     ),
   },
@@ -133,42 +128,6 @@ export const getLpModalData = (pool: string) => [
         currentMomentum="2.5x"
         pool={pool}
         type="unstake"
-      />
-    ),
-  },
-];
-
-export const getVaultModalData = (currency: string) => [
-  {
-    label: "Deposit",
-    tabKey: "Deposit",
-    content: (
-      <EditVaultTabContent
-        currentCollateralizationRatio="300%"
-        newCollateralizationRatio="320%"
-        currency={currency}
-      />
-    ),
-  },
-  {
-    label: "Withdraw",
-    tabKey: "Withdraw",
-    content: (
-      <EditVaultTabContent
-        currentCollateralizationRatio="300%"
-        newCollateralizationRatio="320%"
-        currency={currency}
-      />
-    ),
-  },
-  {
-    label: "Redeem",
-    tabKey: "Redeem",
-    content: (
-      <EditVaultTabContent
-        currentCollateralizationRatio="300%"
-        newCollateralizationRatio="320%"
-        currency={currency}
       />
     ),
   },
@@ -265,3 +224,17 @@ export const LpColumns = [
     label: "TVL",
   },
 ];
+
+export const PIE_CHART_MOCK_DATA = {
+  labels: ["label 1", "label 2", "label 3"],
+  width: "50",
+  datasets: [
+    {
+      label: "# of Votes",
+      data: [12, 19, 3],
+      backgroundColor: ["#8D8D8D", "#676767", "#EDEDED"],
+      borderColor: ["#8D8D8D", "#676767", "#EDEDED"],
+      borderWidth: 1,
+    },
+  ],
+};

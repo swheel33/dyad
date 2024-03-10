@@ -5,6 +5,8 @@ import DnftBox from "@/components/dnft-box";
 import TabsComponent from "@/components/reusable/TabsComponent";
 import ButtonComponent from "@/components/reusable/ButtonComponent";
 import KeroseneCard from "@/components/KeroseneCard/KeroseneCard";
+import NoteCard from "@/components/NoteCard/NoteCard";
+import filterIcon from "@/public/filterIconPng.png";
 
 export default function Home() {
   const keroseneCardsData = [
@@ -23,19 +25,34 @@ export default function Home() {
   ];
   const manageNotesContent = (
     <>
-      <h3 className="text-md font-medium pt-3">
-        Immutable Base. Infinite Possibility.
-      </h3>
-      <p className="text-sm leading-loose text-muted-foreground py-2">
-        Deposit wETH into your Notes to mint DYAD. You will be able to claim
-        rewards based on how much DYAD you’ve minted once we deploy the next
-        layer of contracts. These rewards will make DYAD less expensive to mint,
-        which can increase your yield.
-      </p>
-      <div>
-        <Separator className="my-4" />
+      <div className="mt-12 mb-6 flex justify-between">
+        <ButtonComponent
+          styles={{ marginRight: "20px" }}
+          onClick={() => console.log("Claim Note")}
+        >
+          Claim Note Nº 228
+        </ButtonComponent>
+        <div>
+          <ButtonComponent
+            styles={{
+              width: "40px",
+              paddingRight: "0px",
+              paddingLeft: "0px",
+            }}
+            onClick={() => console.log("Filter")}
+          >
+            <div
+              style={{
+                width: "15px",
+                margin: "auto",
+              }}
+            >
+              <img src={filterIcon.src} />
+            </div>
+          </ButtonComponent>
+        </div>
       </div>
-      <DnftBox />
+      <NoteCard />
     </>
   );
 

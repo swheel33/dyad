@@ -1,30 +1,31 @@
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import InputComponent from "@/components/reusable/InputComponent";
 import ButtonComponent from "@/components/reusable/ButtonComponent";
 import useModal from "@/contexts/modal";
+import { VaultTypes } from "@/mockData/cardModels";
 
 interface EditVaultTabContentProps {
+  type: VaultTypes;
+  inputValue: string;
+  setInputValue: Dispatch<SetStateAction<string>>;
   currency: string;
   currentCollateralizationRatio: string;
   newCollateralizationRatio: string;
+  submitHandler: () => void;
+  maxValue: string;
 }
 
 const EditVaultTabContent: React.FC<EditVaultTabContentProps> = ({
+  type,
   currency,
   currentCollateralizationRatio,
   newCollateralizationRatio,
+  submitHandler,
+  maxValue,
 }) => {
   const { shiftModal } = useModal();
 
   const [inputValue, setInputValue] = useState("");
-
-  const onClickHandler = () => {
-    setInputValue("9999999");
-  };
-
-  const depositHandler = () => {
-    console.log("Deposited");
-  };
 
   const cancelHandler = () => {
     shiftModal();
@@ -35,7 +36,7 @@ const EditVaultTabContent: React.FC<EditVaultTabContentProps> = ({
       <div className="flex justify-between w-full mt-[35px]">
         <div className="w-5/6 ">
           <InputComponent
-            placeHolder={`Amount of ${currency} to deposit`}
+            placeHolder={`Amount of ${currency} to ${type}`}
             onValueChange={setInputValue}
             value={inputValue}
             type="number"
@@ -43,7 +44,7 @@ const EditVaultTabContent: React.FC<EditVaultTabContentProps> = ({
           />
         </div>
         <div className="w-[74px]">
-          <ButtonComponent onClick={onClickHandler} variant="bordered">
+          <ButtonComponent onClick={submitHandler} variant="bordered">
             Max
           </ButtonComponent>
         </div>
@@ -60,8 +61,8 @@ const EditVaultTabContent: React.FC<EditVaultTabContentProps> = ({
       </div>
       <div className="flex justify-between mt-[35px] ">
         <div className="w-[280px]">
-          <ButtonComponent onClick={depositHandler} variant="solid">
-            {`Deposit ${currency}`}
+          <ButtonComponent onClick={submitHandler} variant="solid">
+            {`${type[0].toUpperCase()}${type.slice(1)} ${currency}`}
           </ButtonComponent>
         </div>
         <div className="w-[280px] ">
