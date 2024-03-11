@@ -20,6 +20,7 @@ import { ModalProvider } from "@/contexts/modal";
 import { Footer } from "@/components/ui/footer";
 import { MainNav } from "@/components/ui/main-nav";
 import { NextUIProvider } from "@nextui-org/react";
+import MobileNotSupported from "@/components/ui/MobileNotSupported";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -53,7 +54,7 @@ export default function RootLayout({
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
             <WagmiConfig config={wagmiConfig}>
               <UrqlProvider value={client}>
-                <main className="flex flex-col min-h-screen items-center">
+                <main className="flex flex-col min-h-screen items-center desktop-view">
                   <ModalProvider>
                     <div className="flex max-w-screen-md w-[745px] h-16 justify-start box-border">
                       <MainNav className="mx-4 flex-1 max-w-screen-md" />
@@ -66,6 +67,7 @@ export default function RootLayout({
                     <Footer />
                   </ModalProvider>
                 </main>
+                <MobileNotSupported />
               </UrqlProvider>
             </WagmiConfig>
           </ThemeProvider>
