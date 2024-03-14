@@ -233,8 +233,7 @@ export const PIE_CHART_MOCK_DATA = {
       label: "# of Votes",
       data: [12, 19, 3],
       backgroundColor: ["#8D8D8D", "#676767", "#EDEDED"],
-      borderColor: ["#8D8D8D", "#676767", "#EDEDED"],
-      borderWidth: 1,
+      borderWidth: 0,
     },
   ],
 };
