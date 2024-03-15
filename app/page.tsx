@@ -6,9 +6,13 @@ import TabsComponent from "@/components/reusable/TabsComponent";
 import ButtonComponent from "@/components/reusable/ButtonComponent";
 import KeroseneCard from "@/components/KeroseneCard/KeroseneCard";
 import NoteCard from "@/components/NoteCard/NoteCard";
-import filterIcon from "@/public/filterIconPng.png";
+
+import SortbyComponent from "@/components/reusable/SortbyComponent";
+import { SORT_BY_OPTIONS } from "@/mockData/tabsMockData";
+import { useState } from "react";
 
 export default function Home() {
+  const [selectedValue, setSelectedValue] = useState("");
   const keroseneCardsData = [
     {
       currency: "ETH - DYAD (Uniswap)",
@@ -33,23 +37,11 @@ export default function Home() {
           Claim Note Nº 228
         </ButtonComponent>
         <div>
-          <ButtonComponent
-            styles={{
-              width: "40px",
-              paddingRight: "0px",
-              paddingLeft: "0px",
-            }}
-            onClick={() => console.log("Filter")}
-          >
-            <div
-              style={{
-                width: "15px",
-                margin: "auto",
-              }}
-            >
-              <img src={filterIcon.src} />
-            </div>
-          </ButtonComponent>
+          <SortbyComponent
+            sortOptions={SORT_BY_OPTIONS}
+            selected={selectedValue}
+            onValueChange={setSelectedValue}
+          />
         </div>
       </div>
       <NoteCard />

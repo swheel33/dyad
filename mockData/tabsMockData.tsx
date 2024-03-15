@@ -252,9 +252,37 @@ export const PIE_CHART_OPTIONS = {
       callbacks: {
         label: (context: any) => {
           const { dataIndex, dataset } = context;
-          return dataset.labels[dataIndex] + ": " + dataset.data[dataIndex];
+          return `  ${dataset.labels[dataIndex]}:  ${dataset.data[dataIndex]}`;
         },
       },
     },
   },
 };
+
+export const SORT_BY_OPTIONS = [
+  { label: "Note ID", value: "Note ID" },
+  {
+    label: "Collateralization ratio: Low-High",
+    value: "Collateralization ratio: Low-High",
+  },
+  {
+    label: "Collateralization ratio: High-Low",
+    value: "Collateralization ratio: High-Low",
+  },
+  {
+    label: "DYAD minted: Low-High",
+    value: "DYAD minted: Low-High",
+  },
+  {
+    label: "DYAD minted: High-Low",
+    value: "DYAD minted: High-Low",
+  },
+  {
+    label: "Collateral: Low-High",
+    value: "Collateral: Low-High",
+  },
+  {
+    label: "Collateral: High-Low",
+    value: "Collateral: High-Low",
+  },
+];
