@@ -1,25 +1,24 @@
 import React from "react";
 import { NoteNumberDataColumnModel } from "@/models/NoteCardModels";
-import {
-  PIE_CHART_MOCK_DATA,
-  PIE_CHART_OPTIONS,
-} from "@/mockData/tabsMockData";
 import PieChartComponent from "@/components/reusable/PieChartComponent";
 
 interface NoteNumberProps {
   data: NoteNumberDataColumnModel[];
+  pieChartData: any;
+  pieChartOptions: any;
 }
 
-const NoteNumber: React.FC<NoteNumberProps> = ({ data }) => {
+const NoteNumber: React.FC<NoteNumberProps> = ({
+  data,
+  pieChartData,
+  pieChartOptions,
+}) => {
   return (
     <div className="flex justify-between">
       <div className="flex justify-between w-full text-[#FAFAFA] px-3.5">
         <div className="w-[295px] justify-center mt-[20px]">
           <div className="w-[185px] m-auto">
-            <PieChartComponent
-              data={PIE_CHART_MOCK_DATA}
-              options={PIE_CHART_OPTIONS}
-            />
+            <PieChartComponent data={pieChartData} options={pieChartOptions} />
           </div>
         </div>
         <div className="mt-[27px]">

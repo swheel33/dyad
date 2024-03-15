@@ -8,7 +8,11 @@ import KeroseneCard from "@/components/KeroseneCard/KeroseneCard";
 import NoteCard from "@/components/NoteCard/NoteCard";
 
 import SortbyComponent from "@/components/reusable/SortbyComponent";
-import { SORT_BY_OPTIONS } from "@/mockData/tabsMockData";
+import {
+  SORT_BY_OPTIONS,
+  TABS_MOCK_DATA,
+  TABS_MOCK_DATA_1,
+} from "@/mockData/tabsMockData";
 import { useState } from "react";
 
 export default function Home() {
@@ -44,7 +48,12 @@ export default function Home() {
           />
         </div>
       </div>
-      <NoteCard />
+      <div className="mb-[25px]">
+        <NoteCard tabsData={TABS_MOCK_DATA} />
+      </div>
+      <div className="mb-[25px]">
+        <NoteCard tabsData={TABS_MOCK_DATA_1} />
+      </div>
     </>
   );
 

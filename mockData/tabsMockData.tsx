@@ -58,13 +58,72 @@ export const VAULT_CARDS_DATA: VaultCardDataModel[] = [
   // },
 ];
 
+export const PIE_CHART_MOCK_DATA = {
+  width: "50",
+  datasets: [
+    {
+      rotation: 90,
+      data: [70, 45],
+      labels: ["DYAD minted", "DYAD mintable"],
+      backgroundColor: ["#DEDEDE", "#45E845"],
+      borderWidth: 0,
+      cutout: 85,
+    },
+    {
+      labels: ["% collateral 1", "% collateral 2", "% collateral 3"],
+      data: [12, 19, 3],
+      backgroundColor: ["#8D8D8D", "#676767", "#EDEDED"],
+      borderWidth: 0,
+      radius: "155%",
+    },
+  ],
+};
+
+export const PIE_CHART_MOCK_DATA_1 = {
+  width: "50",
+  datasets: [
+    {
+      rotation: 90,
+      data: [70, 15],
+      labels: ["DYAD minted", "DYAD mintable"],
+      backgroundColor: ["#DEDEDE", "#E88045"],
+      borderWidth: 0,
+      cutout: 85,
+    },
+    {
+      labels: ["% collateral 1", "% collateral 2", "% collateral 3"],
+      data: [12, 19, 3],
+      backgroundColor: ["#8D8D8D", "#676767", "#EDEDED"],
+      borderWidth: 0,
+      radius: "155%",
+    },
+  ],
+};
+
+export const PIE_CHART_OPTIONS = {
+  plugins: {
+    tooltip: {
+      callbacks: {
+        label: (context: any) => {
+          const { dataIndex, dataset } = context;
+          return `  ${dataset.labels[dataIndex]}:  ${dataset.data[dataIndex]}`;
+        },
+      },
+    },
+  },
+};
+
 export const TABS_MOCK_DATA: TabsDataModel[] = [
   {
     label: "Note Nº 223",
     tabKey: "Note Nº 223",
     content: (
       <div>
-        <NoteNumber data={NOTE_NUMBER_MOCK_DATA} />
+        <NoteNumber
+          data={NOTE_NUMBER_MOCK_DATA}
+          pieChartData={PIE_CHART_MOCK_DATA}
+          pieChartOptions={PIE_CHART_OPTIONS}
+        />
       </div>
     ),
   },
@@ -109,6 +168,38 @@ export const TABS_MOCK_DATA: TabsDataModel[] = [
   //     </div>
   //   ),
   // },
+];
+
+export const TABS_MOCK_DATA_1: TabsDataModel[] = [
+  {
+    label: "Note Nº 224",
+    tabKey: "Note Nº 224",
+    content: (
+      <div>
+        <NoteNumber
+          data={NOTE_NUMBER_MOCK_DATA}
+          pieChartData={PIE_CHART_MOCK_DATA_1}
+          pieChartOptions={PIE_CHART_OPTIONS}
+        />
+      </div>
+    ),
+  },
+  {
+    label: "Deposit and Withdraw",
+    tabKey: "Deposit and Withdraw",
+    content: (
+      <Deposit
+        total_collateral="$10,801"
+        collateralization_ratio="320%"
+        vault_cards={VAULT_CARDS_DATA}
+      />
+    ),
+  },
+  {
+    label: "Mint DYAD",
+    tabKey: "Mint DYAD",
+    content: <Mint dyadMinted="3,000" currentCr="300%" newCr="320%" />,
+  },
 ];
 
 export const getLpModalData = (pool: string) => [
@@ -224,40 +315,6 @@ export const LpColumns = [
     label: "TVL",
   },
 ];
-
-export const PIE_CHART_MOCK_DATA = {
-  width: "50",
-  datasets: [
-    {
-      rotation: -50,
-      data: [12, 19],
-      labels: ["DYAD mintable", "DYAD minted"],
-      backgroundColor: ["#45E845", "#DEDEDE"],
-      borderWidth: 0,
-      cutout: 85,
-    },
-    {
-      labels: ["% collateral 1", "% collateral 2", "% collateral 3"],
-      data: [12, 19, 3],
-      backgroundColor: ["#8D8D8D", "#676767", "#EDEDED"],
-      borderWidth: 0,
-      radius: "155%",
-    },
-  ],
-};
-
-export const PIE_CHART_OPTIONS = {
-  plugins: {
-    tooltip: {
-      callbacks: {
-        label: (context: any) => {
-          const { dataIndex, dataset } = context;
-          return `  ${dataset.labels[dataIndex]}:  ${dataset.data[dataIndex]}`;
-        },
-      },
-    },
-  },
-};
 
 export const SORT_BY_OPTIONS = [
   { label: "Note ID", value: "Note ID" },
