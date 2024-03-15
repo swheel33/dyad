@@ -226,14 +226,35 @@ export const LpColumns = [
 ];
 
 export const PIE_CHART_MOCK_DATA = {
-  labels: ["label 1", "label 2", "label 3"],
   width: "50",
   datasets: [
     {
-      label: "# of Votes",
+      rotation: -50,
+      data: [12, 19],
+      labels: ["DYAD mintable", "DYAD minted"],
+      backgroundColor: ["#45E845", "#DEDEDE"],
+      borderWidth: 0,
+      cutout: 85,
+    },
+    {
+      labels: ["% collateral 1", "% collateral 2", "% collateral 3"],
       data: [12, 19, 3],
       backgroundColor: ["#8D8D8D", "#676767", "#EDEDED"],
       borderWidth: 0,
+      radius: "155%",
     },
   ],
+};
+
+export const PIE_CHART_OPTIONS = {
+  plugins: {
+    tooltip: {
+      callbacks: {
+        label: (context: any) => {
+          const { dataIndex, dataset } = context;
+          return dataset.labels[dataIndex] + ": " + dataset.data[dataIndex];
+        },
+      },
+    },
+  },
 };
