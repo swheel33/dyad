@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ButtonComponent from "../reusable/ButtonComponent";
 import InputComponent from "../reusable/InputComponent";
 import NoteCardsContainer from "../reusable/NoteCardsContainer";
@@ -13,16 +13,26 @@ const CheckEligibilityCard: React.FC<CheckEligibilityCardProps> = ({}) => {
       keroseneEarned: "1200",
     },
   ]);
+
+  const [isCheckDisabled, setIsCheckDisabled] = useState(false);
+
+  useEffect(() => {
+    walletAdresses ? setIsCheckDisabled(false) : setIsCheckDisabled(true);
+  }, [walletAdresses, setIsCheckDisabled]);
+
   const onCheckHandler = () => {
-    setCheckedData((prevState: any) => [
-      ...prevState,
-      ...walletAdresses.split(" ").map((address: string) => ({
-        walletAddress: address,
-        keroseneEarned: "1200",
-      })),
-    ]);
-    setWalletAddresses("");
+    if (walletAdresses) {
+      setCheckedData((prevState: any) => [
+        ...walletAdresses.split(" ").map((address: string) => ({
+          walletAddress: address,
+          keroseneEarned: "1200",
+        })),
+        ...prevState,
+      ]);
+      setWalletAddresses("");
+    }
   };
+
   return (
     <NoteCardsContainer height="339px">
       <div className="text-sm font-semibold text-[#A1A1AA]">
@@ -35,7 +45,12 @@ const CheckEligibilityCard: React.FC<CheckEligibilityCardProps> = ({}) => {
             />
           </div>
           <div className="w-[101px] ml-[30px]">
-            <ButtonComponent onClick={onCheckHandler}>Check</ButtonComponent>
+            <ButtonComponent
+              disabled={isCheckDisabled}
+              onClick={onCheckHandler}
+            >
+              <p style={isCheckDisabled ? {} : { color: "#FAFAFA" }}>Check</p>
+            </ButtonComponent>
           </div>
         </div>
         <div className="w-full w-full">
@@ -51,9 +66,9 @@ const CheckEligibilityCard: React.FC<CheckEligibilityCardProps> = ({}) => {
               paddingRight: "15px",
             }}
           >
-            {checkedData.map((data: any) => (
+            {checkedData.map((data: any, index: number) => (
               <div
-                key={data.walletAddress}
+                key={index}
                 className="flex justify-between mb-[43px] text-sm text-[#FAFAFA]"
               >
                 <div className="font-normal">{data.walletAddress}</div>

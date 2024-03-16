@@ -5,6 +5,7 @@ interface ButtonComponentProps {
   variant?: "solid" | "bordered";
   children: JSX.Element | string;
   onClick?: () => void;
+  disabled?: boolean;
 }
 
 const MAIN_BUTTON_STYLES = " px-[23px] h-[39px] w-full text-sm";
@@ -22,12 +23,14 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
   variant = "solid",
   children,
   onClick = () => {},
+  disabled = false,
 }) => {
   return (
     <button
       className={`${classNames[variant]} ${MAIN_BUTTON_STYLES}`}
       style={styles}
       onClick={onClick}
+      disabled={disabled}
     >
       {children}
     </button>
