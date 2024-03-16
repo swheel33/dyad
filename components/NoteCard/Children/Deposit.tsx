@@ -8,6 +8,7 @@ import AddVaultModal from "@/components/Modals/NoteCardModals/DepositModals/AddV
 import { MAX_DEPOSIT_VAULTS } from "@/constants/NoteCards";
 import EditVaultTabContent from "@/components/Modals/NoteCardModals/DepositModals/EditVault/EditVaultTabContent";
 import { VaultTypes } from "@/mockData/cardModels";
+import { COLORS } from "@/constants/styles";
 
 interface DepositProps {
   total_collateral: string;
@@ -85,11 +86,11 @@ const Deposit: React.FC<DepositProps> = ({
   return (
     <div className="w-full">
       <div className="flex justify-between text-sm font-semibold my-[37px] px-[15px]">
-        <div className="flex text-[#A1A1AA]">
+        <div className={`flex text-[${COLORS.GREY}]`}>
           <div className="mr-[5px]">Total collateral: </div>
           <div>{total_collateral}</div>
         </div>
-        <div className="flex text-[#FAFAFA]">
+        <div className={`flex text-[${COLORS.WHITE}]`}>
           <div className="mr-[5px]">Collateralization ratio:</div>
           <div>{collateralization_ratio}</div>
         </div>

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import InputComponent from "@/components/reusable/InputComponent";
 import ButtonComponent from "@/components/reusable/ButtonComponent";
+import { COLORS } from "@/constants/styles";
 
 interface MintProps {
   dyadMinted: string;
@@ -24,7 +25,7 @@ const Mint: React.FC<MintProps> = ({ dyadMinted, currentCr, newCr }) => {
   const burntHandler = () => console.log("Burned");
 
   return (
-    <div className="text-sm font-semibold text-[#A1A1AA]">
+    <div className={`text-sm font-semibold text-[${COLORS.GREY}]`}>
       <div className="flex justify-between mt-[32px] w-full">
         <div className="w-[380px] ">
           <InputComponent

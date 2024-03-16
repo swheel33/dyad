@@ -3,6 +3,7 @@ import filterIcon from "@/public/filterIconPng.png";
 import PopupComponent from "@/components/reusable/PopupComponent";
 import ButtonComponent from "./ButtonComponent";
 import { RadioGroup, Radio } from "@nextui-org/react";
+import { COLORS } from "@/constants/styles";
 
 interface SortOptionsInterface {
   label: string;
@@ -48,7 +49,7 @@ const SortbyComponent: React.FC<SortbyComponentProps> = ({
         <div className="p-[20px]">
           <RadioGroup
             classNames={{
-              label: "text-[#FAFAFA] text-sm font-semibold",
+              label: `text-[${COLORS.WHITE}] text-sm font-semibold`,
             }}
             label={label}
             value={selected}
@@ -59,7 +60,7 @@ const SortbyComponent: React.FC<SortbyComponentProps> = ({
                 key={sortOption.value}
                 classNames={{
                   base: "pt-[15px]",
-                  label: "text-[#FAFAFA] text-sm font-semibold ",
+                  label: `text-[${COLORS.WHITE}] text-sm font-semibold`,
                 }}
                 value={sortOption.value}
               >

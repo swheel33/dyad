@@ -3,6 +3,7 @@ import InputComponent from "@/components/reusable/InputComponent";
 import ButtonComponent from "@/components/reusable/ButtonComponent";
 import useModal from "@/contexts/modal";
 import { VaultTypes } from "@/mockData/cardModels";
+import { COLORS } from "@/constants/styles";
 
 interface EditVaultTabContentProps {
   type: VaultTypes;
@@ -50,7 +51,7 @@ const EditVaultTabContent: React.FC<EditVaultTabContentProps> = ({
         </div>
       </div>
       <div className="flex w-full mt-[35px] justify-between px-[10px] font-semibold text-sm">
-        <div className="flex text-[#A1A1AA]">
+        <div className={`flex text-[${COLORS.GREY}]`}>
           <div className="mr-[5px]">Current collateralization ratio:</div>
           <div>{currentCollateralizationRatio}</div>
         </div>

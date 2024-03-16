@@ -1,5 +1,6 @@
 import React, { ReactNode } from "react";
 import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/react";
+import { COLORS } from "@/constants/styles";
 
 interface PopupComponentProps {
   placement?: any;
@@ -16,7 +17,7 @@ const PopupComponent: React.FC<PopupComponentProps> = ({
     <Popover
       placement={placement}
       classNames={{
-        content: ["bg-[#09090B] rounded-lg border border-[#FAFAFA]"],
+        content: [`bg-[#09090B] rounded-lg border border-[${COLORS.WHITE}]`],
       }}
     >
       <PopoverTrigger>{trigger}</PopoverTrigger>

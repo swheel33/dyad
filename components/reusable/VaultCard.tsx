@@ -1,3 +1,4 @@
+import { COLORS } from "@/constants/styles";
 import { VaultCardDataModel } from "@/models/NoteCardModels";
 import React from "react";
 
@@ -12,7 +13,9 @@ const VaultCard: React.FC<VaultCardProps> = ({ data, onClick }) => {
       className="w-[100px] h-[100px] cursor-pointer bg-[#282828] flex"
       onClick={onClick}
     >
-      <div className="font-semibold text-[#FAFAFA] m-auto text-sm text-center">
+      <div
+        className={`font-semibold text-[${COLORS.WHITE}] m-auto text-sm text-center`}
+      >
         <div className="mb-[2.5px]">{data.currency}</div>
         <div className="mt-[2.5px]">{data.value}</div>
       </div>

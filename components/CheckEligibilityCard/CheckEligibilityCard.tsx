@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import ButtonComponent from "../reusable/ButtonComponent";
 import InputComponent from "../reusable/InputComponent";
 import NoteCardsContainer from "../reusable/NoteCardsContainer";
+import { COLORS } from "@/constants/styles";
 
 interface CheckEligibilityCardProps {}
 
@@ -35,7 +36,7 @@ const CheckEligibilityCard: React.FC<CheckEligibilityCardProps> = ({}) => {
 
   return (
     <NoteCardsContainer height="339px">
-      <div className="text-sm font-semibold text-[#A1A1AA]">
+      <div className={`text-sm font-semibold text-[${COLORS.GREEN}]`}>
         <div className="flex justify-between w-full">
           <div className="w-full">
             <InputComponent
@@ -49,12 +50,16 @@ const CheckEligibilityCard: React.FC<CheckEligibilityCardProps> = ({}) => {
               disabled={isCheckDisabled}
               onClick={onCheckHandler}
             >
-              <p style={isCheckDisabled ? {} : { color: "#FAFAFA" }}>Check</p>
+              <p style={isCheckDisabled ? {} : { color: COLORS.WHITE }}>
+                Check
+              </p>
             </ButtonComponent>
           </div>
         </div>
         <div className="w-full w-full">
-          <div className="flex justify-between mt-[43px] pb-[43px] text-sm text-[#FAFAFA]">
+          <div
+            className={`flex justify-between mt-[43px] pb-[43px] text-sm text-[${COLORS.WHITE}]`}
+          >
             <div>Address</div>
             <div>Kerosene earned</div>
           </div>
@@ -69,7 +74,7 @@ const CheckEligibilityCard: React.FC<CheckEligibilityCardProps> = ({}) => {
             {checkedData.map((data: any, index: number) => (
               <div
                 key={index}
-                className="flex justify-between mb-[43px] text-sm text-[#FAFAFA]"
+                className={`flex justify-between mb-[43px] text-sm text-[${COLORS.WHITE}]`}
               >
                 <div className="font-normal">{data.walletAddress}</div>
                 <div>{data.keroseneEarned}</div>

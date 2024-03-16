@@ -1,6 +1,7 @@
 import React from "react";
 import { Tabs, Tab } from "@nextui-org/react";
 import { TabsDataModel } from "@/models/TabsModel";
+import { COLORS } from "@/constants/styles";
 
 interface tabsComponentPropsInterface {
   tabsData: TabsDataModel[];
@@ -28,7 +29,7 @@ export default function TabsComponent({
             tabList: `justify-between ${
               logo ? "w-3/6" : "w-full"
             } relative rounded-none p-0 border-b border-divider ml-auto`,
-            cursor: "w-full bg-[#FAFAFA]",
+            cursor: `w-full bg-[${COLORS.WHITE}]`,
             tab: "max-w-fit h-7 font-semibold",
           }}
         >

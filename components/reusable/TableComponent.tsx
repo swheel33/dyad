@@ -8,6 +8,7 @@ import {
   Table,
 } from "@nextui-org/react";
 import React from "react";
+import { COLORS } from "@/constants/styles";
 
 interface TableComponentProps {
   columns: any;
@@ -31,9 +32,9 @@ const TableComponent: React.FC<TableComponentProps> = ({
         classNames={{
           th: " table-header ",
           tbody: "px-0 h-full ",
-          tr: `${onRowClick ? "cursor-pointer hover:text-[#a1a1aa]" : ""} ${
-            size === "compact" ? "h-[35px]" : "h-[50px]"
-          } table-row `,
+          tr: `${
+            onRowClick ? `cursor-pointer hover:text-[${COLORS.GREY}]` : ""
+          } ${size === "compact" ? "h-[35px]" : "h-[50px]"} table-row `,
           td: "px-0 pr-[8px]",
         }}
       >

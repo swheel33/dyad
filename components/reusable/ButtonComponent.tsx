@@ -1,3 +1,4 @@
+import { COLORS } from "@/constants/styles";
 import React from "react";
 
 interface ButtonComponentProps {
@@ -28,7 +29,7 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
   return (
     <button
       className={`${classNames[variant]} ${MAIN_BUTTON_STYLES}`}
-      style={{ color: "#FAFAFA", fontWeight: "400", ...styles }}
+      style={{ color: COLORS.WHITE, fontWeight: "400", ...styles }}
       onClick={onClick}
       disabled={disabled}
     >

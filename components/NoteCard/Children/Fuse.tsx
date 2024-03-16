@@ -1,5 +1,6 @@
 import ButtonComponent from "@/components/reusable/ButtonComponent";
 import InputComponent from "@/components/reusable/InputComponent";
+import { COLORS } from "@/constants/styles";
 import React, { useState } from "react";
 
 interface FuseProps {
@@ -18,7 +19,7 @@ const Fuse: React.FC<FuseProps> = ({ fusedKerosene, currentCr, newCr }) => {
   const submitHandler = () => console.log("Fused");
 
   return (
-    <div className="text-sm font-semibold text-[#A1A1AA]">
+    <div className={`text-sm font-semibold text-[${COLORS.GREY}]`}>
       <div className="flex justify-between mt-[60px] w-full">
         <div className="w-[380px] ">
           <InputComponent

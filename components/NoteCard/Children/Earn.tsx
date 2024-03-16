@@ -1,5 +1,6 @@
 import ButtonComponent from "@/components/reusable/ButtonComponent";
 import InputComponent from "@/components/reusable/InputComponent";
+import { COLORS } from "@/constants/styles";
 import React, { useState } from "react";
 
 interface EarnProps {
@@ -24,7 +25,7 @@ const Earn: React.FC<EarnProps> = ({ apy, currentCr, newCr }) => {
   const burntHandler = () => console.log("Burned");
 
   return (
-    <div className="text-sm font-semibold text-[#A1A1AA]">
+    <div className={`text-sm font-semibold text-[${COLORS.GREY}]`}>
       <div className="flex justify-between mt-[32px] w-full">
         <div className="w-[380px] ">
           <InputComponent

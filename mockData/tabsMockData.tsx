@@ -6,6 +6,7 @@ import Lp from "@/components/NoteCard/Children/Lp";
 import Mint from "@/components/NoteCard/Children/Mint";
 import NoteNumber from "@/components/NoteCard/Children/NoteNumber";
 import ButtonComponent from "@/components/reusable/ButtonComponent";
+import { COLORS } from "@/constants/styles";
 import {
   NoteNumberDataColumnModel,
   VaultCardDataModel,
@@ -60,7 +61,7 @@ export const PIE_CHART_MOCK_DATA = {
       rotation: 90,
       data: [70, 45],
       labels: ["DYAD minted", "DYAD mintable"],
-      backgroundColor: ["#DEDEDE", "#45E845"],
+      backgroundColor: ["#DEDEDE", COLORS.GREEN],
       borderWidth: 0,
       cutout: 85,
     },
@@ -81,7 +82,7 @@ export const PIE_CHART_MOCK_DATA_1 = {
       rotation: 90,
       data: [70, 15],
       labels: ["DYAD minted", "DYAD mintable"],
-      backgroundColor: ["#DEDEDE", "#E88045"],
+      backgroundColor: ["#DEDEDE", COLORS.ORANGE],
       borderWidth: 0,
       cutout: 85,
     },
