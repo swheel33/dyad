@@ -28,7 +28,7 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
   return (
     <button
       className={`${classNames[variant]} ${MAIN_BUTTON_STYLES}`}
-      style={styles}
+      style={{ color: "#FAFAFA", fontWeight: "400", ...styles }}
       onClick={onClick}
       disabled={disabled}
     >
