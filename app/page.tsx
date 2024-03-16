@@ -14,6 +14,7 @@ import {
   TABS_MOCK_DATA_1,
 } from "@/mockData/tabsMockData";
 import { useState } from "react";
+import CheckEligibilityCard from "@/components/CheckEligibilityCard/CheckEligibilityCard";
 
 export default function Home() {
   const [selectedValue, setSelectedValue] = useState("");
@@ -85,6 +86,11 @@ export default function Home() {
       label: "Earn Kerosene",
       tabKey: "Earn Kerosene",
       content: keroseneData,
+    },
+    {
+      label: "Check Eligibility",
+      tabKey: "Check Eligibility",
+      content: <CheckEligibilityCard />,
     },
   ];
 

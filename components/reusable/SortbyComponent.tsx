@@ -56,6 +56,7 @@ const SortbyComponent: React.FC<SortbyComponentProps> = ({
           >
             {sortOptions.map((sortOption: SortOptionsInterface) => (
               <Radio
+                key={sortOption.value}
                 classNames={{
                   base: "pt-[15px]",
                   label: "text-[#FAFAFA] text-sm font-semibold ",

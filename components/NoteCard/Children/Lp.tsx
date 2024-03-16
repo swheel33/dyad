@@ -15,7 +15,6 @@ const Lp: React.FC<LpProps> = ({ totalStake, totalPercentage, momentum }) => {
 
   const onRowClickHandler = (key: string) => {
     pushModal(<LpStakeModal tabsData={getLpModalData(key)} logo={key} />);
-    console.log(key);
   };
   return (
     <div>
