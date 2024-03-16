@@ -21,11 +21,11 @@ const NoteNumber: React.FC<NoteNumberProps> = ({
             <PieChartComponent data={pieChartData} options={pieChartOptions} />
           </div>
         </div>
-        <div className="mt-[27px]">
+        <div className="mt-[47px]">
           {data.map((item: any, index: number) => (
             <div
               key={index}
-              className={`flex w-60 justify-between mb-[25px] text-sm ${
+              className={`flex w-60 justify-between mb-[40px] text-sm ${
                 item.highlighted ? "text-[#FAFAFA]" : "text-[#A1A1AA]"
               }`}
             >

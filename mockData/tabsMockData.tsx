@@ -28,11 +28,6 @@ export const NOTE_NUMBER_MOCK_DATA: NoteNumberDataColumnModel[] = [
     value: "$10,805",
     highlighted: false,
   },
-  {
-    text: "Fused Kerosene",
-    value: "800",
-    highlighted: false,
-  },
 ];
 
 export const VAULT_CARDS_DATA: VaultCardDataModel[] = [
@@ -92,7 +87,7 @@ export const PIE_CHART_MOCK_DATA_1 = {
     },
     {
       labels: ["% collateral 1", "% collateral 2", "% collateral 3"],
-      data: [12, 19, 3],
+      data: [18, 35, 27],
       backgroundColor: ["#8D8D8D", "#676767", "#EDEDED"],
       borderWidth: 0,
       radius: "155%",
