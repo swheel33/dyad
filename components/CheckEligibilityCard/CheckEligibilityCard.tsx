@@ -21,6 +21,7 @@ const CheckEligibilityCard: React.FC<CheckEligibilityCardProps> = ({}) => {
         keroseneEarned: "1200",
       })),
     ]);
+    setWalletAddresses("");
   };
   return (
     <NoteCardsContainer height="339px">
@@ -28,7 +29,7 @@ const CheckEligibilityCard: React.FC<CheckEligibilityCardProps> = ({}) => {
         <div className="flex justify-between w-full">
           <div className="w-full">
             <InputComponent
-              placeHolder={`Enter one or more wallet addresses separated by a space or enter `}
+              placeHolder={`Enter one or more wallet addresses separated by a space`}
               value={walletAdresses}
               onValueChange={setWalletAddresses}
             />
