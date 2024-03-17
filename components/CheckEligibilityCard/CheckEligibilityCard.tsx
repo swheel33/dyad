@@ -36,7 +36,7 @@ const CheckEligibilityCard: React.FC<CheckEligibilityCardProps> = ({}) => {
 
   return (
     <NoteCardsContainer height="339px">
-      <div className={`text-sm font-semibold text-[${COLORS.GREEN}]`}>
+      <div className={`text-sm font-semibold text-[${COLORS.WHITE}]`}>
         <div className="flex justify-between w-full">
           <div className="w-full">
             <InputComponent
