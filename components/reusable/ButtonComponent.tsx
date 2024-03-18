@@ -1,5 +1,5 @@
-import { COLORS } from "@/constants/styles";
 import React from "react";
+import { COLORS } from "@/constants/styles";
 
 interface ButtonComponentProps {
   styles?: {};

@@ -1,4 +1,3 @@
-import { COLORS } from "@/constants/styles";
 import React from "react";
 
 interface NoteCardsContainerPropsInterface {
@@ -14,8 +13,8 @@ function NoteCardsContainer({
 }: NoteCardsContainerPropsInterface) {
   return (
     <div
-      className={`flex-1 max-w-screen-md p-7 rounded-[10px]`}
-      style={{ height, width, background: COLORS.DARK_GREY }}
+      className={`flex-1 max-w-screen-md p-7 rounded-[10px] dark-grey-background`}
+      style={{ height, width }}
     >
       {children}
     </div>

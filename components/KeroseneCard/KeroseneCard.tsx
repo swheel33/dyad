@@ -2,7 +2,6 @@ import { useState } from "react";
 import InputComponent from "@/components/reusable/InputComponent";
 import ButtonComponent from "@/components/reusable/ButtonComponent";
 import NoteCardsContainer from "../reusable/NoteCardsContainer";
-import { COLORS } from "@/constants/styles";
 
 interface KeroseneProps {
   currency: string;
@@ -33,9 +32,9 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
 
   return (
     <NoteCardsContainer>
-      <div className={`text-sm font-semibold text-[${COLORS.GREY}]`}>
+      <div className={`text-sm font-semibold grey-font`}>
         <div
-          className={`text-2xl text-[${COLORS.WHITE}] flex justify-between mt-[15px] w-full`}
+          className={`text-2xl white-font flex justify-between mt-[15px] w-full`}
         >
           <div>{currency}</div>
           <div>{APY}% APY</div>

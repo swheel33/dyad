@@ -1,4 +1,3 @@
-import { COLORS } from "@/constants/styles";
 import React from "react";
 
 interface AddVaultButtonProps {
@@ -11,9 +10,7 @@ const AddVaultButton: React.FC<AddVaultButtonProps> = ({ onClick }) => {
       className="w-[100px] h-[100px] cursor-pointer bg-[#282828] flex"
       onClick={onClick ? onClick : () => {}}
     >
-      <div
-        className={`font-semibold text-[${COLORS.WHITE}] m-auto text-sm text-center`}
-      >
+      <div className={`font-semibold white-font m-auto text-sm text-center`}>
         <div className="mb-[2.5px]">+</div>
       </div>
     </div>

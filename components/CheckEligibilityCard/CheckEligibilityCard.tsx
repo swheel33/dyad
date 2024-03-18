@@ -36,7 +36,7 @@ const CheckEligibilityCard: React.FC<CheckEligibilityCardProps> = ({}) => {
 
   return (
     <NoteCardsContainer height="339px">
-      <div className={`text-sm font-semibold text-[${COLORS.WHITE}]`}>
+      <div className={`text-sm font-semibold white-font`}>
         <div className="flex justify-between w-full">
           <div className="w-full">
             <InputComponent
@@ -58,7 +58,7 @@ const CheckEligibilityCard: React.FC<CheckEligibilityCardProps> = ({}) => {
         </div>
         <div className="w-full w-full">
           <div
-            className={`flex justify-between mt-[43px] pb-[43px] text-sm text-[${COLORS.WHITE}]`}
+            className={`flex justify-between mt-[43px] pb-[43px] text-sm white-font`}
           >
             <div>Address</div>
             <div>Kerosene earned</div>
@@ -74,7 +74,7 @@ const CheckEligibilityCard: React.FC<CheckEligibilityCardProps> = ({}) => {
             {checkedData.map((data: any, index: number) => (
               <div
                 key={index}
-                className={`flex justify-between mb-[43px] text-sm text-[${COLORS.WHITE}]`}
+                className={`flex justify-between mb-[43px] text-sm white-font`}
               >
                 <div className="font-normal">{data.walletAddress}</div>
                 <div>{data.keroseneEarned}</div>

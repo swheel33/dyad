@@ -34,6 +34,12 @@
     --ring: 240 5% 64.9%;
 
     --radius: 0.5rem;
+
+    --white: #fafafa;
+    --grey: #a1a1aa;
+    --green: #45e845;
+    --dark-grey: #1a1a1a;
+    --orange: #e88045;
   }
 
   *::-webkit-scrollbar {
@@ -59,8 +65,8 @@
 
   .table-header {
     border-radius: 0px !important;
-    background: #1a1a1a !important;
-    color: #a1a1aa !important;
+    background: var(--dark-grey) !important;
+    color: var(--grey) !important;
     font-weight: 600 !important;
     font-size: 14px !important;
     position: sticky !important;
@@ -74,9 +80,67 @@
     border-bottom: 1px solid #282828 !important;
     font-weight: 600 !important;
     font-size: 14px !important;
-    /* padding-right: 20px !important; */
-    /* padding-left: 0px !important; */
     color: #ffffff;
+  }
+
+  .white-background {
+    background: var(--white);
+  }
+
+  .white-font {
+    color: var(--white);
+  }
+
+  .white-border {
+    border-color: var(--white);
+  }
+
+  .grey-background {
+    background: var(--grey);
+  }
+
+  .grey-font {
+    color: var(--grey);
+  }
+
+  .grey-border {
+    border-color: var(--grey);
+  }
+
+  .green-background {
+    background: var(--green);
+  }
+
+  .green-font {
+    color: var(--green);
+  }
+
+  .green-border {
+    border-color: var(--green);
+  }
+
+  .dark-grey-background {
+    background: var(--dark-grey);
+  }
+
+  .dark-grey-font {
+    color: var(--dark-grey);
+  }
+
+  .dark-grey-border {
+    border-color: var(--dark-grey);
+  }
+
+  .orange-background {
+    background: var(--orange);
+  }
+
+  .orange-font {
+    color: var(--orange);
+  }
+
+  .orange-border {
+    border-color: var(--orange);
   }
 
   .dark {
