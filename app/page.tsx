@@ -3,6 +3,9 @@
 import { useState, useEffect } from "react";
 import { Separator } from "@/components/ui/separator";
 import DnftBox from "@/components/dnft-box";
+import NoteOverview from "@/components/v2/NoteOverview";
+import Deposit from "@/components/v2/Deposit";
+import Mint from "@/components/v2/Mint";
 
 export default function Home() {
   const [showMobileWarning, setShowMobileWarning] = useState(false);
@@ -26,7 +29,9 @@ export default function Home() {
         <div>
           <Separator className="my-4" />
         </div>
-        <DnftBox />
+        <NoteOverview />
+        <Deposit />
+        <Mint />
       </div>
       <div className="show-on-mobile text-md font-medium leading-loose pt-3 p-4">
         The DYAD app is not yet available on mobile. Please use a desktop
