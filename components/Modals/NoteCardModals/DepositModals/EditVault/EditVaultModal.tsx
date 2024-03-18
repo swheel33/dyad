@@ -1,4 +1,3 @@
-import NoteCardsContainer from "@/components/reusable/NoteCardsContainer";
 import TabsComponent from "@/components/reusable/TabsComponent";
 import { TabsDataModel } from "@/models/TabsModel";
 import React from "react";
@@ -10,14 +9,11 @@ interface EditVaultModalProps {
 
 const EditVaultModal: React.FC<EditVaultModalProps> = ({ tabsData, logo }) => {
   return (
-    <div>
-      <NoteCardsContainer>
-        <TabsComponent
-          tabsData={tabsData}
-          logo={<div className="text-2xl font-semibold">{logo}</div>}
-        />
-      </NoteCardsContainer>
-    </div>
+    <TabsComponent
+      tabsData={tabsData}
+      logo={logo}
+      inModal
+    />
   );
 };
 export default EditVaultModal;

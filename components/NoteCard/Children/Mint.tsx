@@ -1,38 +1,86 @@
+"use client";
+
 import { useState } from "react";
-import InputComponent from "@/components/reusable/InputComponent";
 import ButtonComponent from "@/components/reusable/ButtonComponent";
+import { BigIntInput } from "@/components/reusable/BigIntInput";
+import { useTransactionStore } from "@/lib/store";
+import {
+  useReadDyadMintedDyad,
+  useReadVaultGetUsdValue,
+  useReadVaultManagerMinCollaterizationRatio,
+  vaultManagerAbi,
+  vaultManagerAddress,
+} from "@/generated";
+import { defaultChain } from "@/lib/config";
+import { useAccount } from "wagmi";
+import { formatNumber, fromBigNumber, toBigNumber } from "@/lib/utils";
+import { maxUint256 } from "viem";
 
 interface MintProps {
+  tokenId: string;
   dyadMinted: string;
-  currentCr: string;
-  newCr: string;
+  currentCr: bigint | undefined;
 }
 
-const Mint: React.FC<MintProps> = ({ dyadMinted, currentCr, newCr }) => {
+const Mint: React.FC<MintProps> = ({ dyadMinted, currentCr, tokenId }) => {
   const [mintInputValue, setMintInputValue] = useState("");
   const [burnInputValue, setBurnInputValue] = useState("");
+  const { setTransactionData } = useTransactionStore();
+
+  const { data: mintedDyad } = useReadDyadMintedDyad({
+    args: [vaultManagerAddress[defaultChain.id], BigInt(tokenId)],
+    chainId: defaultChain.id,
+  });
+
+  const { data: collateralValue } = useReadVaultGetUsdValue({
+    args: [BigInt(tokenId)],
+    chainId: defaultChain.id,
+  });
+
+  const { data: minCollateralizationRatio } =
+    useReadVaultManagerMinCollaterizationRatio({ chainId: defaultChain.id });
+
+  const newCr =
+    (mintedDyad || 0n) +
+      (BigInt(mintInputValue) || 0n) -
+      (BigInt(burnInputValue) || 0n) !==
+    0n
+      ? ((collateralValue || 0n) * 100n) /
+        ((mintedDyad || 0n) +
+          (BigInt(mintInputValue) || 0n) -
+          (BigInt(burnInputValue) || 0n))
+      : 0n;
+  const { address } = useAccount();
 
   const onMaxMintHandler = () => {
-    setMintInputValue("9999999");
+    setMintInputValue(
+      toBigNumber(
+        Math.round(
+          (fromBigNumber(collateralValue) -
+            fromBigNumber(minCollateralizationRatio) *
+              fromBigNumber(mintedDyad)) /
+            fromBigNumber(minCollateralizationRatio)
+        )
+      ).toString()
+    );
   };
 
   const onMaxBurnHandler = () => {
-    setBurnInputValue("9999999");
+    setBurnInputValue(mintedDyad?.toString() || "0");
   };
 
-  const mintHandler = () => console.log("Minted");
-  const burntHandler = () => console.log("Burned");
+  if (collateralValue === 0n && !collateralValue) {
+    return <p>Deposit collateral to mint DYAD</p>;
+  }
 
   return (
     <div className="text-sm font-semibold text-[#A1A1AA]">
       <div className="flex justify-between mt-[32px] w-full">
         <div className="w-[380px] ">
-          <InputComponent
-            placeHolder={`Amount of DYAD to mint`}
-            onValueChange={setMintInputValue}
+          <BigIntInput
             value={mintInputValue}
-            type="number"
-            max={9999999}
+            onChange={(value) => setMintInputValue(value)}
+            placeholder="Amount of DYAD to mint..."
           />
         </div>
         <div className="w-[74px]">
@@ -41,7 +89,54 @@ const Mint: React.FC<MintProps> = ({ dyadMinted, currentCr, newCr }) => {
           </ButtonComponent>
         </div>
         <div className="w-[128px]">
-          <ButtonComponent onClick={mintHandler}>Mint</ButtonComponent>
+          <ButtonComponent
+            onClick={() =>
+              setTransactionData({
+                config: {
+                  address: vaultManagerAddress[defaultChain.id],
+                  abi: vaultManagerAbi,
+                  functionName: "mintDyad",
+                  args: [tokenId, mintInputValue, address],
+                },
+                description: `Mint ${fromBigNumber(mintInputValue)} DYAD increasing collateralization ratio to ~${newCr.toString()}%`,
+              })
+            }
+            disabled={!mintInputValue}
+          >
+            Mint
+          </ButtonComponent>
+        </div>
+      </div>
+      <div className="flex justify-between mt-[32px] w-full">
+        <div className="w-[380px] ">
+          <BigIntInput
+            value={burnInputValue}
+            onChange={(value) => setBurnInputValue(value)}
+            placeholder="Amount of DYAD to burn..."
+          />
+        </div>
+        <div className="w-[74px]">
+          <ButtonComponent variant="bordered" onClick={onMaxBurnHandler}>
+            Max
+          </ButtonComponent>
+        </div>
+        <div className="w-[128px]">
+          <ButtonComponent
+            onClick={() =>
+              setTransactionData({
+                config: {
+                  address: vaultManagerAddress[defaultChain.id],
+                  abi: vaultManagerAbi,
+                  functionName: "burnDyad",
+                  args: [tokenId, burnInputValue],
+                },
+                description: `Burn ${fromBigNumber(burnInputValue)} DYAD to reduce collateralization ratio to ~${newCr.toString()}%`,
+              })
+            }
+            disabled={!burnInputValue}
+          >
+            Burn
+          </ButtonComponent>
         </div>
       </div>
       <div className="flex justify-between mt-[32px]">
@@ -51,31 +146,18 @@ const Mint: React.FC<MintProps> = ({ dyadMinted, currentCr, newCr }) => {
         </div>
         <div className="flex">
           <div className="mr-[5px]">Current CR:</div>
-          <div>{currentCr}</div>
+          <p>
+            {currentCr === maxUint256
+              ? "Infinity"
+              : `${formatNumber(fromBigNumber(currentCr, 16))}%`}
+          </p>
         </div>
-        <div className="flex">
-          <div className="mr-[5px]">New CR:</div>
-          <div>{newCr}</div>
-        </div>
-      </div>
-      <div className="flex justify-between mt-[32px] w-full">
-        <div className="w-[380px] ">
-          <InputComponent
-            placeHolder={`Amount of DYAD to burn`}
-            onValueChange={setBurnInputValue}
-            value={burnInputValue}
-            type="number"
-            max={9999999}
-          />
-        </div>
-        <div className="w-[74px]">
-          <ButtonComponent variant="bordered" onClick={onMaxBurnHandler}>
-            Max
-          </ButtonComponent>
-        </div>
-        <div className="w-[128px]">
-          <ButtonComponent onClick={burntHandler}>Burn</ButtonComponent>
-        </div>
+        {(mintInputValue || burnInputValue) && (
+          <div className="flex">
+            <div className="mr-[5px]">New CR:</div>
+            <div>{newCr === 0n ? "Infinity" : newCr.toString()}%</div>
+          </div>
+        )}
       </div>
     </div>
   );

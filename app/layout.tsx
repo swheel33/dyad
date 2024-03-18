@@ -9,6 +9,7 @@ import MobileNotSupported from "@/components/ui/MobileNotSupported";
 import { cookieToInitialState } from "wagmi";
 import { wagmiConfig } from "@/lib/config";
 import { Providers } from "./providers";
+import { TransactionModal } from "@/components/reusable/TransactionModal";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -41,6 +42,7 @@ export default function RootLayout({
             <Footer />
           </main>
           <MobileNotSupported />
+          <TransactionModal />
         </Providers>
       </body>
     </html>

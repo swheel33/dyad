@@ -1,23 +1,111 @@
-import NoteCardsContainer from "@/components/reusable/NoteCardsContainer";
-import TableComponent from "@/components/reusable/TableComponent";
-import { columns, rows } from "@/mockData/tabsMockData";
-import React from "react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
-function AddVaultModal() {
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { useReadContracts } from "wagmi";
+import { Address } from "viem";
+import { vaultAbi, vaultManagerAbi, vaultManagerAddress } from "@/generated";
+import { vaultInfo } from "@/lib/constants";
+import { formatNumber, fromBigNumber } from "@/lib/utils";
+import ButtonComponent from "@/components/reusable/ButtonComponent";
+import { useTransactionStore } from "@/lib/store";
+import { defaultChain } from "@/lib/config";
+import { DialogClose } from "@/components/ui/dialog";
+
+function AddVaultModal({
+  vaults,
+  tokenId,
+}: {
+  vaults: Address[];
+  tokenId: string;
+}) {
+  const { data: assetPrices } = useReadContracts({
+    contracts: vaults.map((vault) => ({
+      address: vault,
+      abi: vaultAbi,
+      functionName: "assetPrice",
+    })),
+    allowFailure: false,
+  });
+
+  const vaultSymbols = vaults.map(
+    (vault) => vaultInfo.filter((info) => info.vaultAddress === vault)[0].symbol
+  );
+
   return (
-    <div>
-      <NoteCardsContainer>
-        <>
-          <div className="text-2xl font-semibold">
-            Add new collateral type to your Note
-          </div>
-          <div className="h-[191px] overflow-scroll mt-[20px] ">
-            <TableComponent columns={columns} rows={rows} />
-          </div>
-        </>
-      </NoteCardsContainer>
+    <div className="flex flex-col gap-2">
+      <div className="text-2xl font-semibold">
+        Add new collateral type to your Note
+      </div>
+      <ScrollArea className="max-h-[600px]">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Collateral</TableHead>
+              <TableHead>Oracle Price</TableHead>
+              <TableHead />
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {vaults.map((address, i) => (
+              <TableRow key={i}>
+                <TableCell>{vaultSymbols[i]}</TableCell>
+                <TableCell>
+                  ${formatNumber(fromBigNumber(assetPrices?.at(i), 8))}
+                </TableCell>
+                <RowInput
+                  tokenId={tokenId}
+                  vaultAddress={address}
+                  symbol={vaultSymbols[i]}
+                />
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </ScrollArea>
     </div>
   );
 }
 
 export default AddVaultModal;
+
+const RowInput = ({
+  tokenId,
+  vaultAddress,
+  symbol,
+}: {
+  tokenId: string;
+  vaultAddress: Address;
+  symbol: string;
+}) => {
+  const { setTransactionData } = useTransactionStore();
+  return (
+    <>
+      <TableCell>
+        <DialogClose>
+          <ButtonComponent
+            onClick={() =>
+              setTransactionData({
+                config: {
+                  address: vaultManagerAddress[defaultChain.id],
+                  abi: vaultManagerAbi,
+                  functionName: "add",
+                  args: [tokenId, vaultAddress],
+                },
+                description: `Add the ${symbol} vault to your Note Nº ${tokenId}`,
+              })
+            }
+          >
+            Add
+          </ButtonComponent>
+        </DialogClose>
+      </TableCell>
+    </>
+  );
+};

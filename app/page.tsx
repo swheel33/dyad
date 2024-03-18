@@ -1,7 +1,5 @@
 "use client";
 
-import { Separator } from "@/components/ui/separator";
-import DnftBox from "@/components/dnft-box";
 import TabsComponent from "@/components/reusable/TabsComponent";
 import ButtonComponent from "@/components/reusable/ButtonComponent";
 import KeroseneCard from "@/components/KeroseneCard/KeroseneCard";
@@ -10,9 +8,26 @@ import NoteCard from "@/components/NoteCard/NoteCard";
 import SortbyComponent from "@/components/reusable/SortbyComponent";
 import { SORT_BY_OPTIONS } from "@/mockData/tabsMockData";
 import { useState } from "react";
+import { ClaimModalContent } from "@/components/claim-modal-content";
+import { useQuery } from "@tanstack/react-query";
+import { alchemySdk } from "@/lib/alchemy";
+import { useAccount } from "wagmi";
+import { dNftAddress } from "@/generated";
+import { defaultChain } from "@/lib/config";
 
 export default function Home() {
   const [selectedValue, setSelectedValue] = useState("");
+  const { address } = useAccount();
+  const { data: notes } = useQuery({
+    queryKey: ["notes"],
+    queryFn: () =>
+      alchemySdk.nft
+        .getNftsForOwner(address as string, {
+          contractAddresses: [dNftAddress[defaultChain.id]],
+        })
+        .then((res) => res.ownedNfts.map((nft) => nft.tokenId)),
+  });
+
   const keroseneCardsData = [
     {
       currency: "ETH - DYAD (Uniswap)",
@@ -30,12 +45,7 @@ export default function Home() {
   const manageNotesContent = (
     <>
       <div className="mt-12 mb-6 flex justify-between">
-        <ButtonComponent
-          styles={{ marginRight: "20px" }}
-          onClick={() => console.log("Claim Note")}
-        >
-          Claim Note Nº 228
-        </ButtonComponent>
+        <ClaimModalContent />
         <div>
           <SortbyComponent
             sortOptions={SORT_BY_OPTIONS}
@@ -44,7 +54,10 @@ export default function Home() {
           />
         </div>
       </div>
-      <NoteCard />
+      <div className="flex flex-col gap-4">
+        {notes &&
+          notes.map((tokenId) => <NoteCard key={tokenId} tokenId={tokenId} />)}
+      </div>
     </>
   );
 

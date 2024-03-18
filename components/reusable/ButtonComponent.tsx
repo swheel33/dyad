@@ -1,10 +1,7 @@
 import React from "react";
 
-interface ButtonComponentProps {
-  styles?: {};
+interface ButtonComponentProps extends React.HTMLProps<HTMLButtonElement> {
   variant?: "solid" | "bordered";
-  children: JSX.Element | string;
-  onClick?: () => void;
 }
 
 const MAIN_BUTTON_STYLES = " px-[23px] h-[39px] w-full text-sm";
@@ -18,16 +15,16 @@ const classNames: any = {
 };
 
 const ButtonComponent: React.FC<ButtonComponentProps> = ({
-  styles = {},
   variant = "solid",
   children,
   onClick = () => {},
+  disabled = false,
 }) => {
   return (
     <button
-      className={`${classNames[variant]} ${MAIN_BUTTON_STYLES}`}
-      style={styles}
+      className={`${classNames[variant]} ${MAIN_BUTTON_STYLES} ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
       onClick={onClick}
+      disabled={disabled}
     >
       {children}
     </button>

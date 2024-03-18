@@ -1,75 +1,150 @@
-import { Dispatch, SetStateAction, useState } from "react";
-import InputComponent from "@/components/reusable/InputComponent";
+"use client";
+
+import { useState } from "react";
 import ButtonComponent from "@/components/reusable/ButtonComponent";
-import useModal from "@/contexts/modal";
-import { VaultTypes } from "@/mockData/cardModels";
+import { DialogClose } from "@/components/ui/dialog";
+import { BigIntInput } from "@/components/reusable/BigIntInput";
+import { formatNumber, fromBigNumber, toBigNumber } from "@/lib/utils";
+import { Address, erc20Abi } from "viem";
+import { useAccount, useReadContract } from "wagmi";
+import { useTransactionStore } from "@/lib/store";
+import {
+  useReadDyadMintedDyad,
+  useReadVaultAssetPrice,
+  useReadVaultGetUsdValue,
+  useReadVaultManagerMinCollaterizationRatio,
+  vaultManagerAbi,
+  vaultManagerAddress,
+} from "@/generated";
+import { defaultChain } from "@/lib/config";
 
 interface EditVaultTabContentProps {
-  type: VaultTypes;
-  inputValue: string;
-  setInputValue: Dispatch<SetStateAction<string>>;
-  currency: string;
-  currentCollateralizationRatio: string;
-  newCollateralizationRatio: string;
-  submitHandler: () => void;
-  maxValue: string;
+  action: "deposit" | "withdraw" | "redeem";
+  vaultAddress: Address;
+  token: Address;
+  symbol: string;
+  collateralizationRatio: bigint | undefined;
+  tokenId: string;
 }
 
 const EditVaultTabContent: React.FC<EditVaultTabContentProps> = ({
-  type,
-  currency,
-  currentCollateralizationRatio,
-  newCollateralizationRatio,
-  submitHandler,
-  maxValue,
+  action,
+  token,
+  symbol,
+  collateralizationRatio,
+  tokenId,
+  vaultAddress,
 }) => {
-  const { shiftModal } = useModal();
-
   const [inputValue, setInputValue] = useState("");
+  const { address } = useAccount();
+  const { setTransactionData } = useTransactionStore();
 
-  const cancelHandler = () => {
-    shiftModal();
+  const { data: mintedDyad } = useReadDyadMintedDyad({
+    args: [vaultManagerAddress[defaultChain.id], BigInt(tokenId)],
+    chainId: defaultChain.id,
+  });
+
+  const { data: collateralValue } = useReadVaultGetUsdValue({
+    args: [BigInt(tokenId)],
+    chainId: defaultChain.id,
+  });
+
+  const { data: assetValue } = useReadVaultAssetPrice({
+    chainId: defaultChain.id,
+  });
+
+  const { data: minCollateralizationRatio } =
+    useReadVaultManagerMinCollaterizationRatio({ chainId: defaultChain.id });
+
+  const newCr =
+    ((fromBigNumber(collateralValue) +
+      (action === "deposit"
+        ? fromBigNumber(inputValue) * fromBigNumber(assetValue, 8)
+        : -fromBigNumber(inputValue) * fromBigNumber(assetValue, 8))) /
+      fromBigNumber(mintedDyad)) *
+    100;
+
+  const { data: balance } = useReadContract({
+    address: token,
+    abi: erc20Abi,
+    functionName: "balanceOf",
+    args: [address!],
+  });
+
+  const maxHandler = () => {
+    if (action === "deposit") {
+      setInputValue(balance?.toString() || "0");
+    }
+    if (action === "withdraw") {
+      setInputValue(
+        toBigNumber(
+          (fromBigNumber(collateralValue) -
+            fromBigNumber(mintedDyad) *
+              fromBigNumber(minCollateralizationRatio)) /
+            fromBigNumber(assetValue, 8)
+        ).toString()
+      );
+    }
   };
 
   return (
-    <div>
-      <div className="flex justify-between w-full mt-[35px]">
+    <div className="flex flex-col gap-4">
+      <div className="flex justify-between gap-5 w-full">
         <div className="w-5/6 ">
-          <InputComponent
-            placeHolder={`Amount of ${currency} to ${type}`}
-            onValueChange={setInputValue}
+          <BigIntInput
             value={inputValue}
-            type="number"
-            max={9999999}
+            onChange={(value) => setInputValue(value)}
+            placeholder={`Amount of ${symbol} to ${action}...`}
           />
         </div>
         <div className="w-[74px]">
-          <ButtonComponent onClick={submitHandler} variant="bordered">
+          <ButtonComponent onClick={maxHandler} variant="bordered">
             Max
           </ButtonComponent>
         </div>
       </div>
-      <div className="flex w-full mt-[35px] justify-between px-[10px] font-semibold text-sm">
-        <div className="flex text-[#A1A1AA]">
-          <div className="mr-[5px]">Current collateralization ratio:</div>
-          <div>{currentCollateralizationRatio}</div>
+      {mintedDyad !== 0n && !!mintedDyad && (
+        <div className="flex flex-col w-full justify-between font-semibold text-sm">
+          <div className="flex text-[#A1A1AA]">
+            <div className="mr-[5px]">Current collateralization ratio:</div>
+            <p>{formatNumber(fromBigNumber(collateralizationRatio, 16))}%</p>
+          </div>
+          <div className="flex">
+            <div className="mr-[5px] ">New collateralization ratio:</div>
+            <div>{formatNumber(newCr)}%</div>
+          </div>
         </div>
-        <div className="flex">
-          <div className="mr-[5px] ">New collateralization ratio:</div>
-          <div>{newCollateralizationRatio}</div>
-        </div>
-      </div>
-      <div className="flex justify-between mt-[35px] ">
-        <div className="w-[280px]">
-          <ButtonComponent onClick={submitHandler} variant="solid">
-            {`${type[0].toUpperCase()}${type.slice(1)} ${currency}`}
+      )}
+
+      <div className="flex gap-8">
+        <DialogClose>
+          <ButtonComponent
+            onClick={() => {
+              setTransactionData({
+                config: {
+                  address: vaultManagerAddress[defaultChain.id],
+                  abi: vaultManagerAbi,
+                  functionName: action,
+                  args:
+                    action === "deposit"
+                      ? [tokenId, vaultAddress, inputValue]
+                      : action === "withdraw"
+                        ? [tokenId, vaultAddress, inputValue, address]
+                        : [tokenId, vaultAddress, inputValue],
+                },
+                description: `${action} ${formatNumber(fromBigNumber(inputValue), 4)} ${symbol}`,
+              });
+            }}
+            disabled={!inputValue}
+            variant="solid"
+          >
+            <p className="capitalize">{action}</p>
           </ButtonComponent>
-        </div>
-        <div className="w-[280px] ">
-          <ButtonComponent onClick={cancelHandler} variant="bordered">
-            Cancel
-          </ButtonComponent>
-        </div>
+        </DialogClose>
+
+        <DialogClose>
+          <ButtonComponent variant="bordered">Cancel</ButtonComponent>
+        </DialogClose>
       </div>
     </div>
   );

@@ -1,86 +1,52 @@
-import AddVaultButton from "@/components/reusable/AddVaultButton";
-import VaultCard from "@/components/reusable/VaultCard";
-import { VaultCardDataModel } from "@/models/NoteCardModels";
-import React, { useState } from "react";
-import useModal from "@/contexts/modal";
 import EditVaultModal from "@/components/Modals/NoteCardModals/DepositModals/EditVault/EditVaultModal";
-import AddVaultModal from "@/components/Modals/NoteCardModals/DepositModals/AddVault/AddVaultModal";
-import { MAX_DEPOSIT_VAULTS } from "@/constants/NoteCards";
 import EditVaultTabContent from "@/components/Modals/NoteCardModals/DepositModals/EditVault/EditVaultTabContent";
-import { VaultTypes } from "@/mockData/cardModels";
+import {
+  useReadVaultManagerCollatRatio,
+  useReadVaultManagerHasVault,
+  vaultAbi,
+  vaultAddress,
+  vaultManagerAbi,
+  vaultManagerAddress,
+} from "@/generated";
+import { defaultChain } from "@/lib/config";
+import { useReadContract, useReadContracts } from "wagmi";
+import { Address, maxUint256 } from "viem";
+import { formatNumber, fromBigNumber } from "@/lib/utils";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { TabsDataModel } from "@/models/TabsModel";
+import { vaultInfo } from "@/lib/constants";
+import AddVaultModal from "@/components/Modals/NoteCardModals/DepositModals/AddVault/AddVaultModal";
 
 interface DepositProps {
+  tokenId: string;
   total_collateral: string;
-  collateralization_ratio: string;
-  vault_cards: VaultCardDataModel[];
+  collateralization_ratio: bigint | undefined;
 }
 
+export const supportedVaults = [vaultAddress[defaultChain.id]];
+
 const Deposit: React.FC<DepositProps> = ({
+  tokenId,
   total_collateral,
   collateralization_ratio,
-  vault_cards,
 }) => {
-  const [depositInput, setDepositInput] = useState("");
-  const [withdrawInput, setWithdrawInput] = useState("");
-  const [redeemInput, setRedeemInput] = useState("");
-  const { pushModal } = useModal();
+  const { data: vaultData } = useReadContracts({
+    contracts: supportedVaults.map((address) => ({
+      address: vaultManagerAddress[defaultChain.id],
+      abi: vaultManagerAbi,
+      functionName: "hasVault",
+      args: [BigInt(tokenId), address],
+      chainId: defaultChain.id,
+    })),
+    allowFailure: false,
+  });
 
-  const getVaultModalData = (currency: string) => [
-    {
-      label: "Deposit",
-      tabKey: "Deposit",
-      content: (
-        <EditVaultTabContent
-          type={VaultTypes.deposit}
-          inputValue={depositInput}
-          setInputValue={setDepositInput}
-          currentCollateralizationRatio="300%"
-          newCollateralizationRatio="320%"
-          currency={currency}
-          submitHandler={() => {
-            console.log(VaultTypes.deposit);
-          }}
-          maxValue="99999"
-        />
-      ),
-    },
-    {
-      label: "Withdraw",
-      tabKey: "Withdraw",
-      content: (
-        <EditVaultTabContent
-          type={VaultTypes.withdraw}
-          inputValue={withdrawInput}
-          setInputValue={setWithdrawInput}
-          currentCollateralizationRatio="350%"
-          newCollateralizationRatio="370%"
-          currency={currency}
-          submitHandler={() => {
-            console.log(VaultTypes.withdraw);
-          }}
-          maxValue="99999"
-        />
-      ),
-    },
-    {
-      label: "Redeem",
-      tabKey: "Redeem",
-      content: (
-        <EditVaultTabContent
-          type={VaultTypes.redeem}
-          inputValue={redeemInput}
-          setInputValue={setRedeemInput}
-          currentCollateralizationRatio="200%"
-          newCollateralizationRatio="220%"
-          currency={currency}
-          submitHandler={() => {
-            console.log(VaultTypes.redeem);
-          }}
-          maxValue="99999"
-        />
-      ),
-    },
-  ];
+  const emptyVaultMap = vaultData?.map((data) => !data) || [];
+  const hasEmptyVaults = emptyVaultMap?.includes(true);
+  const emptyVaults = emptyVaultMap
+    .map((emptyVault, i) => (!emptyVault ? null : supportedVaults[i]))
+    .filter((data) => !!data);
 
   return (
     <div className="w-full">
@@ -91,29 +57,140 @@ const Deposit: React.FC<DepositProps> = ({
         </div>
         <div className="flex text-[#FAFAFA]">
           <div className="mr-[5px]">Collateralization ratio:</div>
-          <div>{collateralization_ratio}</div>
+          <p>
+            {collateralization_ratio === maxUint256
+              ? "Infinity"
+              : `${formatNumber(fromBigNumber(collateralization_ratio, 16))}%`}
+          </p>
         </div>
       </div>
       <div className="grid grid-cols-5 gap-[30px]">
-        {vault_cards.map((card: VaultCardDataModel, index: number) => (
-          <VaultCard
-            key={index}
-            data={card}
-            onClick={() =>
-              pushModal(
-                <EditVaultModal
-                  tabsData={getVaultModalData(card.currency)}
-                  logo={card.currency}
-                />
-              )
-            }
-          />
+        {supportedVaults.map((address, i) => (
+          <Vault key={i} tokenId={tokenId} vaultAddress={address} />
         ))}
-        {vault_cards.length < MAX_DEPOSIT_VAULTS && (
-          <AddVaultButton onClick={() => pushModal(<AddVaultModal />)} />
+        {hasEmptyVaults && (
+          <AddVault
+            tokenId={tokenId}
+            vaultAddresses={emptyVaults as Address[]}
+          />
         )}
       </div>
     </div>
   );
 };
 export default Deposit;
+
+const Vault = ({
+  vaultAddress,
+  tokenId,
+}: {
+  vaultAddress: Address;
+  tokenId: string;
+}) => {
+  const { data: hasVault } = useReadVaultManagerHasVault({
+    chainId: defaultChain.id,
+    args: [BigInt(tokenId), vaultAddress],
+  });
+  const { data: collateralValue, isLoading: collateralLoading } =
+    useReadContract({
+      address: vaultAddress,
+      abi: vaultAbi,
+      args: [BigInt(tokenId)],
+      functionName: "getUsdValue",
+      chainId: defaultChain.id,
+    });
+
+  const { data: collatRatio } = useReadVaultManagerCollatRatio({
+    args: [BigInt(tokenId)],
+    chainId: defaultChain.id,
+  });
+
+  const { tokenAddress: collateralAddress, symbol: collateralString } =
+    vaultInfo.filter((value) => value.vaultAddress === vaultAddress)[0];
+
+  const tabs: TabsDataModel[] = [
+    {
+      label: "Deposit",
+      tabKey: "Deposit",
+      content: (
+        <EditVaultTabContent
+          action="deposit"
+          token={collateralAddress}
+          symbol={collateralString}
+          collateralizationRatio={collatRatio}
+          tokenId={tokenId}
+          vaultAddress={vaultAddress}
+        />
+      ),
+    },
+    {
+      label: "Withdraw",
+      tabKey: "Withdraw",
+      content: (
+        <EditVaultTabContent
+          action="withdraw"
+          token={collateralAddress}
+          symbol={collateralString}
+          collateralizationRatio={collatRatio}
+          tokenId={tokenId}
+          vaultAddress={vaultAddress}
+        />
+      ),
+    },
+    {
+      label: "Redeem",
+      tabKey: "Redeem",
+      content: (
+        <EditVaultTabContent
+          action="redeem"
+          token={collateralAddress!}
+          symbol={collateralString!}
+          collateralizationRatio={collatRatio}
+          tokenId={tokenId}
+          vaultAddress={vaultAddress}
+        />
+      ),
+    },
+  ];
+
+  if (!hasVault) {
+    return null;
+  }
+  if (collateralLoading) {
+    return <Skeleton className="w-[100px] h-[100px]" />;
+  }
+  return (
+    <Dialog>
+      <DialogTrigger>
+        <div className="font-semibold text-[#FAFAFA] text-sm items-center justify-center flex flex-col gap-2 w-[100px] h-[100px] bg-[#282828]">
+          <p>{collateralString}</p>
+          <p>${formatNumber(fromBigNumber(collateralValue))}</p>
+        </div>
+      </DialogTrigger>
+      <DialogContent>
+        <EditVaultModal tabsData={tabs} logo={collateralString} />
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+const AddVault = ({
+  tokenId,
+  vaultAddresses,
+}: {
+  tokenId: string;
+  vaultAddresses: Address[];
+}) => {
+  return (
+    <Dialog>
+      <DialogTrigger>
+        <div className="font-semibold text-[#FAFAFA] text-sm items-center justify-center flex flex-col gap-2 w-[100px] h-[100px] bg-[#282828]">
+          <p>+</p>
+        </div>
+      </DialogTrigger>
+      <DialogContent>
+        <AddVaultModal vaults={vaultAddresses} tokenId={tokenId} />
+      </DialogContent>
+    </Dialog>
+  );
+};

@@ -7,6 +7,7 @@ import { dyadAbi } from "@/lib/abi/Dyad";
 import { vaultManagerAbi } from "@/lib/abi/VaultManager";
 import { vaultAbi } from "@/lib/abi/Vault";
 import { paymentsAbi } from "@/lib/abi/Payments";
+import { erc20Abi } from "viem";
 
 export default defineConfig({
   out: "generated.ts",
@@ -52,6 +53,13 @@ export default defineConfig({
         [sepolia.id]: "0xb1dD20c907e1DD95D6c05E29F0d79f6e8061735B",
       },
       abi: paymentsAbi,
+    },
+    {
+      name: "WETH",
+      address: {
+        [sepolia.id]: "0x7b79995e5f793A07Bc00c21412e50Ecae098E7f9",
+      },
+      abi: erc20Abi,
     },
   ],
 
