@@ -14,8 +14,8 @@ function NoteCardsContainer({
 }: NoteCardsContainerPropsInterface) {
   return (
     <div
-      className={`flex-1 max-w-screen-md p-7  bg-[${COLORS.DARK_GREY}] rounded-[10px]`}
-      style={{ height, width }}
+      className={`flex-1 max-w-screen-md p-7 rounded-[10px]`}
+      style={{ height, width, background: COLORS.DARK_GREY }}
     >
       {children}
     </div>

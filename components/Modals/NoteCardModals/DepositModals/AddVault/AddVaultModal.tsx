@@ -11,7 +11,7 @@ function AddVaultModal() {
           <div className="text-2xl font-semibold">
             Add new collateral type to your Note
           </div>
-          <div className="h-[191px] overflow-scroll mt-[20px] ">
+          <div className="h-[191px] mt-[20px] ">
             <TableComponent columns={columns} rows={rows} />
           </div>
         </>

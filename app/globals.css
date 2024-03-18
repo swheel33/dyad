@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
+  *:root {
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
 
@@ -34,27 +34,27 @@
     --ring: 240 5% 64.9%;
 
     --radius: 0.5rem;
+  }
 
-    *::-webkit-scrollbar {
-      width: 5px;
-      height: 5px;
-    }
+  *::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
 
-    /* Hide scroll corner */
-    *::-webkit-scrollbar-corner {
-      display: none;
-    }
+  /* Hide scroll corner */
+  *::-webkit-scrollbar-corner {
+    display: none;
+  }
 
-    /* Handle */
-    *::-webkit-scrollbar-thumb {
-      background: #282828;
-      border-radius: 10px;
-    }
+  /* Handle */
+  *::-webkit-scrollbar-thumb {
+    background: #282828;
+    border-radius: 10px;
+  }
 
-    /* Handle on hover */
-    *::-webkit-scrollbar-thumb:hover {
-      background: #282828;
-    }
+  /* Handle on hover */
+  *::-webkit-scrollbar-thumb:hover {
+    background: #282828;
   }
 
   .table-header {
